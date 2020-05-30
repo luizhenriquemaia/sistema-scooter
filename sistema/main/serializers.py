@@ -1,10 +1,16 @@
 from rest_framework import serializers
-from .models import StatusScooter, Report, Movement
+from .models import StatusScooter, Scooter, Report, Movement
 
 
 class StatusScooterSerializer(serializers.ModelSerializer):
     class Meta:
         model = StatusScooter
+        fields = '__all__'
+
+
+class ScooterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Scooter
         fields = '__all__'
 
 

@@ -4,6 +4,12 @@ from datetime import date
 
 class StatusScooter(models.Model):
     description = models.CharField(max_length=200)
+    objects = models.Manager()
+
+
+class Scooter(models.Model):
+    chassisNumber = models.IntegerField()
+    objects = models.Manager()
 
 
 class Report(models.Model):
@@ -12,7 +18,7 @@ class Report(models.Model):
 
 
 class Movement(models.Model):
-    chassisNumber = models.IntegerField()
+    scooter = models.ForeignKey(Scooter, on_delete=models.CASCADE, null=True)
     OL = models.CharField(max_length=50, null=True)
     deliveryman = models.CharField(max_length=200)
     observation = models.CharField(max_length=500)
