@@ -1,0 +1,26 @@
+{
+  "name": "sistema",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/luizhenriquemaia/sistema-scooter.git",
+  "author": "LuizHenriqueMaia <luizhenriquembh@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "webpack --mode development --watch ./sistema/frontend/src/index.js --output ./sistema/frontend/static/frontend/main.js",
+    "build": "webpack --mode production ./sistema/frontend/src/index.js --output ./sistema/frontend/static/frontend/main.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-react": "^7.10.1",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0"
+  }
+}
