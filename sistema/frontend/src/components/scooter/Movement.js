@@ -53,14 +53,14 @@ export default function Movement() {
                 </div>
                 <div className="form-input">
                     <label>Retirada</label>
-                    <input type="radio" name="typeMovement" onChange={handleChange} />
+                    <input type="radio" name="typeMovement" value="retirada" onChange={handleChange} />
                     <label>Devolução</label>
-                    <input type="radio" name="typeMovement" onChange={handleChange} />
+                    <input type="radio" name="typeMovement" value="devolução" onChange={handleChange} />
                 </div>
                 <div className="form-input">
                     <label>Destino</label>
-                    <input type="radio" name="destiny" onChange={handleChange} />
-                    <input type="radio" name="destiny" onChange={handleChange} />
+                    <input type="radio" name="destiny" value="base" onChange={handleChange} />
+                    <input type="radio" name="destiny" value="manutenção" onChange={handleChange} />
                 </div>
                 <div className="form-input">
                     <h4>Acessórios</h4>
