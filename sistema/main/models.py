@@ -7,9 +7,20 @@ class StatusScooter(models.Model):
     objects = models.Manager()
 
 
+class LogisticOperator(models.Model):
+    description = models.CharField(max_length=200)
+
+
 class Scooter(models.Model):
     chassisNumber = models.IntegerField()
+    status = models.ForeignKey(StatusScooter, on_delete=models.CASCADE, default=0)
     objects = models.Manager()
+
+
+class Deliveryman(models.Model):
+    name = models.CharField(max_length=400)
+    LogisticOperator = models.ForeignKey(LogisticOperator, on_delete=models.CASCADE, null=True)
+    active = models.BooleanField(default=True)
 
 
 class Report(models.Model):
@@ -19,12 +30,10 @@ class Report(models.Model):
 
 class Movement(models.Model):
     scooter = models.ForeignKey(Scooter, on_delete=models.CASCADE, null=True)
-    OL = models.CharField(max_length=50, null=True)
-    deliveryman = models.CharField(max_length=200)
+    deliveryman = models.ForeignKey(Deliveryman, on_delete=models.CASCADE, null=True)
     observation = models.CharField(max_length=500)
     pickUpTime = models.TimeField()
     returnTime = models.TimeField()
-    status = models.ForeignKey(StatusScooter, on_delete=models.CASCADE)
     helmet = models.BooleanField()
     bags = models.BooleanField()
     charger = models.BooleanField()

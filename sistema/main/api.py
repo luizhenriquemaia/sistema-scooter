@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from .models import StatusScooter, Scooter, Report, Movement
-from .serializers import StatusScooterSerializer, ScooterSerializer, ReportSerializer, MovementSerializer
+from .models import StatusScooter, LogisticOperator, Scooter, Deliveryman, Report, Movement
+from .serializers import StatusScooterSerializer, LogisticOperatorSerializer, ScooterSerializer, DeliverymanSerializer, ReportSerializer, MovementSerializer
 
 
 class StatusScooterViewSet(viewsets.ModelViewSet):
@@ -9,6 +9,13 @@ class StatusScooterViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return StatusScooter.objects.all()
+
+
+class LogisticOperatorViewSet(viewsets.ModelViewSet):
+    serializer_class = LogisticOperatorSerializer
+
+    def get_queryset(self):
+        return LogisticOperator.objects.all()
 
 
 class ScooterViewSet(viewsets.ViewSet):
@@ -22,6 +29,13 @@ class ScooterViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
 
+class DeliverymanViewSet(viewsets.ModelViewSet):
+    serializer_class = DeliverymanSerializer
+
+    def get_queryset(self):
+        return Deliveryman.objects.all()
+
+        
 class ReportViewSet(viewsets.ModelViewSet):
     serializer_class = ReportSerializer
 
