@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import StatusScooter, LogisticOperator, Scooter, Deliveryman, Report, Movement
+from .models import StatusScooter, LogisticOperator, Scooter, Deliveryman, Movement
 
 
 class StatusScooterSerializer(serializers.ModelSerializer):
@@ -24,13 +24,22 @@ class DeliverymanSerializer(serializers.ModelSerializer):
         model = Deliveryman
         fields = '__all__'
 
-class ReportSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Report
-        fields = '__all__'
-
 
 class MovementSerializer(serializers.ModelSerializer):
+    scooter = ScooterSerializer(read_only=True)
+    scooter_id = serializers.IntegerField()
+    deliveryman = DeliverymanSerializer(read_only=True)
+    deliveryman_id = serializers.IntegerField()
+    logisticOperator = LogisticOperatorSerializer(read_only=True)
+    logisticOperator_id = serializers.IntegerField()
+
+
     class Meta:
         model = Movement
-        fields = '__all__'
+        fields = ['scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
+                  'dateMovement', 'pickUpTime', 'returnTime', 'helmet', 'bags', 'charger', 'case', 'observation']
+    
+    def create(self, validated_data):
+        return Movement.create(Movement, **validated_data)
+    
+

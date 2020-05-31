@@ -1,55 +1,60 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+//import { useHistory } from 'react-router-dom'
+import { addMovement } from '../../actions/movement'
 
 
 export default function Movement() {
-    const [newMovement, setNewMovement] = useState({
-        chassisNumber: "",
-        OL: "",
-        deliveryman: "",
+    const dispatch = useDispatch()
+    const [newMovementState, setNewMovementState] = useState({
+        scooter: "",
+        cpfDeliveryman: "",
         typeMovement: "",
         destiny: "",
-        helmet: false,
-        bag: false,
-        case: false,
-        charger: false,
+        accessoriesHelmet: false,
+        accessoriesBag: false,
+        accessoriesCase: false,
+        accessoriesCharger: false,
         observation: ""
     })
 
     const handleChange = e => {
         const { name, value } = e.target
-        setNewMovement({
-            ...newMovement,
+        setNewMovementState({
+            ...newMovementState,
             [name]: value
         })
     }
 
     const handleCheck = e => {
         const { name, checked } = e.target
-        setNewMovement({
-            ...newMovement,
+        setNewMovementState({
+            ...newMovementState,
             [name]: checked
         })
     }
 
-    console.log(newMovement)
+    const handleSubmit = e => {
+        e.preventDefault()
+        const { scooter, cpfDeliveryman, typeMovement, destiny, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
+        const newMovement = { scooter, cpfDeliveryman, typeMovement, destiny, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
+        dispatch(addMovement(newMovement))
+    }
+
+    console.log(newMovementState)
 
 
     return (
         <div className="content">
             <h1 className="title-page">Registro de movimentação de patinetes</h1>
-            <form >
+            <form onSubmit={handleSubmit}>
                 <div className="form-input">
                     <label>Número do chassi</label>
-                    <input type="text" name="chassisNumber" onChange={handleChange} />
+                    <input type="text" name="scooter" onChange={handleChange} />
                 </div>
                 <div className="form-input">
-                    <label>Operador Logístico (OL)</label>
-                    <input type="text" name="OL" onChange={handleChange} />
-                </div>
-                <div className="form-input">
-                    <label>Entregador</label>
-                    <input type="text" name="deliveryman" onChange={handleChange} />
+                    <label>CPF do Entregador</label>
+                    <input type="text" name="cpfDeliveryman" onChange={handleChange} />
                 </div>
                 <div className="form-input">
                     <label>Retirada</label>
@@ -65,13 +70,13 @@ export default function Movement() {
                 <div className="form-input">
                     <h4>Acessórios</h4>
                     <label>Capacete</label>
-                    <input type="checkbox" name="helmet" onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesHelmet" onChange={handleCheck} />
                     <label>Bag</label>
-                    <input type="checkbox" name="bag" onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesBag" onChange={handleCheck} />
                     <label>Case</label>
-                    <input type="checkbox" name="case" onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesCase" onChange={handleCheck} />
                     <label>Carregador</label>
-                    <input type="checkbox" name="charger" onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesCharger" onChange={handleCheck} />
                 </div>
                 <div className="form-input">
                     <label>Observação</label>
