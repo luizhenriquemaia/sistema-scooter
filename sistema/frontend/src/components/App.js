@@ -2,7 +2,7 @@
 import React from 'react'
 import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 // Components
-import Home from './layout/Home'
+import Movement from './scooter/Movement'
 
 
 export default function App() {
@@ -10,7 +10,7 @@ export default function App() {
         <Router>
             <div className="container">
                 <Switch>
-                    <Route exact path="/" component={Home} />
+                    <Route exact path="/" component={Movement} />
                 </Switch>
             </div>
         </Router>
