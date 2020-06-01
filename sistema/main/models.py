@@ -34,7 +34,7 @@ class Movement(models.Model):
     accessoriesBag = models.BooleanField(default=False)
     accessoriesCase = models.BooleanField(default=False)
     accessoriesCharger = models.BooleanField(default=False)
-    observation = models.CharField(max_length=500, null=True)
+    observation = models.CharField(max_length=500, blank=True)
     objects = models.Manager()
 
     def create(self, **validated_data):
