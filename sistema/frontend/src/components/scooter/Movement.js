@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { getMovements } from '../../actions/movement'
+import { getMovements, addMovement } from '../../actions/movement'
 
 
 export default function Movement() {
@@ -9,10 +9,14 @@ export default function Movement() {
     const history = useHistory()
     const movements = useSelector(state => state.movements.movement)
     const [MovementState, setMovementState] = useState([{
-        id: "",
+        id: 0,
         dataMovement: "",
-        scooter: "",
-        cpfDeliveryman: "",
+        scooter: {
+            chassisNumber: ""},
+        logisticOperator: {
+            description: ""},
+        deliveryman: {
+            name: ""},
         typeMovement: "",
         destiny: "",
         accessoriesHelmet: false,
@@ -23,9 +27,8 @@ export default function Movement() {
     }])
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
-        cpfDeliveryman: "",
-        typeMovement: "",
-        destiny: "",
+        OL: "",
+        cpfDeliverymanState: "",
         accessoriesHelmet: false,
         accessoriesBag: false,
         accessoriesCase: false,
@@ -59,7 +62,13 @@ export default function Movement() {
     }
 
     const handleClick = (idMovement) => history.push(`details-movement/${idMovement}`)
-
+    const handleClickAdicionar = e => {
+        const { scooter, OL, cpfDeliverymanState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
+        const cpfDeliveryman = cpfDeliverymanState.replace(/\D/g, '')
+        const typeMovement = "retirada"
+        const newMovimentToAPI = { scooter, OL, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+        dispatch(addMovement(newMovimentToAPI))
+    }
 
     console.log(MovementState)
 
@@ -83,18 +92,23 @@ export default function Movement() {
                     {MovementState.map(movement => (
                         <tr key={movement.id}>
                             <td>{movement.dateMovement}</td>
-                            <td>{movement.scooter}</td>
-                            <td>{movement.deliveryman}</td>
+                            <td>{movement.scooter.chassisNumber}</td>
+                            <td>{movement.deliveryman.name}</td>
+                            <td>{movement.logisticOperator.description}</td>
                             <td>{movement.pickUpTime}</td>
                             <td>{movement.returnTime}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            <br/>
+            <h2>Adicionar Nova Movimentação</h2>
             <label>Scooter</label>
             <input type="text" name="scooter" onChange={handleChange} />
+            <label>Operador Logístico</label>
+            <input type="text" name="OL" onChange={handleChange} />
             <label>CPF Entregador</label>
-            <input type="text" name="cpfDeliveryman" onChange={handleChange} />
+            <input type="text" name="cpfDeliverymanState" onChange={handleChange} />
             <label>Capacete</label>
             <input type="checkbox" name="accessoriesHelmet" onChange={handleCheck} />
             <label>Bag</label>
@@ -103,7 +117,9 @@ export default function Movement() {
             <input type="checkbox" name="accessoriesCase" onChange={handleCheck} />
             <label>Carregador</label>
             <input type="checkbox" name="accessoriesCharger" onChange={handleCheck} />
-            <button className="submit-button">Nova Movimentação</button>
+            <label>Observação</label>
+            <textarea name="observation" onChange={handleChange}></textarea>
+            <button className="submit-button" onClick={handleClickAdicionar}>Adicionar</button>
         </div>
     )
 }

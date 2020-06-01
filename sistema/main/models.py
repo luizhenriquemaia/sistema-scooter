@@ -19,6 +19,7 @@ class Scooter(models.Model):
 
 class Deliveryman(models.Model):
     name = models.CharField(max_length=400)
+    cpf = models.CharField(max_length=11, default=0)
     active = models.BooleanField(default=True)
 
 
@@ -37,19 +38,20 @@ class Movement(models.Model):
     objects = models.Manager()
 
     def create(self, **validated_data):
-        new_movement = Movement(
-            scooter=Scooter.objects.filter(
-                chassisNumber=int(validated_data['scooter']))[0],
-            deliveryman=Deliveryman.objects.filter(
-                deliveryman=validated_data['name'])[0],
-            logisticOperator=LogisticOperator.objects.filter(
-                description=validated_data['OL'])[0],
-            dateMovement=date.today(),
-            pickUpTime = datetime.now().time(),
-            accessoriesHelmet=validated_data['accessoriesHelmet'],
-            accessoriesBag=validated_data['accessoriesBag'],
-            accessoriesCase=validated_data['acessoriesCharger'],
-            accessoriesCharger=validated_data['acessoriesCase'],
-            observation=validated_data['oservation']
-        )
+        print(f"\n\n\n\n validated_data: {validated_data}\n\n\n\n")
+        if validated_data['typeMovement'] != 'devolução':
+            new_movement = Movement(
+                scooter=Scooter.objects.get(id=validated_data['scooter_id']),
+                deliveryman=Deliveryman.objects.get(id=validated_data['deliveryman_id']),
+                logisticOperator=LogisticOperator.objects.get(id=validated_data['logisticOperator_id']),
+                dateMovement=date.today(),
+                pickUpTime=datetime.now().time(),
+                accessoriesHelmet=validated_data['accessoriesHelmet'],
+                accessoriesBag=validated_data['accessoriesBag'],
+                accessoriesCase=validated_data['accessoriesCase'],
+                accessoriesCharger=validated_data['accessoriesCharger'],
+                observation=validated_data['observation']
+            )
+            new_movement.save()
+            return new_movement
 
