@@ -66,8 +66,8 @@ export default function Movement() {
         const { scooter, OL, cpfDeliverymanState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfDeliveryman = cpfDeliverymanState.replace(/\D/g, '')
         const typeMovement = "retirada"
-        const newMovimentToAPI = { scooter, OL, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
-        dispatch(addMovement(newMovimentToAPI))
+        const newMovementToAPI = { scooter, OL, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+        dispatch(addMovement(newMovementToAPI))
     }
 
     console.log(MovementState)
