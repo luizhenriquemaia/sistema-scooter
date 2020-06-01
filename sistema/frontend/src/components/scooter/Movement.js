@@ -1,11 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-//import { useHistory } from 'react-router-dom'
-import { addMovement } from '../../actions/movement'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { getMovements } from '../../actions/movement'
 
 
 export default function Movement() {
     const dispatch = useDispatch()
+    const history = useHistory()
+    const movements = useSelector(state => state.movements.movement)
+    const [MovementState, setMovementState] = useState([{
+        id: "",
+        dataMovement: "",
+        scooter: "",
+        cpfDeliveryman: "",
+        typeMovement: "",
+        destiny: "",
+        accessoriesHelmet: false,
+        accessoriesBag: false,
+        accessoriesCase: false,
+        accessoriesCharger: false,
+        observation: ""
+    }])
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
         cpfDeliveryman: "",
@@ -17,6 +32,14 @@ export default function Movement() {
         accessoriesCharger: false,
         observation: ""
     })
+    
+    useEffect(() => {
+        if (movements.length !== 0) setMovementState(movements)
+    }, [movements])
+
+    useEffect(() => {
+        dispatch(getMovements())
+    }, [])
 
     const handleChange = e => {
         const { name, value } = e.target
@@ -24,6 +47,7 @@ export default function Movement() {
             ...newMovementState,
             [name]: value
         })
+        console.log(newMovementState)
     }
 
     const handleCheck = e => {
@@ -34,57 +58,52 @@ export default function Movement() {
         })
     }
 
-    const handleSubmit = e => {
-        e.preventDefault()
-        const { scooter, cpfDeliveryman, typeMovement, destiny, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
-        const newMovement = { scooter, cpfDeliveryman, typeMovement, destiny, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
-        dispatch(addMovement(newMovement))
-    }
+    const handleClick = (idMovement) => history.push(`details-movement/${idMovement}`)
 
-    console.log(newMovementState)
+
+    console.log(MovementState)
 
 
     return (
         <div className="content">
-            <h1 className="title-page">Registro de movimentação de patinetes</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="form-input">
-                    <label>Número do chassi</label>
-                    <input type="text" name="scooter" onChange={handleChange} />
-                </div>
-                <div className="form-input">
-                    <label>CPF do Entregador</label>
-                    <input type="text" name="cpfDeliveryman" onChange={handleChange} />
-                </div>
-                <div className="form-input">
-                    <label>Retirada</label>
-                    <input type="radio" name="typeMovement" value="retirada" onChange={handleChange} />
-                    <label>Devolução</label>
-                    <input type="radio" name="typeMovement" value="devolução" onChange={handleChange} />
-                </div>
-                <div className="form-input">
-                    <label>Destino</label>
-                    <input type="radio" name="destiny" value="base" onChange={handleChange} />
-                    <input type="radio" name="destiny" value="manutenção" onChange={handleChange} />
-                </div>
-                <div className="form-input">
-                    <h4>Acessórios</h4>
-                    <label>Capacete</label>
-                    <input type="checkbox" name="accessoriesHelmet" onChange={handleCheck} />
-                    <label>Bag</label>
-                    <input type="checkbox" name="accessoriesBag" onChange={handleCheck} />
-                    <label>Case</label>
-                    <input type="checkbox" name="accessoriesCase" onChange={handleCheck} />
-                    <label>Carregador</label>
-                    <input type="checkbox" name="accessoriesCharger" onChange={handleCheck} />
-                </div>
-                <div className="form-input">
-                    <label>Observação</label>
-                    <textarea name="observation" onChange={handleChange}></textarea>
-                </div>
-                <button className="submit-button">Registrar</button>
-                <button className="submit-button">Cancelar</button>
-            </form>
+            <h1 className="title-page">Movimentações Patenetes</h1>
+            <table className="table-movements">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Chassi</th>
+                        <th>Entregador</th>
+                        <th>OL</th>
+                        <th>Hora Retirada</th>
+                        <th>Hora Devolução</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {MovementState.map(movement => (
+                        <tr key={movement.id}>
+                            <td>{movement.dateMovement}</td>
+                            <td>{movement.scooter}</td>
+                            <td>{movement.deliveryman}</td>
+                            <td>{movement.pickUpTime}</td>
+                            <td>{movement.returnTime}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <label>Scooter</label>
+            <input type="text" name="scooter" onChange={handleChange} />
+            <label>CPF Entregador</label>
+            <input type="text" name="cpfDeliveryman" onChange={handleChange} />
+            <label>Capacete</label>
+            <input type="checkbox" name="accessoriesHelmet" onChange={handleCheck} />
+            <label>Bag</label>
+            <input type="checkbox" name="accessoriesBag" onChange={handleCheck} />
+            <label>Case</label>
+            <input type="checkbox" name="accessoriesCase" onChange={handleCheck} />
+            <label>Carregador</label>
+            <input type="checkbox" name="accessoriesCharger" onChange={handleCheck} />
+            <button className="submit-button">Nova Movimentação</button>
         </div>
     )
 }

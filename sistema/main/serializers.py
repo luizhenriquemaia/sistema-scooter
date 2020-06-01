@@ -37,7 +37,8 @@ class MovementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movement
         fields = ['scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
-                  'dateMovement', 'pickUpTime', 'returnTime', 'helmet', 'bags', 'charger', 'case', 'observation']
+                  'dateMovement', 'pickUpTime', 'returnTime', 'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 
+                  'accessoriesCharger', 'observation']
     
     def create(self, validated_data):
         return Movement.create(Movement, **validated_data)

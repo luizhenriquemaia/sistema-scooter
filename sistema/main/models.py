@@ -29,10 +29,10 @@ class Movement(models.Model):
     dateMovement = models.DateField(default=date(2000, 1, 1))
     pickUpTime = models.TimeField(null=True)
     returnTime = models.TimeField(null=True)
-    helmet = models.BooleanField()
-    bags = models.BooleanField()
-    charger = models.BooleanField()
-    case = models.BooleanField()
+    accessoriesHelmet = models.BooleanField(default=False)
+    accessoriesBag = models.BooleanField(default=False)
+    accessoriesCase = models.BooleanField(default=False)
+    accessoriesCharger = models.BooleanField(default=False)
     observation = models.CharField(max_length=500, null=True)
     objects = models.Manager()
 
@@ -46,10 +46,10 @@ class Movement(models.Model):
                 description=validated_data['OL'])[0],
             dateMovement=date.today(),
             pickUpTime = datetime.now().time(),
-            helment=validated_data['accessoriesHelmet'],
-            bags=validated_data['accessoriesBag'],
-            charger=validated_data['acessoriesCharger'],
-            case=validated_data['acessoriesCase'],
+            accessoriesHelmet=validated_data['accessoriesHelmet'],
+            accessoriesBag=validated_data['accessoriesBag'],
+            accessoriesCase=validated_data['acessoriesCharger'],
+            accessoriesCharger=validated_data['acessoriesCase'],
             observation=validated_data['oservation']
         )
 
