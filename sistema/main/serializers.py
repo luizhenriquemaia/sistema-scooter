@@ -32,12 +32,13 @@ class MovementSerializer(serializers.ModelSerializer):
     deliveryman_id = serializers.IntegerField()
     logisticOperator = LogisticOperatorSerializer(read_only=True)
     logisticOperator_id = serializers.IntegerField()
+    typeMovement = serializers.CharField(required=False)
 
 
     class Meta:
         model = Movement
-        fields = ['scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
-                  'dateMovement', 'pickUpTime', 'returnTime', 'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 
+        fields = ['id', 'scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
+                  'typeMovement', 'dateMovement', 'pickUpTime', 'returnTime', 'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase',
                   'accessoriesCharger', 'observation']
     
     def create(self, validated_data):

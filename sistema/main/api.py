@@ -48,6 +48,10 @@ class MovementViewSet(viewsets.ViewSet):
     
     def create(self, request):
         print(f"\n\n\n{request.data}\n\n\n")
+        request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
+        request.data['logisticOperator_id'] = LogisticOperator.objects.get(description=request.data['OL']).id
+        request.data['deliveryman_id'] = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman']).id
+        print(f"\n\n\n{request.data}\n\n\n")
         serializer = MovementSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             new_movement = serializer.save()
