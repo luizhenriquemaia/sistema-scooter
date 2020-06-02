@@ -6,9 +6,17 @@ class StatusScooter(models.Model):
     description = models.CharField(max_length=200)
     objects = models.Manager()
 
+    def create(self, **validated_data):
+        new_status = StatusScooter(
+            description=validated_data['description']
+        )
+        new_status.save()
+        return new_status
+
 
 class LogisticOperator(models.Model):
     description = models.CharField(max_length=200)
+    objects = models.Manager()
 
     def create(self, **validated_data):
         new_logistic_operator = LogisticOperator(
@@ -28,6 +36,7 @@ class Deliveryman(models.Model):
     name = models.CharField(max_length=400)
     cpf = models.CharField(max_length=11, default=0)
     active = models.BooleanField(default=True)
+    objects = models.Manager()
 
     def create(self, **validated_data):
         print(f"\n\n\n\n validated_data: {validated_data}\n\n\n\n")

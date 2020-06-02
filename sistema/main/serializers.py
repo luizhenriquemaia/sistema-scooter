@@ -5,7 +5,10 @@ from .models import StatusScooter, LogisticOperator, Scooter, Deliveryman, Movem
 class StatusScooterSerializer(serializers.ModelSerializer):
     class Meta:
         model = StatusScooter
-        fields = '__all__'
+        fields = ['id', 'description']
+
+    def create(self, validated_data):
+        return StatusScooter.create(LogisticOperator, **validated_data)
 
 
 class LogisticOperatorSerializer(serializers.ModelSerializer):
@@ -17,9 +20,11 @@ class LogisticOperatorSerializer(serializers.ModelSerializer):
         return LogisticOperator.create(LogisticOperator, **validated_data)
 
 class ScooterSerializer(serializers.ModelSerializer):
+    status = StatusScooterSerializer(read_only=True)
+    status_id = serializers.IntegerField()
     class Meta:
         model = Scooter
-        fields = '__all__'
+        fields = ['chassisNumber', 'status', 'status_id']
 
 
 class DeliverymanSerializer(serializers.ModelSerializer): 
