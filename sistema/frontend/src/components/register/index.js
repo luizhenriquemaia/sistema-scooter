@@ -1,56 +1,51 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-// import { useHistory } from 'react-router-dom'
-// import { getMovement, addMovement } from '../../actions/movement'
+import { useDispatch } from 'react-redux'
+import { addDeliveryman } from '../../actions/register'
 
 
 export default function Register() {
     const dispatch = useDispatch()
-    // const history = useHistory()
-    const registers = useSelector(state => state.registers.register)
-    const [RegisterState, setRegisterState] = useState([{
-        registerType: "",
-        logisticOperator: {
-            description: ""},
-        deliveryman: {
-            name: ""},
-        cpfDeliveryman: ""
-    }])
-    
-    useEffect(() => {
-        if (registers.length !== 0) setRegisterState(registers)
-    }, [registers])
-
-    useEffect(() => {
-        dispatch(getRegisters())
-    }, [])
+    const [RegisterState, setRegisterState] = useState({
+        registerType: "deliveryman",
+        logisticOperatorDescription: "",
+        deliverymanName: "",
+        cpfDeliveryman: "",
+        deliverymanActive: false
+    })
 
     const handleChange = e => {
         const { name, value } = e.target
-        setNewRegisterState({
-            ...newRegisterState,
+        setRegisterState({
+            ...RegisterState,
             [name]: value
         })
     }
 
-    // const handleCheck = e => {
-    //     const { name, checked } = e.target
-    //     setNewRegisterState({
-    //         ...newRegisterState,
-    //         [name]: checked
-    //     })
-    // }
+    const handleCheck = e => {
+        const { name, checked } = e.target
+        setRegisterState({
+            ...RegisterState,
+            [name]: checked
+        })
+    }
 
     // const handleClick = (idRegister) => history.push(`details-register/${idRegister}`)
-    // const handleClickAdicionar = e => {
-    //     const { scooter, OL, cpfDeliverymanState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newRegisterState
-    //     const cpfDeliveryman = cpfDeliverymanState.replace(/\D/g, '')
-    //     const typeRegister = "retirada"
-    //     const newRegisterToAPI = { scooter, OL, cpfDeliveryman, typeRegister, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
-    //     dispatch(addRegister(newRegisterToAPI))
-    // }
-
-    // console.log(RegisterState)
+    const handleClickAdicionar = e => {
+        const { registerType } = RegisterState
+        if (registerType === "deliveryman") {
+            const { deliverymanName, cpfDeliveryman, deliverymanActive } = RegisterState
+            const cpfDeliverymanToAPI = cpfDeliveryman.replace(/\D/g, '')
+            const newRegisterToAPI = { registerType, deliverymanName, deliverymanActive, cpfDeliverymanToAPI }
+            console.log(newRegisterToAPI)
+            dispatch(addDeliveryman(newRegisterToAPI))
+        }
+        else {
+            const { logisticOperatorDescription } = RegisterState
+            const newRegisterToAPI = { registerType, logisticOperatorDescription }
+            console.log(newRegisterToAPI)
+        }
+        //dispatch(addRegister(newRegisterToAPI))
+    }
 
 
     return (
@@ -64,9 +59,13 @@ export default function Register() {
                         <option value="logisticOperator">Operador Oligstico</option>
                     </select>
                     <label>Operador Logístico</label>
-                    <input type="text" name="OL" onChange={handleChange} />
+                    <input type="text" name="logisticOperatorDescription" onChange={handleChange} />
                     <label>CPF Entregador</label>
-                    <input type="text" name="cpfDeliverymanState" onChange={handleChange} />  {/* não seria apenas name=cpfDeliveryman" */}
+                    <input type="text" name="cpfDeliveryman" onChange={handleChange} />
+                    <label>Nome Entregador</label>
+                    <input type="text" name="deliverymanName" onChange={handleChange} />
+                    <label>Ativo</label>
+                    <input type="checkbox" name="deliverymanActive" onChange={handleCheck} />
                 </div>
                 <button className="submit-button" onClick={handleClickAdicionar}>Limpar</button>
                 <button className="submit-button" onClick={handleClickAdicionar}>Registrar</button>

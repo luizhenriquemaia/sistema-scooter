@@ -4,6 +4,7 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 // Components
 import Movement from './scooter/Movement'
 import DetailsMovement from './scooter/DetailsMovement'
+import Register from './register'
 // Redux things
 import { Provider } from 'react-redux'
 import store from '../store'
@@ -18,6 +19,7 @@ export default function App() {
                             <Switch>
                             <Route exact path="/" component={Movement} />
                             <Route exact path="/details-movement/:idMovement" component={DetailsMovement} />
+                            <Route exact path="/register" component={Register} />
                             </Switch>
                         </div>
                     </Fragment>

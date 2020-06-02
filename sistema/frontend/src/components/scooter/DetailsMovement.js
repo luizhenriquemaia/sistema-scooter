@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-//import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { addMovement } from '../../actions/movement'
 
 
 export default function Movement() {
     const dispatch = useDispatch()
+    const history = useHistory()
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
         cpfDeliveryman: "",
@@ -32,6 +33,11 @@ export default function Movement() {
             ...newMovementState,
             [name]: checked
         })
+    }
+
+    const redirectToRegister = e => {
+        e.preventDefault()
+        history.push('/register')
     }
 
     const handleSubmit = e => {
