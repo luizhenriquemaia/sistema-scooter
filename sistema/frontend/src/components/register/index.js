@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { addDeliveryman } from '../../actions/register'
+import { addDeliveryman, addLogisticOperator } from '../../actions/register'
 
 
 export default function Register() {
@@ -29,22 +29,26 @@ export default function Register() {
         })
     }
 
-    // const handleClick = (idRegister) => history.push(`details-register/${idRegister}`)
     const handleClickAdicionar = e => {
         const { registerType } = RegisterState
         if (registerType === "deliveryman") {
             const { deliverymanName, cpfDeliveryman, deliverymanActive } = RegisterState
             const cpfDeliverymanToAPI = cpfDeliveryman.replace(/\D/g, '')
-            const newRegisterToAPI = { registerType, deliverymanName, deliverymanActive, cpfDeliverymanToAPI }
-            console.log(newRegisterToAPI)
-            dispatch(addDeliveryman(newRegisterToAPI))
+            if (cpfDeliverymanToAPI.length !== 11) {
+                console.log("cpf inválido")
+            }
+            else {
+                const newRegisterToAPI = { deliverymanName, deliverymanActive, cpfDeliverymanToAPI }
+                console.log(newRegisterToAPI)
+                dispatch(addDeliveryman(newRegisterToAPI))
+            }
         }
         else {
             const { logisticOperatorDescription } = RegisterState
             const newRegisterToAPI = { registerType, logisticOperatorDescription }
             console.log(newRegisterToAPI)
+            dispatch(addLogisticOperator(newRegisterToAPI))
         }
-        //dispatch(addRegister(newRegisterToAPI))
     }
 
 

@@ -1,17 +1,22 @@
-import { ADD_DELIVERYMANT } from '../actions/types.js'
+import { ADD_DELIVERYMAN, ADD_LOGISTICOPERATOR } from '../actions/types.js'
 
 
 
 const initialState = {
-    movement: []
+    register: []
 }
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case ADD_DELIVERYMANT:
+        case ADD_DELIVERYMAN:
             return {
                 ...state,
-                movement: [...state.movement, action.payload]
+                register: [...state.register, action.payload]
+            }
+        case ADD_LOGISTICOPERATOR:
+            return {
+                ...state,
+                register: [...state.register, action.payload]
             }
         default:
             return state

@@ -9,7 +9,7 @@ class StatusScooter(models.Model):
 
 class LogisticOperator(models.Model):
     description = models.CharField(max_length=200)
-
+ 
 
 class Scooter(models.Model):
     chassisNumber = models.IntegerField()
@@ -21,6 +21,17 @@ class Deliveryman(models.Model):
     name = models.CharField(max_length=400)
     cpf = models.CharField(max_length=11, default=0)
     active = models.BooleanField(default=True)
+
+    def create(self, **validated_data):
+        print(f"\n\n\n\n validated_data: {validated_data}\n\n\n\n")
+        new_deliveryman = Deliveryman(
+            name=validated_data['name'],
+            cpf=validated_data['cpf'],
+            active=validated_data['active']
+        )
+        new_deliveryman.save()
+        return new_deliveryman
+
 
 
 class Movement(models.Model):

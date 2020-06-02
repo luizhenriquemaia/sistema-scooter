@@ -19,10 +19,13 @@ class ScooterSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class DeliverymanSerializer(serializers.ModelSerializer):
+class DeliverymanSerializer(serializers.ModelSerializer): 
     class Meta:
         model = Deliveryman
-        fields = '__all__'
+        fields = ['id', 'name', 'cpf', 'active']
+    
+    def create(self, validated_data):
+        return Deliveryman.create(Deliveryman, **validated_data)
 
 
 class MovementSerializer(serializers.ModelSerializer):
