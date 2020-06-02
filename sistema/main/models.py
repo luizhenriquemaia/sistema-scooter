@@ -9,6 +9,13 @@ class StatusScooter(models.Model):
 
 class LogisticOperator(models.Model):
     description = models.CharField(max_length=200)
+
+    def create(self, **validated_data):
+        new_logistic_operator = LogisticOperator(
+            description=validated_data['description']
+        )
+        new_logistic_operator.save()
+        return new_logistic_operator
  
 
 class Scooter(models.Model):

@@ -11,7 +11,10 @@ class StatusScooterSerializer(serializers.ModelSerializer):
 class LogisticOperatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = LogisticOperator
-        fields = '__all__'
+        fields = ['id', 'description']
+
+    def create(self, validated_data):
+        return LogisticOperator.create(LogisticOperator, **validated_data)
 
 class ScooterSerializer(serializers.ModelSerializer):
     class Meta:

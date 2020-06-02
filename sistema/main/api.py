@@ -11,11 +11,23 @@ class StatusScooterViewSet(viewsets.ModelViewSet):
         return StatusScooter.objects.all()
 
 
-class LogisticOperatorViewSet(viewsets.ModelViewSet):
-    serializer_class = LogisticOperatorSerializer
+class LogisticOperatorViewSet(viewsets.ViewSet):
 
-    def get_queryset(self):
-        return LogisticOperator.objects.all()
+    def list(self, request):
+        queryset = LogisticOperator.objects.all()
+        serializer = LogisticOperatorSerializer(queryset, many=True)
+        if len(serializer.data) > 0:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
+    def create(self, request):
+        request.data['description'] = request.data['logisticOperatorDescription']
+        serializer = LogisticOperatorSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            new_logistic_operator = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ScooterViewSet(viewsets.ViewSet):
@@ -31,12 +43,18 @@ class ScooterViewSet(viewsets.ViewSet):
 
 class DeliverymanViewSet(viewsets.ViewSet):
 
+    def list(self, request):
+        queryset = Deliveryman.objects.all()
+        serializer = DeliverymanSerializer(queryset, many=True)
+        if len(serializer.data) > 0:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
     def create(self, request):
-        print(f"\n\n\n{request.data}\n\n\n")
         request.data['name'] = request.data['deliverymanName']
         request.data['cpf'] = request.data['cpfDeliverymanToAPI']
         request.data['active'] = request.data['deliverymanActive']
-        print(f"\n\n\n{request.data}\n\n\n")
         serializer = DeliverymanSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             new_deliveryman = serializer.save()
@@ -55,11 +73,9 @@ class MovementViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
     
     def create(self, request):
-        print(f"\n\n\n{request.data}\n\n\n")
         request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
         request.data['logisticOperator_id'] = LogisticOperator.objects.get(description=request.data['OL']).id
         request.data['deliveryman_id'] = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman']).id
-        print(f"\n\n\n{request.data}\n\n\n")
         serializer = MovementSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             new_movement = serializer.save()
