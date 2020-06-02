@@ -1,4 +1,4 @@
-import { GET_SCOOTERS, DELETE_SCOOTER, ADD_SCOOTER } from '../actions/types.js'
+import { GET_SCOOTERS, GET_STATUS_SCOOTERS, DELETE_SCOOTER, ADD_SCOOTER } from '../actions/types.js'
 
 
 
@@ -12,6 +12,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 scooter: action.payload,
+            }
+        case GET_STATUS_SCOOTERS:
+            return {
+                ...state,
+                statusScooter: action.payload,
             }
         case DELETE_SCOOTER:
             return {

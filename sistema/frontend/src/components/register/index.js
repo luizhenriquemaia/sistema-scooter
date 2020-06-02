@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addDeliveryman, addLogisticOperator } from '../../actions/register'
+import { getStatusScooters } from '../../actions/scooters'
 
 
 export default function Register() {
@@ -10,8 +11,26 @@ export default function Register() {
         logisticOperatorDescription: "",
         deliverymanName: "",
         cpfDeliveryman: "",
-        deliverymanActive: false
+        deliverymanActive: false,
+        chassisScooter: "",
+        statusScooter: ""
     })
+    const [statusScooterFromAPI, setStatusScooterFromAPI] = useState([{
+        id: "",
+        description: ""
+    }])
+
+    useEffect(() => {
+        dispatch(getStatusScooters())
+    }, [])
+
+    const statusScooter = useSelector(state => state.scooters.statusScooter)
+
+    useEffect(() => {
+        if (statusScooter !== undefined) {
+            setStatusScooterFromAPI(statusScooter)
+        }
+    }, [statusScooter])
 
     const handleChange = e => {
         const { name, value } = e.target
@@ -29,6 +48,7 @@ export default function Register() {
         })
     }
 
+    
     const handleClickAdicionar = e => {
         const { registerType } = RegisterState
         if (registerType === "deliveryman") {
@@ -61,6 +81,7 @@ export default function Register() {
                     <select name="registerType" onChange={handleChange} >
                         <option value="deliveryman">Entregador</option>
                         <option value="logisticOperator">Operador Oligstico</option>
+                        <option value="scooter">Patinete</option>
                     </select>
                     <label>Operador Logístico</label>
                     <input type="text" name="logisticOperatorDescription" onChange={handleChange} />
@@ -70,6 +91,14 @@ export default function Register() {
                     <input type="text" name="deliverymanName" onChange={handleChange} />
                     <label>Ativo</label>
                     <input type="checkbox" name="deliverymanActive" onChange={handleCheck} />
+                    <label>Chassi Patinete</label>
+                    <input type="text" name="chassisScooter" onChange={handleChange} />
+                    <label>Status Patinete</label>
+                    <select name="statusScooter" onChange={handleChange} >
+                        {statusScooterFromAPI.map(status => (
+                            <option value={status.id} key={status.id}>{status.description}</option>
+                        ))}
+                    </select>
                 </div>
                 <button className="submit-button" onClick={handleClickAdicionar}>Limpar</button>
                 <button className="submit-button" onClick={handleClickAdicionar}>Registrar</button>

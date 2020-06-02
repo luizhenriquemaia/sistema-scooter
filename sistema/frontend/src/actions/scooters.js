@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_SCOOTERS, GET_SCOOTER, DELETE_SCOOTER, ADD_SCOOTER } from './types'
+import { GET_SCOOTERS, GET_SCOOTER, GET_STATUS_SCOOTERS, DELETE_SCOOTER, ADD_SCOOTER } from './types'
 
 
 export function getScooters() {
@@ -24,6 +24,22 @@ export function getScooter(id) {
             .then(res => {
                 dispatch({
                     type: GET_SCOOTER,
+                    payload: res.data
+                })
+            })
+            .catch(
+                err => dispatch(returnErrors(err.response.data, err.response.status))
+            )
+    }
+}
+
+
+export function getStatusScooters() {
+    return dispatch => {
+        axios.get(`/api/status-scooter/`)
+            .then(res => {
+                dispatch({
+                    type: GET_STATUS_SCOOTERS,
                     payload: res.data
                 })
             })
