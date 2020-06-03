@@ -8,6 +8,7 @@ export default function Movement() {
     const dispatch = useDispatch()
     const history = useHistory()
     const movements = useSelector(state => state.movements.movement)
+
     const [MovementState, setMovementState] = useState([{
         id: 0,
         dataMovement: "",
@@ -23,7 +24,8 @@ export default function Movement() {
         accessoriesBag: false,
         accessoriesCase: false,
         accessoriesCharger: false,
-        observation: ""
+        observation: "",
+        timeFormatted: ""
     }])
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
@@ -35,9 +37,22 @@ export default function Movement() {
         accessoriesCharger: false,
         observation: ""
     })
+
+    const formattingTime = (dateMovement, timeMovement) => {
+        var dateSplited = dateMovement.split("-")
+        var timeSplited = timeMovement.split(":")
+        var dateMovementFormatted = new Date(dateSplited[0], dateSplited[1]-1, dateSplited[2], timeSplited[0], timeSplited[1])
+        var timeMovementFormatted = `${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
+        return timeMovementFormatted
+    }
     
     useEffect(() => {
-        if (movements.length !== 0) setMovementState(movements)
+        if (movements.length !== 0) {
+            movements.map(movement => {
+                movement.timeFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
+            })
+            setMovementState(movements)
+        }
     }, [movements])
 
     useEffect(() => {
@@ -100,7 +115,7 @@ export default function Movement() {
                             <td>{movement.scooter.chassisNumber}</td>
                             <td>{movement.deliveryman.name}</td>
                             <td>{movement.logisticOperator.description}</td>
-                            <td>{movement.pickUpTime}</td>
+                            <td>{movement.timeFormatted}</td>
                             <td>{movement.returnTime}</td>
                         </tr>
                     ))}
