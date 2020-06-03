@@ -34,10 +34,13 @@ export default function Movement() {
     const movement = useSelector(state => state.movements.movement)
 
     useEffect(() => {
-        if (movement !== undefined) {
+        console.log(typeof movement)
+        if (movement.scooter) {
+            console.log(movement.legth)
+            console.log(movement)
             setMovementStateAPI({
-                scooter: movement.scooter_id,
-                cpfDeliveryman: movement.deliveryman_id,
+                scooter: movement.scooter.chassisNumber,
+                cpfDeliveryman: movement.deliveryman.cpf,
                 accessoriesHelmet: movement.accessoriesHelmet,
                 accessoriesBag: movement.accessoriesBag,
                 accessoriesCase: movement.accessoriesCase,

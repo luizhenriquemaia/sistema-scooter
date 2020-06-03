@@ -57,5 +57,21 @@ class MovementSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         return Movement.create(Movement, **validated_data)
+
+
+class MovementRetrieveSerializer(serializers.ModelSerializer):
+    scooter = ScooterSerializer(read_only=False)
+    scooter_id = serializers.IntegerField()
+    deliveryman = DeliverymanSerializer(read_only=False)
+    deliveryman_id = serializers.IntegerField()
+    logisticOperator = LogisticOperatorSerializer(read_only=False)
+    logisticOperator_id = serializers.IntegerField()
+    typeMovement = serializers.CharField(required=False)
+
+    class Meta:
+        model = Movement
+        fields = ['id', 'scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
+                  'typeMovement', 'dateMovement', 'pickUpTime', 'returnTime', 'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase',
+                  'accessoriesCharger', 'observation']
     
 

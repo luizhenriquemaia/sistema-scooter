@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import StatusScooter, LogisticOperator, Scooter, Deliveryman, Movement
-from .serializers import StatusScooterSerializer, LogisticOperatorSerializer, ScooterSerializer, DeliverymanSerializer, MovementSerializer
+from .serializers import StatusScooterSerializer, LogisticOperatorSerializer, ScooterSerializer, DeliverymanSerializer, MovementSerializer, MovementRetrieveSerializer
 
 
 class StatusScooterViewSet(viewsets.ViewSet):
@@ -106,8 +106,7 @@ class MovementViewSet(viewsets.ViewSet):
     
     def retrieve(self, request, pk):
         movement = Movement.retrieve(Movement, id=pk)
-        print(f"\n\n\nMovement: {movement}\n\n\n")
-        serializer = MovementSerializer(data=movement)
+        serializer = MovementRetrieveSerializer(data=movement)
         if serializer.is_valid(raise_exception=True):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
