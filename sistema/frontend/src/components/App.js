@@ -2,6 +2,7 @@
 import React, { Fragment } from 'react'
 import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 // Components
+import Menu from './menu'
 import Movement from './scooter/Movement'
 import DetailsMovement from './scooter/DetailsMovement'
 import Register from './register'
@@ -15,6 +16,7 @@ export default function App() {
         <Provider store={store}>
                 <Router>
                     <Fragment>
+                    <Menu/>
                         <div className="container">
                             <Switch>
                             <Route exact path="/" component={Movement} />

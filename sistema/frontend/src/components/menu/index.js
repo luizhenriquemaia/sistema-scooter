@@ -20,15 +20,15 @@ return (
                 <div className="navBox">
                     <img src="#" />
                     <p>nova movimentação</p>
-                    <div class="navSubBox">
+                    <div className="navSubBox">
                         <img src="#" />
                         <p>movimentação interna</p>
                     </div>
-                    <div class="navSubBox">
+                    <div className="navSubBox">
                         <img src="#" />
                         <p>movimentação interna</p>
                     </div>
-                    <div class="navSubBox">
+                    <div className="navSubBox">
                         <img src="#" />
                         <p>movimentação interna</p>
                     </div>
