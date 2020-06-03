@@ -1,4 +1,4 @@
-import { GET_MOVEMENTS, DELETE_MOVEMENT, ADD_MOVEMENT } from '../actions/types.js'
+import { GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT } from '../actions/types.js'
 
 
 
@@ -9,6 +9,11 @@ const initialState = {
 export default function (state = initialState, action) {
     switch (action.type) {
         case GET_MOVEMENTS:
+            return {
+                ...state,
+                movement: action.payload,
+            }
+        case GET_MOVEMENT:
             return {
                 ...state,
                 movement: action.payload,

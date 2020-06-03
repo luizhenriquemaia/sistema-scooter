@@ -103,3 +103,11 @@ class MovementViewSet(viewsets.ViewSet):
             new_movement = serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def retrieve(self, request, pk):
+        movement = Movement.retrieve(Movement, id=pk)
+        print(f"\n\n\nMovement: {movement}\n\n\n")
+        serializer = MovementSerializer(data=movement)
+        if serializer.is_valid(raise_exception=True):
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

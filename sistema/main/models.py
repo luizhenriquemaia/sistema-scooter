@@ -89,4 +89,25 @@ class Movement(models.Model):
             )
             new_movement.save()
             return new_movement
+    
+    def retrieve(self, id):
+        movement = Movement.objects.get(id=id)
+        movement_dict = {
+            "id": id,
+            "scooter": Scooter.objects.get(id=movement.scooter_id).__dict__,
+            "scooter_id": Scooter.objects.get(id=movement.scooter_id).id,
+            "deliveryman": Deliveryman.objects.get(id=movement.deliveryman_id).__dict__,
+            "deliveryman_id": Deliveryman.objects.get(id=movement.deliveryman_id).id,
+            "logisticOperator": LogisticOperator.objects.get(id=movement.logisticOperator_id).__dict__,
+            "logisticOperator_id": LogisticOperator.objects.get(id=movement.logisticOperator_id).id,
+            "dateMovement": movement.dateMovement,
+            "pickUpTime": movement.pickUpTime,
+            "returnTime": movement.returnTime,
+            "accessoriesHelmet": movement.accessoriesHelmet,
+            "accessoriesBag": movement.accessoriesBag,
+            "accessoriesCase": movement.accessoriesCase,
+            "accessoriesCharger": movement.accessoriesCharger,
+            "observation": movement.observation
+        }
+        return movement_dict
 

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import { addMovement } from '../../actions/movement'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory, useParams } from 'react-router-dom'
+import { addMovement, getMovement } from '../../actions/movement'
 
 
 export default function Movement() {
+    const params = useParams()
     const dispatch = useDispatch()
     const history = useHistory()
+    const idMovementParams = params.idMovement
+    const [idMovement, setIdMovement] = useState(-1)
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
         cpfDeliveryman: "",
@@ -18,6 +21,18 @@ export default function Movement() {
         accessoriesCharger: false,
         observation: ""
     })
+    const movement = useSelector(state => state.movements.movement)
+
+    useEffect(() => {
+        if (idMovement != -1) dispatch(getMovement(idMovement))
+    }, [idMovement])
+
+    useEffect(() => {
+        setIdMovement(idMovementParams)
+    }, [idMovementParams])
+
+    console.log(idMovement)
+    console.log(movement)
 
     const handleChange = e => {
         const { name, value } = e.target

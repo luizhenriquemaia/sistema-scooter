@@ -111,7 +111,7 @@ export default function Movement() {
                 <tbody>
                     {MovementState.map(movement => (
                         <tr key={movement.id}>
-                            <td>{movement.dateMovement}</td>
+                            <td onClick={() => handleClick(movement.id)}>{movement.dateMovement}</td>
                             <td>{movement.scooter.chassisNumber}</td>
                             <td>{movement.deliveryman.name}</td>
                             <td>{movement.logisticOperator.description}</td>
