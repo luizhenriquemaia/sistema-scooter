@@ -65,9 +65,14 @@ export default function Movement() {
     const handleClickAdicionar = e => {
         const { scooter, OL, cpfDeliverymanState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfDeliveryman = cpfDeliverymanState.replace(/\D/g, '')
-        const typeMovement = "retirada"
-        const newMovementToAPI = { scooter, OL, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
-        dispatch(addMovement(newMovementToAPI))
+        if (cpfDeliveryman.length !== 11) {
+            console.log("invalid cpf")
+        }
+        else {
+            const typeMovement = "retirada"
+            const newMovementToAPI = { scooter, OL, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+            dispatch(addMovement(newMovementToAPI))
+        }
     }
 
     console.log(MovementState)
