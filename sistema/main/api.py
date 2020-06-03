@@ -50,6 +50,17 @@ class ScooterViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        
+    
+    def create(self, request):
+        request.data['status_id'] = request.data['statusScooter']
+        request.data['chassisNumber'] = request.data['chassisScooter']
+        serializer = ScooterSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            new_scooter = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 
 class DeliverymanViewSet(viewsets.ViewSet):

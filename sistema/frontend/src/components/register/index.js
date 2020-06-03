@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addDeliveryman, addLogisticOperator } from '../../actions/register'
-import { getStatusScooters } from '../../actions/scooters'
+import { getStatusScooters, addScooter } from '../../actions/scooters'
 
 
 export default function Register() {
@@ -51,23 +51,33 @@ export default function Register() {
     
     const handleClickAdicionar = e => {
         const { registerType } = RegisterState
-        if (registerType === "deliveryman") {
-            const { deliverymanName, cpfDeliveryman, deliverymanActive } = RegisterState
-            const cpfDeliverymanToAPI = cpfDeliveryman.replace(/\D/g, '')
-            if (cpfDeliverymanToAPI.length !== 11) {
-                console.log("cpf inválido")
-            }
-            else {
-                const newRegisterToAPI = { deliverymanName, deliverymanActive, cpfDeliverymanToAPI }
+        switch (registerType) {
+            case "deliveryman":
+                const { deliverymanName, cpfDeliveryman, deliverymanActive } = RegisterState
+                const cpfDeliverymanToAPI = cpfDeliveryman.replace(/\D/g, '')
+                if (cpfDeliverymanToAPI.length !== 11) {
+                    console.log("cpf inválido")
+                }
+                else {
+                    var newRegisterToAPI = { deliverymanName, deliverymanActive, cpfDeliverymanToAPI }
+                    console.log(newRegisterToAPI)
+                    dispatch(addDeliveryman(newRegisterToAPI))
+                }
+        
+            case "logisticOperator":
+                const { logisticOperatorDescription } = RegisterState
+                var newRegisterToAPI = { registerType, logisticOperatorDescription }
                 console.log(newRegisterToAPI)
-                dispatch(addDeliveryman(newRegisterToAPI))
-            }
-        }
-        else {
-            const { logisticOperatorDescription } = RegisterState
-            const newRegisterToAPI = { registerType, logisticOperatorDescription }
-            console.log(newRegisterToAPI)
-            dispatch(addLogisticOperator(newRegisterToAPI))
+                dispatch(addLogisticOperator(newRegisterToAPI))
+            
+            case "scooter":
+                const { chassisScooter, statusScooter } = RegisterState
+                var newRegisterToAPI = { chassisScooter, statusScooter }
+                console.log(newRegisterToAPI)
+                dispatch(addScooter(newRegisterToAPI))
+            
+            default:
+                console.log("invalid register type")
         }
     }
 
@@ -95,6 +105,7 @@ export default function Register() {
                     <input type="text" name="chassisScooter" onChange={handleChange} />
                     <label>Status Patinete</label>
                     <select name="statusScooter" onChange={handleChange} >
+                        <option value="0">-----</option>
                         {statusScooterFromAPI.map(status => (
                             <option value={status.id} key={status.id}>{status.description}</option>
                         ))}

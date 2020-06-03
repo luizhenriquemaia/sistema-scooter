@@ -31,6 +31,14 @@ class Scooter(models.Model):
     status = models.ForeignKey(StatusScooter, on_delete=models.CASCADE, default=0)
     objects = models.Manager()
 
+    def create(self, **validated_data):
+        new_scooter = Scooter(
+            chassisNumber=validated_data['chassisNumber'],
+            status=StatusScooter.objects.get(id=validated_data['status_id'])
+        )
+        new_scooter.save()
+        return new_scooter
+
 
 class Deliveryman(models.Model):
     name = models.CharField(max_length=400)

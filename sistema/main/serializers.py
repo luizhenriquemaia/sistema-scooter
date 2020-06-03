@@ -24,7 +24,10 @@ class ScooterSerializer(serializers.ModelSerializer):
     status_id = serializers.IntegerField()
     class Meta:
         model = Scooter
-        fields = ['chassisNumber', 'status', 'status_id']
+        fields = ['id', 'chassisNumber', 'status', 'status_id']
+    
+    def create(self, validated_data):
+        return Scooter.create(Scooter, **validated_data)
 
 
 class DeliverymanSerializer(serializers.ModelSerializer): 
