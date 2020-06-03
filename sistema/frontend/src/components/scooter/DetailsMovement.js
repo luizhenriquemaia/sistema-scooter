@@ -21,7 +21,31 @@ export default function Movement() {
         accessoriesCharger: false,
         observation: ""
     })
+    const [movementStateAPI, setMovementStateAPI] = useState({
+        scooter: "",
+        cpfDeliveryman: "",
+        destiny: "",
+        accessoriesHelmet: false,
+        accessoriesBag: false,
+        accessoriesCase: false,
+        accessoriesCharger: false,
+        observation: ""
+    })
     const movement = useSelector(state => state.movements.movement)
+
+    useEffect(() => {
+        if (movement !== undefined) {
+            setMovementStateAPI({
+                scooter: movement.scooter_id,
+                cpfDeliveryman: movement.deliveryman_id,
+                accessoriesHelmet: movement.accessoriesHelmet,
+                accessoriesBag: movement.accessoriesBag,
+                accessoriesCase: movement.accessoriesCase,
+                accessoriesCharger: movement.accessoriesCharger,
+                observation: movement.observation
+            })
+        }
+    }, [movement])
 
     useEffect(() => {
         if (idMovement != -1) dispatch(getMovement(idMovement))
@@ -31,7 +55,6 @@ export default function Movement() {
         setIdMovement(idMovementParams)
     }, [idMovementParams])
 
-    console.log(idMovement)
     console.log(movement)
 
     const handleChange = e => {
@@ -62,7 +85,7 @@ export default function Movement() {
         dispatch(addMovement(newMovement))
     }
 
-    console.log(newMovementState)
+    console.log(movementStateAPI)
 
 
     return (
@@ -71,11 +94,11 @@ export default function Movement() {
             <form onSubmit={handleSubmit}>
                 <div className="form-input">
                     <label>Número do chassi</label>
-                    <input type="text" name="scooter" onChange={handleChange} />
+                    <input type="text" name="scooter" value={movementStateAPI.scooter} onChange={handleChange} />
                 </div>
                 <div className="form-input">
                     <label>CPF do Entregador</label>
-                    <input type="text" name="cpfDeliveryman" onChange={handleChange} />
+                    <input type="text" name="cpfDeliveryman" value={movementStateAPI.cpfDeliveryman} onChange={handleChange} />
                 </div>
                 <div className="form-input">
                     <label>Retirada</label>
@@ -91,13 +114,13 @@ export default function Movement() {
                 <div className="form-input">
                     <h4>Acessórios</h4>
                     <label>Capacete</label>
-                    <input type="checkbox" name="accessoriesHelmet" onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesHelmet" checked={movementStateAPI.accessoriesHelmet} onChange={handleCheck} />
                     <label>Bag</label>
-                    <input type="checkbox" name="accessoriesBag" onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesBag" checked={movementStateAPI.accessoriesBag} onChange={handleCheck} />
                     <label>Case</label>
-                    <input type="checkbox" name="accessoriesCase" onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesCase" checked={movementStateAPI.accessoriesCase} onChange={handleCheck} />
                     <label>Carregador</label>
-                    <input type="checkbox" name="accessoriesCharger" onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesCharger" checked={movementStateAPI.accessoriesCharger} onChange={handleCheck} />
                 </div>
                 <div className="form-input">
                     <label>Observação</label>
