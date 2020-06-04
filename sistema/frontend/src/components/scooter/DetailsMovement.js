@@ -15,7 +15,7 @@ export default function Movement() {
         cpfDeliveryman: "",
         LO: "",
         typeMovement: "",
-        destiny: "",
+        destinyScooter: "",
         accessoriesHelmet: false,
         accessoriesBag: false,
         accessoriesCase: false,
@@ -26,16 +26,33 @@ export default function Movement() {
 
     useEffect(() => {
         if (movement.scooter) {
-            setMovementState({
-                scooter: movement.scooter.chassisNumber,
-                cpfDeliveryman: movement.deliveryman.cpf,
-                LO: movement.logisticOperator.description,
-                accessoriesHelmet: movement.accessoriesHelmet,
-                accessoriesBag: movement.accessoriesBag,
-                accessoriesCase: movement.accessoriesCase,
-                accessoriesCharger: movement.accessoriesCharger,
-                observation: movement.observation
-            })
+            if (movement.returnTime) {
+                setMovementState({
+                    scooter: movement.scooter.chassisNumber,
+                    cpfDeliveryman: movement.deliveryman.cpf,
+                    LO: movement.logisticOperator.description,
+                    typeMovement: "devolução",
+                    accessoriesHelmet: movement.accessoriesHelmet,
+                    accessoriesBag: movement.accessoriesBag,
+                    accessoriesCase: movement.accessoriesCase,
+                    accessoriesCharger: movement.accessoriesCharger,
+                    observation: movement.observation,
+                    destinyScooter: movement.destinyScooter
+                })
+            }
+            else {
+                setMovementState({
+                    scooter: movement.scooter.chassisNumber,
+                    cpfDeliveryman: movement.deliveryman.cpf,
+                    LO: movement.logisticOperator.description,
+                    typeMovement: "retirada",
+                    accessoriesHelmet: movement.accessoriesHelmet,
+                    accessoriesBag: movement.accessoriesBag,
+                    accessoriesCase: movement.accessoriesCase,
+                    accessoriesCharger: movement.accessoriesCharger,
+                    observation: movement.observation
+                })
+            }
         }
     }, [movement])
 
@@ -48,6 +65,8 @@ export default function Movement() {
     }, [idMovementParams])    
 
     const handleChange = e => {
+        console.log(e.target.name)
+        console.log(e.target.value)
         const { name, value } = e.target
         setMovementState({
             ...movementState,
@@ -65,9 +84,8 @@ export default function Movement() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        const { scooter, cpfDeliveryman, LO, typeMovement, destiny, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
-        const updateMovementData = { scooter, cpfDeliveryman, LO, typeMovement, destiny, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
-        console.log(updateMovementData)
+        const { scooter, cpfDeliveryman, LO, typeMovement, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
+        const updateMovementData = { scooter, cpfDeliveryman, LO, typeMovement, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
         dispatch(updateMovement(idMovement, updateMovementData))
     }
 
@@ -90,15 +108,15 @@ export default function Movement() {
                 </div>
                 <div className="form-input">
                     <label>Retirada</label>
-                    <input type="radio" name="typeMovement" value="retirada" onChange={handleChange} />
+                    <input type="radio" name="typeMovement" value="retirada" checked={movementState.typeMovement == "retirada"} onChange={handleChange} />
                     <label>Devolução</label>
-                    <input type="radio" name="typeMovement" value="devolução" onChange={handleChange} />
+                    <input type="radio" name="typeMovement" value="devolução" checked={movementState.typeMovement == "devolução"} onChange={handleChange} />
                 </div>
                 <div className="form-input">
                     <label>Destino</label>
-                    <input type="radio" name="destiny" value="base" onChange={handleChange} />
+                    <input type="radio" name="destinyScooter" value="base" checked={movementState.destinyScooter == "base"} onChange={handleChange} />
                     <span>Base</span>
-                    <input type="radio" name="destiny" value="manutenção" onChange={handleChange} />
+                    <input type="radio" name="destinyScooter" value="manutenção" checked={movementState.destinyScooter == "manutenção"} onChange={handleChange} />
                     <span>Manutenção</span>
                 </div>
                 <div className="form-input">

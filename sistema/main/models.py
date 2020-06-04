@@ -62,6 +62,7 @@ class Movement(models.Model):
     scooter = models.ForeignKey(Scooter, on_delete=models.CASCADE, null=True)
     deliveryman = models.ForeignKey(Deliveryman, on_delete=models.CASCADE, null=True)
     logisticOperator = models.ForeignKey(LogisticOperator, on_delete=models.CASCADE, null=True)
+    destinyScooter = models.CharField(max_length=200, blank=True)
     dateMovement = models.DateField(default=date(2000, 1, 1))
     pickUpTime = models.TimeField(null=True)
     returnTime = models.TimeField(null=True)
@@ -71,6 +72,28 @@ class Movement(models.Model):
     accessoriesCharger = models.BooleanField(default=False)
     observation = models.CharField(max_length=500, blank=True)
     objects = models.Manager()
+
+    def retrieve(self, id):
+        movement = Movement.objects.get(id=id)
+        movement_dict = {
+            "id": id,
+            "scooter": Scooter.objects.get(id=movement.scooter_id).__dict__,
+            "scooter_id": Scooter.objects.get(id=movement.scooter_id).id,
+            "deliveryman": Deliveryman.objects.get(id=movement.deliveryman_id).__dict__,
+            "deliveryman_id": Deliveryman.objects.get(id=movement.deliveryman_id).id,
+            "logisticOperator": LogisticOperator.objects.get(id=movement.logisticOperator_id).__dict__,
+            "logisticOperator_id": LogisticOperator.objects.get(id=movement.logisticOperator_id).id,
+            "destinyScooter": movement.destinyScooter,
+            "dateMovement": movement.dateMovement,
+            "pickUpTime": movement.pickUpTime,
+            "returnTime": movement.returnTime,
+            "accessoriesHelmet": movement.accessoriesHelmet,
+            "accessoriesBag": movement.accessoriesBag,
+            "accessoriesCase": movement.accessoriesCase,
+            "accessoriesCharger": movement.accessoriesCharger,
+            "observation": movement.observation
+        }
+        return movement_dict
 
     def create(self, **validated_data):
         print(f"\n\n\n\n validated_data: {validated_data}\n\n\n\n")
@@ -90,24 +113,26 @@ class Movement(models.Model):
             new_movement.save()
             return new_movement
     
-    def retrieve(self, id):
-        movement = Movement.objects.get(id=id)
-        movement_dict = {
-            "id": id,
-            "scooter": Scooter.objects.get(id=movement.scooter_id).__dict__,
-            "scooter_id": Scooter.objects.get(id=movement.scooter_id).id,
-            "deliveryman": Deliveryman.objects.get(id=movement.deliveryman_id).__dict__,
-            "deliveryman_id": Deliveryman.objects.get(id=movement.deliveryman_id).id,
-            "logisticOperator": LogisticOperator.objects.get(id=movement.logisticOperator_id).__dict__,
-            "logisticOperator_id": LogisticOperator.objects.get(id=movement.logisticOperator_id).id,
-            "dateMovement": movement.dateMovement,
-            "pickUpTime": movement.pickUpTime,
-            "returnTime": movement.returnTime,
-            "accessoriesHelmet": movement.accessoriesHelmet,
-            "accessoriesBag": movement.accessoriesBag,
-            "accessoriesCase": movement.accessoriesCase,
-            "accessoriesCharger": movement.accessoriesCharger,
-            "observation": movement.observation
-        }
-        return movement_dict
+    def update(self, movement, **validated_data):
+        print(f"\n\n\nvalidated_data: {validated_data}")
+        print(f"\Movement: {movement}\n\n\n")
+        movement.scooter = Scooter.objects.get(
+            id=validated_data['scooter_id'])
+        movement.deliveryman = Deliveryman.objects.get(
+            id=validated_data['deliveryman_id'])
+        movement.accessoriesHelmet = validated_data['accessoriesHelmet']
+        movement.accessoriesBag = validated_data['accessoriesBag']
+        movement.accessoriesCase = validated_data['accessoriesCase']
+        movement.accessoriesCharger = validated_data['accessoriesCharger']
+        movement.observation = validated_data['observation']
+        if validated_data['typeMovement'] == 'devolução':
+            # don't let the user changes the return time in update
+            if movement.returnTime:
+                pass
+            else:
+                movement.returnTime = datetime.now().time()
+            movement.destinyScooter = validated_data['destinyScooter']
+        movement.save()
+        return movement
+
 
