@@ -25,7 +25,8 @@ export default function Movement() {
         accessoriesCase: false,
         accessoriesCharger: false,
         observation: "",
-        timeFormatted: ""
+        timePickUpFormatted: "",
+        timeReturnFormatted: ""
     }])
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
@@ -42,14 +43,21 @@ export default function Movement() {
         var dateSplited = dateMovement.split("-")
         var timeSplited = timeMovement.split(":")
         var dateMovementFormatted = new Date(dateSplited[0], dateSplited[1]-1, dateSplited[2], timeSplited[0], timeSplited[1])
-        var timeMovementFormatted = `${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
+        // add 0 digit to hours below 10
+        if (dateMovementFormatted.getHours() < 10) {
+            var timeMovementFormatted = `0${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
+        }
+        else {
+            var timeMovementFormatted = `${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
+        }
         return timeMovementFormatted
     }
     
     useEffect(() => {
         if (movements.length !== 0) {
             movements.map(movement => {
-                movement.timeFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
+                movement.timePickUpFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
+                if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.dateMovement, movement.returnTime)
             })
             setMovementState(movements)
         }
@@ -115,8 +123,8 @@ export default function Movement() {
                             <td>{movement.scooter.chassisNumber}</td>
                             <td>{movement.deliveryman.name}</td>
                             <td>{movement.logisticOperator.description}</td>
-                            <td>{movement.timeFormatted}</td>
-                            <td>{movement.returnTime}</td>
+                            <td>{movement.timePickUpFormatted}</td>
+                            <td>{movement.timeReturnFormatted}</td>
                         </tr>
                     ))}
                 </tbody>
