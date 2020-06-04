@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT } from './types'
+import { GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from './types'
 
 
 export function getMovements() {
@@ -40,6 +40,19 @@ export const addMovement = (movement) => {
             .then(res => {
                 dispatch({
                     type: ADD_MOVEMENT,
+                    payload: res.data
+                })
+            })
+            .catch(err => console.log(err))
+    }
+}
+
+export const updateMovement = (id, movementData) => {
+    return dispatch => {
+        axios.put(`/api/movement/${id}/`, movementData)
+            .then(res => {
+                dispatch({
+                    type: UPDATE_MOVEMENT,
                     payload: res.data
                 })
             })

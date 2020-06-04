@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
-import { addMovement, getMovement } from '../../actions/movement'
+import { getMovement, updateMovement } from '../../actions/movement'
 
 
 export default function Movement() {
@@ -10,20 +10,11 @@ export default function Movement() {
     const history = useHistory()
     const idMovementParams = params.idMovement
     const [idMovement, setIdMovement] = useState(-1)
-    const [newMovementState, setNewMovementState] = useState({
+    const [movementState, setMovementState] = useState({
         scooter: "",
         cpfDeliveryman: "",
+        LO: "",
         typeMovement: "",
-        destiny: "",
-        accessoriesHelmet: false,
-        accessoriesBag: false,
-        accessoriesCase: false,
-        accessoriesCharger: false,
-        observation: ""
-    })
-    const [movementStateAPI, setMovementStateAPI] = useState({
-        scooter: "",
-        cpfDeliveryman: "",
         destiny: "",
         accessoriesHelmet: false,
         accessoriesBag: false,
@@ -34,13 +25,11 @@ export default function Movement() {
     const movement = useSelector(state => state.movements.movement)
 
     useEffect(() => {
-        console.log(typeof movement)
         if (movement.scooter) {
-            console.log(movement.legth)
-            console.log(movement)
-            setMovementStateAPI({
+            setMovementState({
                 scooter: movement.scooter.chassisNumber,
                 cpfDeliveryman: movement.deliveryman.cpf,
+                LO: movement.logisticOperator.description,
                 accessoriesHelmet: movement.accessoriesHelmet,
                 accessoriesBag: movement.accessoriesBag,
                 accessoriesCase: movement.accessoriesCase,
@@ -56,39 +45,31 @@ export default function Movement() {
 
     useEffect(() => {
         setIdMovement(idMovementParams)
-    }, [idMovementParams])
-
-    console.log(movement)
+    }, [idMovementParams])    
 
     const handleChange = e => {
         const { name, value } = e.target
-        setNewMovementState({
-            ...newMovementState,
+        setMovementState({
+            ...movementState,
             [name]: value
         })
     }
 
     const handleCheck = e => {
         const { name, checked } = e.target
-        setNewMovementState({
-            ...newMovementState,
+        setMovementState({
+            ...movementState,
             [name]: checked
         })
     }
 
-    const redirectToRegister = e => {
-        e.preventDefault()
-        history.push('/register')
-    }
-
     const handleSubmit = e => {
         e.preventDefault()
-        const { scooter, cpfDeliveryman, typeMovement, destiny, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
-        const newMovement = { scooter, cpfDeliveryman, typeMovement, destiny, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
-        dispatch(addMovement(newMovement))
+        const { scooter, cpfDeliveryman, LO, typeMovement, destiny, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
+        const updateMovementData = { scooter, cpfDeliveryman, LO, typeMovement, destiny, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
+        console.log(updateMovementData)
+        dispatch(updateMovement(idMovement, updateMovementData))
     }
-
-    console.log(movementStateAPI)
 
 
     return (
@@ -97,11 +78,15 @@ export default function Movement() {
             <form onSubmit={handleSubmit}>
                 <div className="form-input">
                     <label>Número do chassi</label>
-                    <input type="text" name="scooter" value={movementStateAPI.scooter} onChange={handleChange} />
+                    <input type="text" name="scooter" value={movementState.scooter} onChange={handleChange} />
+                </div>
+                <div className="form-input">
+                    <label>Operador Logístico</label>
+                    <input type="text" name="LO" value={movementState.LO} onChange={handleChange} />
                 </div>
                 <div className="form-input">
                     <label>CPF do Entregador</label>
-                    <input type="text" name="cpfDeliveryman" value={movementStateAPI.cpfDeliveryman} onChange={handleChange} />
+                    <input type="text" name="cpfDeliveryman" value={movementState.cpfDeliveryman} onChange={handleChange} />
                 </div>
                 <div className="form-input">
                     <label>Retirada</label>
@@ -112,18 +97,20 @@ export default function Movement() {
                 <div className="form-input">
                     <label>Destino</label>
                     <input type="radio" name="destiny" value="base" onChange={handleChange} />
+                    <span>Base</span>
                     <input type="radio" name="destiny" value="manutenção" onChange={handleChange} />
+                    <span>Manutenção</span>
                 </div>
                 <div className="form-input">
                     <h4>Acessórios</h4>
                     <label>Capacete</label>
-                    <input type="checkbox" name="accessoriesHelmet" checked={movementStateAPI.accessoriesHelmet} onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesHelmet" checked={movementState.accessoriesHelmet} onChange={handleCheck} />
                     <label>Bag</label>
-                    <input type="checkbox" name="accessoriesBag" checked={movementStateAPI.accessoriesBag} onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesBag" checked={movementState.accessoriesBag} onChange={handleCheck} />
                     <label>Case</label>
-                    <input type="checkbox" name="accessoriesCase" checked={movementStateAPI.accessoriesCase} onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesCase" checked={movementState.accessoriesCase} onChange={handleCheck} />
                     <label>Carregador</label>
-                    <input type="checkbox" name="accessoriesCharger" checked={movementStateAPI.accessoriesCharger} onChange={handleCheck} />
+                    <input type="checkbox" name="accessoriesCharger" checked={movementState.accessoriesCharger} onChange={handleCheck} />
                 </div>
                 <div className="form-input">
                     <label>Observação</label>
