@@ -1,10 +1,19 @@
-from rest_framework import viewsets, status
+from django.contrib.auth.models import User
+from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from .models import StatusScooter, LogisticOperator, Scooter, Deliveryman, Movement
-from .serializers import StatusScooterSerializer, LogisticOperatorSerializer, ScooterSerializer, DeliverymanSerializer, MovementSerializer, MovementRetrieveSerializer
+from .serializers import UserSerializer, StatusScooterSerializer, LogisticOperatorSerializer, ScooterSerializer, DeliverymanSerializer, MovementSerializer, MovementRetrieveSerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 class StatusScooterViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     
     def list(self, request):
         queryset = StatusScooter.objects.all()
@@ -23,6 +32,7 @@ class StatusScooterViewSet(viewsets.ViewSet):
 
 
 class LogisticOperatorViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
         queryset = LogisticOperator.objects.all()
@@ -42,6 +52,7 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
 
 
 class ScooterViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
         queryset = Scooter.objects.all()
@@ -64,6 +75,7 @@ class ScooterViewSet(viewsets.ViewSet):
 
 
 class DeliverymanViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
         queryset = Deliveryman.objects.all()
@@ -85,6 +97,7 @@ class DeliverymanViewSet(viewsets.ViewSet):
 
 
 class MovementViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
         queryset = Movement.objects.all()
@@ -110,7 +123,7 @@ class MovementViewSet(viewsets.ViewSet):
             cpf=request.data['cpfDeliveryman']).id
         serializer = MovementSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            new_movement = serializer.save()
+            new_movement = serializer.save(owner=self.request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

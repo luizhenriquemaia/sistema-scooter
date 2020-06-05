@@ -1,5 +1,14 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import StatusScooter, LogisticOperator, Scooter, Deliveryman, Movement
+
+
+class UserSerializer(serializers.ModelSerializer):
+    
+
+    class Meta:
+        model = User
+        fields = ['id', 'username']
 
 
 class StatusScooterSerializer(serializers.ModelSerializer):
@@ -72,11 +81,12 @@ class MovementRetrieveSerializer(serializers.ModelSerializer):
     logisticOperator_id = serializers.IntegerField()
     typeMovement = serializers.CharField(required=False)
     destinyScooter = serializers.CharField(required=False, allow_blank=True)
+    owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
         model = Movement
         fields = ['id', 'scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
                   'typeMovement', 'dateMovement', 'pickUpTime', 'returnTime', 'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase',
-                  'accessoriesCharger', 'observation', 'destinyScooter']
+                  'accessoriesCharger', 'observation', 'destinyScooter', 'owner']
     
 

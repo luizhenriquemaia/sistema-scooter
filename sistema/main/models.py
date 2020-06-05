@@ -71,6 +71,7 @@ class Movement(models.Model):
     accessoriesCase = models.BooleanField(default=False)
     accessoriesCharger = models.BooleanField(default=False)
     observation = models.CharField(max_length=500, blank=True)
+    owner = models.ForeignKey('auth.User', related_name='movement', on_delete=models.CASCADE)
     objects = models.Manager()
 
     def retrieve(self, id):
