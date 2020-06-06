@@ -7,7 +7,6 @@ import { getMovements, addMovement } from '../../actions/movement'
 export default function Movement() {
     const dispatch = useDispatch()
     const history = useHistory()
-    const movements = useSelector(state => state.movements.movement)
     const [MovementState, setMovementState] = useState([{
         id: 0,
         dataMovement: "",
@@ -38,6 +37,11 @@ export default function Movement() {
         observation: ""
     })
 
+    const [shouldGetMovements, setShouldGetMovements] = useState(false)
+    const movements = useSelector(state => state.movements.movement)
+    const isDetails = useSelector(state => state.movements.isDetails)
+
+
     const formattingTime = (dateMovement, timeMovement) => {
         var dateSplited = dateMovement.split("-")
         var timeSplited = timeMovement.split(":")
@@ -53,19 +57,29 @@ export default function Movement() {
     }
     
     useEffect(() => {
-        if (movements.length !== 0) {
-            movements.map(movement => {
-                movement.timePickUpFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
-                if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.dateMovement, movement.returnTime)
-            })
-            setMovementState(movements)
+        if (movements.length !== 0 && movements !== undefined) {
+            if (isDetails !== undefined && isDetails === false) {
+                movements.map(movement => {
+                    movement.timePickUpFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
+                    if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.dateMovement, movement.returnTime)
+                })
+                setMovementState(movements)
+            }
+            else {
+                setShouldGetMovements(true)
+            }
+        }
+        else {
+            setShouldGetMovements(true)
         }
     }, [movements])
 
 
     useEffect(() => {
-        dispatch(getMovements())
-    }, [])
+        if (shouldGetMovements == true) {
+            dispatch(getMovements())
+        }
+    }, [shouldGetMovements])
 
     
 

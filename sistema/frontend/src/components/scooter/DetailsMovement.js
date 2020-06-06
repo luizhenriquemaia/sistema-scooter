@@ -65,8 +65,6 @@ export default function Movement() {
     }, [idMovementParams])    
 
     const handleChange = e => {
-        console.log(e.target.name)
-        console.log(e.target.value)
         const { name, value } = e.target
         setMovementState({
             ...movementState,
@@ -87,6 +85,7 @@ export default function Movement() {
         const { scooter, cpfDeliveryman, LO, typeMovement, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
         const updateMovementData = { scooter, cpfDeliveryman, LO, typeMovement, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
         dispatch(updateMovement(idMovement, updateMovementData))
+        history.push("/")
     }
 
 

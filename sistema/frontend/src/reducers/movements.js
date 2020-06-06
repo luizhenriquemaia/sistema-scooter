@@ -3,7 +3,8 @@ import { GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVE
 
 
 const initialState = {
-    movement: []
+    movement: [],
+    isDetails: false
 }
 
 export default function (state = initialState, action) {
@@ -12,11 +13,13 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 movement: action.payload,
+                isDetails: false
             }
         case GET_MOVEMENT:
             return {
                 ...state,
                 movement: action.payload,
+                isDetails: true
             }
         case DELETE_MOVEMENT:
             return {
