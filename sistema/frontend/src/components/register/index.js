@@ -27,7 +27,7 @@ export default function Register() {
     const statusScooter = useSelector(state => state.scooters.statusScooter)
 
     useEffect(() => {
-        if (statusScooter !== undefined) {
+        if (statusScooter !== undefined && statusScooter !== "") {
             setStatusScooterFromAPI(statusScooter)
         }
     }, [statusScooter])
@@ -72,12 +72,16 @@ export default function Register() {
             
             case "scooter":
                 const { chassisScooter, statusScooter } = RegisterState
-                var newRegisterToAPI = { chassisScooter, statusScooter }
-                console.log(newRegisterToAPI)
-                dispatch(addScooter(newRegisterToAPI))
+                if (statusScooter !== "0" && statusScooter !== "") {
+                    var newRegisterToAPI = { chassisScooter, statusScooter }
+                    console.log(newRegisterToAPI)
+                    dispatch(addScooter(newRegisterToAPI))
+                }
+                else {
+                    console.log("invalid status scooter")
+                }
             
             default:
-                console.log("invalid register type")
         }
     }
 
@@ -110,6 +114,7 @@ export default function Register() {
                             <option value={status.id} key={status.id}>{status.description}</option>
                         ))}
                     </select>
+                    
                 </div>
                 <button className="submit-button" onClick={handleClickAdicionar}>Limpar</button>
                 <button className="submit-button" onClick={handleClickAdicionar}>Registrar</button>
