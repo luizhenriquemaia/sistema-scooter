@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { getMovements, addMovement } from '../../actions/movement'
 
 
@@ -8,7 +8,6 @@ export default function Movement() {
     const dispatch = useDispatch()
     const history = useHistory()
     const movements = useSelector(state => state.movements.movement)
-
     const [MovementState, setMovementState] = useState([{
         id: 0,
         dataMovement: "",
@@ -63,9 +62,12 @@ export default function Movement() {
         }
     }, [movements])
 
+
     useEffect(() => {
         dispatch(getMovements())
     }, [])
+
+    
 
     const handleChange = e => {
         const { name, value } = e.target
@@ -73,7 +75,6 @@ export default function Movement() {
             ...newMovementState,
             [name]: value
         })
-        console.log(newMovementState)
     }
 
     const handleCheck = e => {
@@ -97,8 +98,6 @@ export default function Movement() {
             dispatch(addMovement(newMovementToAPI))
         }
     }
-
-    console.log(MovementState)
 
 
     return (
