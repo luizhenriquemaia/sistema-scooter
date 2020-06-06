@@ -15,46 +15,54 @@ class StatusScooter(models.Model):
 
 
 class LogisticOperator(models.Model):
-    description = models.CharField(max_length=200, unique=True)
+    description = models.CharField(max_length=200)
     objects = models.Manager()
 
     def create(self, **validated_data):
-        new_logistic_operator = LogisticOperator(
-            description=validated_data['description']
-        )
-        new_logistic_operator.save()
-        return new_logistic_operator
+        if LogisticOperator.objects.filter(description=validated_data['description']):
+            return "this logistic operator already exists"
+        else:
+            new_logistic_operator = LogisticOperator(
+                description=validated_data['description']
+            )
+            new_logistic_operator.save()
+            return new_logistic_operator
  
 
 class Scooter(models.Model):
-    chassisNumber = models.IntegerField(unique=True)
+    chassisNumber = models.IntegerField()
     status = models.ForeignKey(StatusScooter, on_delete=models.CASCADE, default=0)
     objects = models.Manager()
 
     def create(self, **validated_data):
-        new_scooter = Scooter(
-            chassisNumber=validated_data['chassisNumber'],
-            status=StatusScooter.objects.get(id=validated_data['status_id'])
-        )
-        new_scooter.save()
-        return new_scooter
+        if Scooter.objects.filter(chassisNumber=validated_data['chassisNumber']):
+            return "this scooter already exists"
+        else:
+            new_scooter = Scooter(
+                chassisNumber=validated_data['chassisNumber'],
+                status=StatusScooter.objects.get(id=validated_data['status_id'])
+            )
+            new_scooter.save()
+            return new_scooter
 
 
 class Deliveryman(models.Model):
     name = models.CharField(max_length=400)
-    cpf = models.CharField(max_length=11, default=0, unique=True)
+    cpf = models.CharField(max_length=11, default=0)
     active = models.BooleanField(default=True)
     objects = models.Manager()
 
     def create(self, **validated_data):
-        print(f"\n\n\n\n validated_data: {validated_data}\n\n\n\n")
-        new_deliveryman = Deliveryman(
-            name=validated_data['name'],
-            cpf=validated_data['cpf'],
-            active=validated_data['active']
-        )
-        new_deliveryman.save()
-        return new_deliveryman
+        if Deliveryman.objects.filter(cpf=validated_data['cpf']):
+            return "this deliveryman already exists"
+        else:
+            new_deliveryman = Deliveryman(
+                name=validated_data['name'],
+                cpf=validated_data['cpf'],
+                active=validated_data['active']
+            )
+            new_deliveryman.save()
+            return new_deliveryman
 
 
 class Movement(models.Model):

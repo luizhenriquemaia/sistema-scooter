@@ -45,9 +45,12 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
     def create(self, request):
         request.data['description'] = request.data['logisticOperatorDescription']
         serializer = LogisticOperatorSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            new_logistic_operator = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            if serializer.is_valid(raise_exception=True):
+                new_logistic_operator = serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except AttributeError:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -67,9 +70,12 @@ class ScooterViewSet(viewsets.ViewSet):
         request.data['status_id'] = request.data['statusScooter']
         request.data['chassisNumber'] = request.data['chassisScooter']
         serializer = ScooterSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            new_scooter = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            if serializer.is_valid(raise_exception=True):
+                new_scooter = serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except AttributeError:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
@@ -90,9 +96,12 @@ class DeliverymanViewSet(viewsets.ViewSet):
         request.data['cpf'] = request.data['cpfDeliverymanToAPI']
         request.data['active'] = request.data['deliverymanActive']
         serializer = DeliverymanSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            new_deliveryman = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            if serializer.is_valid(raise_exception=True):
+                new_deliveryman = serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except AttributeError:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -108,7 +117,9 @@ class MovementViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk):
+        print(f"\n\n\n {pk}\n\n\n")
         movement = Movement.retrieve(Movement, id=pk)
+        print(f"movement: {movement} \n\n\n")
         serializer = MovementRetrieveSerializer(data=movement)
         if serializer.is_valid(raise_exception=True):
             return Response(serializer.data, status=status.HTTP_200_OK)

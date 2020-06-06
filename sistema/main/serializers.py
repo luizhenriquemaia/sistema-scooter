@@ -1,11 +1,10 @@
 from django.contrib.auth.models import User
+from rest_framework.validators import UniqueValidator
 from rest_framework import serializers
 from .models import StatusScooter, LogisticOperator, Scooter, Deliveryman, Movement
 
 
 class UserSerializer(serializers.ModelSerializer):
-    
-
     class Meta:
         model = User
         fields = ['id', 'username']
@@ -17,7 +16,7 @@ class StatusScooterSerializer(serializers.ModelSerializer):
         fields = ['id', 'description']
 
     def create(self, validated_data):
-        return StatusScooter.create(LogisticOperator, **validated_data)
+        return StatusScooter.create(StatusScooter, **validated_data)
 
 
 class LogisticOperatorSerializer(serializers.ModelSerializer):
