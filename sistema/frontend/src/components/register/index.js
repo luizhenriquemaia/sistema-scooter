@@ -51,8 +51,7 @@ export default function Register() {
     
     const handleClickAdicionar = e => {
         const { registerType } = RegisterState
-        switch (registerType) {
-            case "deliveryman":
+        if (registerType === "deliveryman") {
                 const { deliverymanName, cpfDeliveryman, deliverymanActive } = RegisterState
                 const cpfDeliverymanToAPI = cpfDeliveryman.replace(/\D/g, '')
                 if (cpfDeliverymanToAPI.length !== 11) {
@@ -63,25 +62,26 @@ export default function Register() {
                     console.log(newRegisterToAPI)
                     dispatch(addDeliveryman(newRegisterToAPI))
                 }
-        
-            case "logisticOperator":
+            }
+        else if (registerType === "logisticOperator") {
                 const { logisticOperatorDescription } = RegisterState
                 var newRegisterToAPI = { registerType, logisticOperatorDescription }
                 console.log(newRegisterToAPI)
                 dispatch(addLogisticOperator(newRegisterToAPI))
-            
-            case "scooter":
-                const { chassisScooter, statusScooter } = RegisterState
-                if (statusScooter !== "0" && statusScooter !== "") {
-                    var newRegisterToAPI = { chassisScooter, statusScooter }
-                    console.log(newRegisterToAPI)
-                    dispatch(addScooter(newRegisterToAPI))
+            }
+        else if (registerType === "scooter") {
+                    const { chassisScooter, statusScooter } = RegisterState
+                    if (statusScooter !== "0" && statusScooter !== "") {
+                        var newRegisterToAPI = { chassisScooter, statusScooter }
+                        console.log(newRegisterToAPI)
+                        dispatch(addScooter(newRegisterToAPI))
+                    }
+                    else {
+                        console.log("invalid status scooter")
+                    }
                 }
-                else {
-                    console.log("invalid status scooter")
-                }
-            
-            default:
+        else {
+            console.log("invalid register type")
         }
     }
 
