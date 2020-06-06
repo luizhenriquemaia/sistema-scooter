@@ -89,6 +89,8 @@ export default function Movement() {
         dispatch(updateMovement(idMovement, updateMovementData))
     }
 
+    const handleCancel = () => history.push('/')
+
 
     return (
         <div className="content">
@@ -135,7 +137,7 @@ export default function Movement() {
                     <textarea name="observation" onChange={handleChange}></textarea>
                 </div>
                 <button className="submit-button">Registrar</button>
-                <button className="submit-button">Cancelar</button>
+                <button className="submit-button" onClick={handleCancel}>Cancelar</button>
             </form>
         </div>
     )
