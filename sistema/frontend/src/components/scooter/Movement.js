@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { getMovements, addMovement } from '../../actions/movement'
 
 
@@ -42,7 +42,7 @@ export default function Movement() {
         var dateSplited = dateMovement.split("-")
         var timeSplited = timeMovement.split(":")
         var dateMovementFormatted = new Date(dateSplited[0], dateSplited[1]-1, dateSplited[2], timeSplited[0], timeSplited[1])
-        // add 0 digit to hours below 10
+        // add 0 digit to hour below 10
         if (dateMovementFormatted.getHours() < 10) {
             var timeMovementFormatted = `0${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
         }
@@ -96,6 +96,7 @@ export default function Movement() {
             const typeMovement = "retirada"
             const newMovementToAPI = { scooter, OL, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
             dispatch(addMovement(newMovementToAPI))
+            setNewMovementState({scooter: "", OL: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: ""})
         }
     }
 
@@ -131,21 +132,21 @@ export default function Movement() {
             <br/>
             <h2>Adicionar Nova Movimentação</h2>
             <label>Scooter</label>
-            <input type="text" name="scooter" onChange={handleChange} />
+            <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
             <label>Operador Logístico</label>
-            <input type="text" name="OL" onChange={handleChange} />
+            <input type="text" name="OL" value={newMovementState.OL} onChange={handleChange} />
             <label>CPF Entregador</label>
-            <input type="text" name="cpfDeliverymanState" onChange={handleChange} />
+            <input type="text" name="cpfDeliverymanState" value={newMovementState.cpfDeliverymanState} onChange={handleChange} />
             <label>Capacete</label>
-            <input type="checkbox" name="accessoriesHelmet" onChange={handleCheck} />
+            <input type="checkbox" name="accessoriesHelmet" value={newMovementState.accessoriesHelmet} onChange={handleCheck} />
             <label>Bag</label>
-            <input type="checkbox" name="accessoriesBag" onChange={handleCheck} />
+            <input type="checkbox" name="accessoriesBag" value={newMovementState.accessoriesBag} onChange={handleCheck} />
             <label>Case</label>
-            <input type="checkbox" name="accessoriesCase" onChange={handleCheck} />
+            <input type="checkbox" name="accessoriesCase" value={newMovementState.accessoriesCase} onChange={handleCheck} />
             <label>Carregador</label>
-            <input type="checkbox" name="accessoriesCharger" onChange={handleCheck} />
+            <input type="checkbox" name="accessoriesCharger" value={newMovementState.accessoriesCharger} onChange={handleCheck} />
             <label>Observação</label>
-            <textarea name="observation" onChange={handleChange}></textarea>
+            <textarea name="observation" value={newMovementState.observation} onChange={handleChange}></textarea>
             <button className="submit-button" onClick={handleClickAdicionar}>Adicionar</button>
         </div>
     )
