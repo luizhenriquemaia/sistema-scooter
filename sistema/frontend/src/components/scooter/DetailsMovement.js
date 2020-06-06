@@ -134,7 +134,7 @@ export default function Movement() {
                     <textarea name="observation" onChange={handleChange}></textarea>
                 </div>
                 <button className="submit-button">Registrar</button>
-                <button className="submit-button" onClick={() => history.goBack()}>Cancelar</button>
+                <button className="submit-button" onClick={() => history.push("/")}>Cancelar</button>
             </form>
         </div>
     )
