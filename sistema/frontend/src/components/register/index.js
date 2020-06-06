@@ -48,7 +48,8 @@ export default function Register() {
         })
     }
 
-    
+    console.log(RegisterState)
+
     const handleClickAdicionar = e => {
         const { registerType } = RegisterState
         if (registerType === "deliveryman") {
@@ -61,6 +62,7 @@ export default function Register() {
                     var newRegisterToAPI = { deliverymanName, deliverymanActive, cpfDeliverymanToAPI }
                     console.log(newRegisterToAPI)
                     dispatch(addDeliveryman(newRegisterToAPI))
+                    setRegisterState({registerType: "deliveryman", deliverymanName: "", cpfDeliveryman: "", deliverymanActive: false})
                 }
             }
         else if (registerType === "logisticOperator") {
@@ -68,6 +70,7 @@ export default function Register() {
                 var newRegisterToAPI = { registerType, logisticOperatorDescription }
                 console.log(newRegisterToAPI)
                 dispatch(addLogisticOperator(newRegisterToAPI))
+                setRegisterState({registerType: "logisticOperator", logisticOperatorDescription: ""})
             }
         else if (registerType === "scooter") {
                     const { chassisScooter, statusScooter } = RegisterState
@@ -75,6 +78,7 @@ export default function Register() {
                         var newRegisterToAPI = { chassisScooter, statusScooter }
                         console.log(newRegisterToAPI)
                         dispatch(addScooter(newRegisterToAPI))
+                        setRegisterState({registerType: "scooter", chassisScooter: "", statusScooter: ""})
                     }
                     else {
                         console.log("invalid status scooter")
@@ -98,15 +102,15 @@ export default function Register() {
                         <option value="scooter">Patinete</option>
                     </select>
                     <label>Operador Logístico</label>
-                    <input type="text" name="logisticOperatorDescription" onChange={handleChange} />
+                    <input type="text" name="logisticOperatorDescription" value={RegisterState.logisticOperatorDescription || ''} onChange={handleChange} />
                     <label>CPF Entregador</label>
-                    <input type="text" name="cpfDeliveryman" onChange={handleChange} />
+                    <input type="text" name="cpfDeliveryman" value={RegisterState.cpfDeliveryman || ''} onChange={handleChange} />
                     <label>Nome Entregador</label>
-                    <input type="text" name="deliverymanName" onChange={handleChange} />
+                    <input type="text" name="deliverymanName" value={RegisterState.deliverymanName || ''} onChange={handleChange} />
                     <label>Ativo</label>
-                    <input type="checkbox" name="deliverymanActive" onChange={handleCheck} />
+                    <input type="checkbox" name="deliverymanActive" value={RegisterState.deliverymanActive || ''} onChange={handleCheck} />
                     <label>Chassi Patinete</label>
-                    <input type="text" name="chassisScooter" onChange={handleChange} />
+                    <input type="text" name="chassisScooter" value={RegisterState.chassisScooter || ''} onChange={handleChange} />
                     <label>Status Patinete</label>
                     <select name="statusScooter" onChange={handleChange} >
                         <option value="0">-----</option>
