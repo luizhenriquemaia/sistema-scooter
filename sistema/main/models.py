@@ -15,7 +15,7 @@ class StatusScooter(models.Model):
 
 
 class LogisticOperator(models.Model):
-    description = models.CharField(max_length=200)
+    description = models.CharField(max_length=200, unique=True)
     objects = models.Manager()
 
     def create(self, **validated_data):
@@ -27,7 +27,7 @@ class LogisticOperator(models.Model):
  
 
 class Scooter(models.Model):
-    chassisNumber = models.IntegerField()
+    chassisNumber = models.IntegerField(unique=True)
     status = models.ForeignKey(StatusScooter, on_delete=models.CASCADE, default=0)
     objects = models.Manager()
 
@@ -42,7 +42,7 @@ class Scooter(models.Model):
 
 class Deliveryman(models.Model):
     name = models.CharField(max_length=400)
-    cpf = models.CharField(max_length=11, default=0)
+    cpf = models.CharField(max_length=11, default=0, unique=True)
     active = models.BooleanField(default=True)
     objects = models.Manager()
 
@@ -55,7 +55,6 @@ class Deliveryman(models.Model):
         )
         new_deliveryman.save()
         return new_deliveryman
-
 
 
 class Movement(models.Model):
