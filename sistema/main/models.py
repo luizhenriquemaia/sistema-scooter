@@ -109,7 +109,8 @@ class Movement(models.Model):
                 accessoriesBag=validated_data['accessoriesBag'],
                 accessoriesCase=validated_data['accessoriesCase'],
                 accessoriesCharger=validated_data['accessoriesCharger'],
-                observation=validated_data['observation']
+                observation=validated_data['observation'],
+                owner=validated_data['owner']
             )
             new_movement.save()
             return new_movement
