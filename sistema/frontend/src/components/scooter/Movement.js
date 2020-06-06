@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { getMovements, addMovement } from '../../actions/movement'
+import { getMovements, getMovementsWithFilters, addMovement } from '../../actions/movement'
 
 
 export default function Movement() {
@@ -35,6 +35,11 @@ export default function Movement() {
         accessoriesCase: false,
         accessoriesCharger: false,
         observation: ""
+    })
+
+    const [filtersMovements, setFiltersMovements] = useState({
+        filterInitialDate: "",
+        filterFinalDate: ""
     })
 
     const [shouldGetMovements, setShouldGetMovements] = useState(false)
@@ -71,6 +76,10 @@ export default function Movement() {
         }
         else {
             setShouldGetMovements(true)
+            setMovementState([{id: 0, dataMovement: "", scooter: {chassisNumber: ""}, logisticOperator: {description: ""},
+                deliveryman: {name: ""}, typeMovement: "", destiny: "", accessoriesHelmet: false, accessoriesBag: false,
+                accessoriesCase: false, accessoriesCharger: false, observation: "", timePickUpFormatted: "", timeReturnFormatted: ""
+            }])
         }
     }, [movements])
 
@@ -80,8 +89,6 @@ export default function Movement() {
             dispatch(getMovements())
         }
     }, [shouldGetMovements])
-
-    
 
     const handleChange = e => {
         const { name, value } = e.target
@@ -114,10 +121,36 @@ export default function Movement() {
         }
     }
 
+    const handleFiltersChange = e => {
+        const { name, value } = e.target
+        setFiltersMovements({
+            ...filtersMovements,
+            [name]: value
+        })
+    }
+
+    const handleSetFilters = e => {
+        const { filterInitialDate, filterFinalDate } = filtersMovements
+        if (filterInitialDate <= filterFinalDate ) {
+            const filtersMovements = { filterInitialDate, filterFinalDate }
+            dispatch(getMovementsWithFilters(filtersMovements))
+        }
+        else {
+            console.log("initial date must be before final date")
+        }
+    }
+
 
     return (
         <div className="content">
             <h1 className="title-page">Movimentações Patenetes</h1>
+            <div>
+                <label>Data</label>
+                <input type="date" name="filterInitialDate"  onChange={handleFiltersChange} />
+                <input type="date" name="filterFinalDate" onChange={handleFiltersChange} />
+            </div>
+            <button onClick={handleSetFilters}>Aplicar Filtros</button>
+
             <table className="table-movements">
                 <thead>
                     <tr>

@@ -17,6 +17,21 @@ export function getMovements() {
     }
 }
 
+export const getMovementsWithFilters = (filters) => {
+    return dispatch => {
+        axios.get(`/api/movement/?initialDate=${filters.filterInitialDate}&finalDate=${filters.filterFinalDate}`)
+            .then(res => {
+                dispatch({
+                    type: GET_MOVEMENTS,
+                    payload: res.data
+                })
+            })
+            .catch(
+                err => dispatch(returnErrors(err.response.data, err.response.status))
+            )
+    }
+}
+
 
 export function getMovement(id) {
     return dispatch => {

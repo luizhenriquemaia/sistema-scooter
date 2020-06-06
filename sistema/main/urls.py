@@ -16,6 +16,7 @@ router.register('api/deliveryman', DeliverymanViewSet, 'deliveryman')
 router.register('api/movement', MovementViewSet, 'movement')
 
 
+
 urlpatterns = [
     path('api/auth', include('rest_framework.urls'))
 ]

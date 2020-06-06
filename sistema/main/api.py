@@ -109,17 +109,23 @@ class MovementViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        queryset = Movement.objects.all()
-        serializer = MovementSerializer(queryset, many=True)
+        if request.user.is_staff or request.user.is_superuser:
+            queryset_list = Movement.objects.all()
+        else:
+            queryset_list = Movement.objects.filter(owner=request.user)
+        query_from_url_initial_date = request.GET.get("initialDate")
+        query_from_url_final_date = request.GET.get("finalDate")
+        if query_from_url_initial_date and query_from_url_final_date:
+            queryset_list = Movement.objects.filter(dateMovement__range=(
+                query_from_url_initial_date, query_from_url_final_date))
+        serializer = MovementSerializer(queryset_list, many=True)
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk):
-        print(f"\n\n\n {pk}\n\n\n")
         movement = Movement.retrieve(Movement, id=pk)
-        print(f"movement: {movement} \n\n\n")
         serializer = MovementRetrieveSerializer(data=movement)
         if serializer.is_valid(raise_exception=True):
             return Response(serializer.data, status=status.HTTP_200_OK)
