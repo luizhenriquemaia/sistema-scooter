@@ -40,7 +40,8 @@ export default function Movement() {
     const [filtersMovements, setFiltersMovements] = useState({
         filterInitialDate: "",
         filterFinalDate: "",
-        filterShowReturnedScooters: true
+        filterShowReturnedScooters: true,
+        filterShowJustOneOL: ""
     })
 
     const [shouldGetMovements, setShouldGetMovements] = useState(false)
@@ -108,7 +109,7 @@ export default function Movement() {
     }
 
     const handleClick = (idMovement) => history.push(`details-movement/${idMovement}`)
-    const handleClickAdicionar = e => {
+    const handleClickAdd = e => {
         const { scooter, OL, cpfDeliverymanState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfDeliveryman = cpfDeliverymanState.replace(/\D/g, '')
         if (cpfDeliveryman.length !== 11) {
@@ -125,11 +126,18 @@ export default function Movement() {
 
     // HANDLE FILTER THINGS
     useEffect(() => {
-        if (filtersMovements.filterShowReturnedScooters === false) {
-            setMovementState(movements.filter(movement => movement.returnTime === null))
+        if (filtersMovements.filterShowReturnedScooters) {
+            if (filtersMovements.filterShowReturnedScooters === false) {
+                setMovementState(movements.filter(movement => movement.returnTime === null))
+            }
+            else {
+                setMovementState(movements)
+            }
         }
-        else {            
-            setMovementState(movements)
+        if (filtersMovements.filterShowJustOneOL) {
+            if (filtersMovements.filterShowJustOneOL !== "") {
+                setMovementState(movements.filter(movement => movement.logisticOperator.description === filtersMovements.filterShowJustOneOL))
+            }
         }
     }, [filtersMovements])
 
@@ -138,7 +146,7 @@ export default function Movement() {
         setFiltersMovements({
             ...filtersMovements,
             [name]: value
-        })
+        })    
     }
 
     const handleCheckFilter = e => {
@@ -150,17 +158,18 @@ export default function Movement() {
     }
 
     const handleSetFilters = e => {
-        const { filterInitialDate, filterFinalDate } = filtersMovements
-        if (filterInitialDate <= filterFinalDate ) {
-            const filtersMovements = { filterInitialDate, filterFinalDate }
-            dispatch(getMovementsWithFilters(filtersMovements))
-        }
-        else {
-            console.log("initial date must be before final date")
+        const { filterInitialDate, filterFinalDate  } = filtersMovements
+        if (filterInitialDate && filterFinalDate) {
+            if (filterInitialDate <= filterFinalDate) {
+                const filtersMovements = { filterInitialDate, filterFinalDate }
+                dispatch(getMovementsWithFilters(filtersMovements))
+            }
+            else {
+                console.log("initial date must be before final date")
+            }
         }
     }
 
-    console.log(MovementState)
 
     return (
         <div className="content">
@@ -174,7 +183,8 @@ export default function Movement() {
             <div>
                 <label>Mostrar Patinetes Devolvidos</label>
                 <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter}/>
-
+                <label>Mostrar Apenas a OL</label>
+                <input type="text" name="filterShowJustOneOL" onChange={handleFiltersChange} />
             </div>
 
             <table className="table-movements">
@@ -220,7 +230,7 @@ export default function Movement() {
             <input type="checkbox" name="accessoriesCharger" checked={newMovementState.accessoriesCharger} onChange={handleCheck} />
             <label>Observação</label>
             <textarea name="observation" value={newMovementState.observation} onChange={handleChange}></textarea>
-            <button className="submit-button" onClick={handleClickAdicionar}>Adicionar</button>
+            <button className="submit-button" onClick={handleClickAdd}>Adicionar</button>
         </div>
     )
 }
