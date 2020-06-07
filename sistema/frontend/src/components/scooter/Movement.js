@@ -39,7 +39,8 @@ export default function Movement() {
 
     const [filtersMovements, setFiltersMovements] = useState({
         filterInitialDate: "",
-        filterFinalDate: ""
+        filterFinalDate: "",
+        filterShowReturnedScooters: true
     })
 
     const [shouldGetMovements, setShouldGetMovements] = useState(false)
@@ -121,11 +122,30 @@ export default function Movement() {
         }
     }
 
+
+    // HANDLE FILTER THINGS
+    useEffect(() => {
+        if (filtersMovements.filterShowReturnedScooters === false) {
+            setMovementState(movements.filter(movement => movement.returnTime === null))
+        }
+        else {            
+            setMovementState(movements)
+        }
+    }, [filtersMovements])
+
     const handleFiltersChange = e => {
         const { name, value } = e.target
         setFiltersMovements({
             ...filtersMovements,
             [name]: value
+        })
+    }
+
+    const handleCheckFilter = e => {
+        const { name, checked } = e.target
+        setFiltersMovements({
+            ...filtersMovements,
+            [name]: checked
         })
     }
 
@@ -140,6 +160,7 @@ export default function Movement() {
         }
     }
 
+    console.log(MovementState)
 
     return (
         <div className="content">
@@ -148,8 +169,13 @@ export default function Movement() {
                 <label>Data</label>
                 <input type="date" name="filterInitialDate"  onChange={handleFiltersChange} />
                 <input type="date" name="filterFinalDate" onChange={handleFiltersChange} />
+                <button onClick={handleSetFilters}>Aplicar Filtros</button>
             </div>
-            <button onClick={handleSetFilters}>Aplicar Filtros</button>
+            <div>
+                <label>Mostrar Patinetes Devolvidos</label>
+                <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter}/>
+
+            </div>
 
             <table className="table-movements">
                 <thead>
@@ -183,15 +209,15 @@ export default function Movement() {
             <label>Operador Logístico</label>
             <input type="text" name="OL" value={newMovementState.OL} onChange={handleChange} />
             <label>CPF Entregador</label>
-            <input type="text" name="cpfDeliverymanState" value={newMovementState.cpfDeliverymanState} onChange={handleChange} />
+            <input type="text" name="cpfDeliverymanState" checked={newMovementState.cpfDeliverymanState} onChange={handleChange} />
             <label>Capacete</label>
-            <input type="checkbox" name="accessoriesHelmet" value={newMovementState.accessoriesHelmet} onChange={handleCheck} />
+            <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
             <label>Bag</label>
-            <input type="checkbox" name="accessoriesBag" value={newMovementState.accessoriesBag} onChange={handleCheck} />
+            <input type="checkbox" name="accessoriesBag" checked={newMovementState.accessoriesBag} onChange={handleCheck} />
             <label>Case</label>
-            <input type="checkbox" name="accessoriesCase" value={newMovementState.accessoriesCase} onChange={handleCheck} />
+            <input type="checkbox" name="accessoriesCase" checked={newMovementState.accessoriesCase} onChange={handleCheck} />
             <label>Carregador</label>
-            <input type="checkbox" name="accessoriesCharger" value={newMovementState.accessoriesCharger} onChange={handleCheck} />
+            <input type="checkbox" name="accessoriesCharger" checked={newMovementState.accessoriesCharger} onChange={handleCheck} />
             <label>Observação</label>
             <textarea name="observation" value={newMovementState.observation} onChange={handleChange}></textarea>
             <button className="submit-button" onClick={handleClickAdicionar}>Adicionar</button>
