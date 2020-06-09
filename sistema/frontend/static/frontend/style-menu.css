@@ -13,8 +13,13 @@
     background: rgba(0, 0, 0, 0.85);
     width: 286px;
     height: 100vh;
-    transition: width ease-in-out 1s;
+    max-height: 1500px;
     position: absolute;
+    overflow: hidden;
+    transition: 
+        width ease-out 0.4s, 
+        border-radius 3s, 
+        max-height ease-out 0.5s 0.4s;
 }
 
 .menuIconBox {
@@ -22,7 +27,8 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding-right: 14px;
+    padding-right: 16px;
+    transition: padding-right 0.4s;
 }
 
 .menuIconBox span {
@@ -32,7 +38,7 @@
     background-size: contain;
     border: 1px solid #f6f6f6;
     border-radius: 10px;
-    transition: transform 1s, background 1s;
+    transition: transform 0.5s, background 0.6s;
 }
 
 .navBlock { 
@@ -81,7 +87,7 @@
 
 .menuBlock.closedMenu {
     width: 82px;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .menuBlock.closedMenu .menuIconBox {
@@ -96,3 +102,13 @@
 
 /* Menu Fechado Mobile */
 
+@media screen and (max-width: 600px) {
+    .menuBlock.closedMenu {
+        max-height: 65px;
+        border-radius: 0px 0px 12px;
+    }
+
+    .menuBlock.closedMenu .menuIconBox {
+        padding-right: 23px;
+    }
+}
