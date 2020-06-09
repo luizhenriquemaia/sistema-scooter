@@ -11,7 +11,8 @@ export default function Register() {
         logisticOperatorDescription: "",
         deliverymanName: "",
         cpfDeliveryman: "",
-        deliverymanActive: false,
+        logisticOperatorDeliveryman: "",
+        deliverymanActive: true,
         chassisScooter: "",
         statusScooter: ""
     })
@@ -53,18 +54,23 @@ export default function Register() {
     const handleClickAdicionar = e => {
         const { registerType } = RegisterState
         if (registerType === "deliveryman") {
-                const { deliverymanName, cpfDeliveryman, deliverymanActive } = RegisterState
-                const cpfDeliverymanToAPI = cpfDeliveryman.replace(/\D/g, '')
-                if (cpfDeliverymanToAPI.length !== 11) {
-                    console.log("cpf inválido")
-                }
-                else {
-                    var newRegisterToAPI = { deliverymanName, deliverymanActive, cpfDeliverymanToAPI }
-                    console.log(newRegisterToAPI)
-                    dispatch(addDeliveryman(newRegisterToAPI))
-                    setRegisterState({registerType: "deliveryman", deliverymanName: "", cpfDeliveryman: "", deliverymanActive: false})
-                }
+            const { deliverymanName, cpfDeliveryman, deliverymanActive, logisticOperatorDeliveryman } = RegisterState
+            const cpfDeliverymanToAPI = cpfDeliveryman.replace(/\D/g, '')
+            if (cpfDeliverymanToAPI.length !== 11) {
+                console.log("cpf inválido")
             }
+            else {
+                var newRegisterToAPI = { deliverymanName, deliverymanActive, cpfDeliverymanToAPI, logisticOperatorDeliveryman }
+                console.log(newRegisterToAPI)
+                dispatch(addDeliveryman(newRegisterToAPI))
+                setRegisterState({ 
+                    registerType: "deliveryman",
+                    deliverymanName: "", 
+                    cpfDeliveryman: "", 
+                    logisticOperatorDeliveryman: "", 
+                    deliverymanActive: true})
+            }
+        }
         else if (registerType === "logisticOperator") {
                 const { logisticOperatorDescription } = RegisterState
                 var newRegisterToAPI = { registerType, logisticOperatorDescription }
@@ -107,8 +113,10 @@ export default function Register() {
                     <input type="text" name="cpfDeliveryman" value={RegisterState.cpfDeliveryman || ''} onChange={handleChange} />
                     <label>Nome Entregador</label>
                     <input type="text" name="deliverymanName" value={RegisterState.deliverymanName || ''} onChange={handleChange} />
+                    <label>OL do Entregador</label>
+                    <input type="text" name="logisticOperatorDeliveryman" value={RegisterState.logisticOperatorDeliveryman || ''} onChange={handleChange} />
                     <label>Ativo</label>
-                    <input type="checkbox" name="deliverymanActive" value={RegisterState.deliverymanActive || ''} onChange={handleCheck} />
+                    <input type="checkbox" name="deliverymanActive" checked={RegisterState.deliverymanActive || ''} onChange={handleCheck} />
                     <label>Chassi Patinete</label>
                     <input type="text" name="chassisScooter" value={RegisterState.chassisScooter || ''} onChange={handleChange} />
                     <label>Status Patinete</label>

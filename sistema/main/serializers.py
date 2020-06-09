@@ -38,10 +38,13 @@ class ScooterSerializer(serializers.ModelSerializer):
         return Scooter.create(Scooter, **validated_data)
 
 
-class DeliverymanSerializer(serializers.ModelSerializer): 
+class DeliverymanSerializer(serializers.ModelSerializer):
+    logisticOperator = LogisticOperatorSerializer(read_only=True)
+    logisticOperator_id = serializers.IntegerField()
     class Meta:
         model = Deliveryman
-        fields = ['id', 'name', 'cpf', 'active']
+        fields = ['id', 'name', 'cpf', 'logisticOperator',
+                  'logisticOperator_id', 'active']
     
     def create(self, validated_data):
         return Deliveryman.create(Deliveryman, **validated_data)

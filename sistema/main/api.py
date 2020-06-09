@@ -95,6 +95,8 @@ class DeliverymanViewSet(viewsets.ViewSet):
         request.data['name'] = request.data['deliverymanName']
         request.data['cpf'] = request.data['cpfDeliverymanToAPI']
         request.data['active'] = request.data['deliverymanActive']
+        request.data['logisticOperator_id'] = LogisticOperator.objects.get(
+            description=request.data['logisticOperatorDeliveryman']).id
         serializer = DeliverymanSerializer(data=request.data)
         try:
             if serializer.is_valid(raise_exception=True):
@@ -134,10 +136,10 @@ class MovementViewSet(viewsets.ViewSet):
     def create(self, request):
         request.data['scooter_id'] = Scooter.objects.get(
             chassisNumber=request.data['scooter']).id
-        request.data['logisticOperator_id'] = LogisticOperator.objects.get(
-            description=request.data['OL']).id
-        request.data['deliveryman_id'] = Deliveryman.objects.get(
-            cpf=request.data['cpfDeliveryman']).id
+        deliverymanMovement = Deliveryman.objects.get(
+            cpf=request.data['cpfDeliveryman'])
+        request.data['logisticOperator_id'] = deliverymanMovement.logisticOperator_id
+        request.data['deliveryman_id'] = deliverymanMovement.id
         serializer = MovementSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             new_movement = serializer.save(owner=self.request.user)

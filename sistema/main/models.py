@@ -50,6 +50,8 @@ class Deliveryman(models.Model):
     name = models.CharField(max_length=400)
     cpf = models.CharField(max_length=11, default=0)
     active = models.BooleanField(default=True)
+    logisticOperator = models.ForeignKey(
+        LogisticOperator, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def create(self, **validated_data):
@@ -59,6 +61,8 @@ class Deliveryman(models.Model):
             new_deliveryman = Deliveryman(
                 name=validated_data['name'],
                 cpf=validated_data['cpf'],
+                logisticOperator=LogisticOperator.objects.get(
+                    id=validated_data['logisticOperator_id']),
                 active=validated_data['active']
             )
             new_deliveryman.save()
@@ -68,7 +72,8 @@ class Deliveryman(models.Model):
 class Movement(models.Model):
     scooter = models.ForeignKey(Scooter, on_delete=models.CASCADE, null=True)
     deliveryman = models.ForeignKey(Deliveryman, on_delete=models.CASCADE, null=True)
-    logisticOperator = models.ForeignKey(LogisticOperator, on_delete=models.CASCADE, null=True)
+    logisticOperator = models.ForeignKey(
+        LogisticOperator, on_delete=models.CASCADE, null=True)
     destinyScooter = models.CharField(max_length=200, blank=True)
     dateMovement = models.DateField(default=date(2000, 1, 1))
     pickUpTime = models.TimeField(null=True)
@@ -78,7 +83,7 @@ class Movement(models.Model):
     accessoriesCase = models.BooleanField(default=False)
     accessoriesCharger = models.BooleanField(default=False)
     observation = models.CharField(max_length=500, blank=True)
-    owner = models.ForeignKey('auth.User', related_name='movement', on_delete=models.CASCADE)
+    owner = models.ForeignKey('auth.User', related_name='movement', on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def retrieve(self, id):
