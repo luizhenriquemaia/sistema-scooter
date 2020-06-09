@@ -54,7 +54,7 @@ export default function Movement() {
         var dateSplited = dateMovement.split("-")
         var timeSplited = timeMovement.split(":")
         var dateMovementFormatted = new Date(dateSplited[0], dateSplited[1]-1, dateSplited[2], timeSplited[0], timeSplited[1])
-        // add 0 digit to hour below 10
+        // add 0 digit to hours below 10
         if (dateMovementFormatted.getHours() < 10) {
             var timeMovementFormatted = `0${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
         }
@@ -66,20 +66,24 @@ export default function Movement() {
     
     useEffect(() => {
         if (movements.length !== 0 && movements !== undefined) {
-            if (isDetails !== undefined && isDetails === false) {                
+            if (isDetails !== undefined && isDetails === false) {      
+                console.log(movements)          
                 movements.map(movement => {
                     movement.timePickUpFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
                     if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.dateMovement, movement.returnTime)
                 })
                 setMovementState(movements)
+                console.log(1)
                 setShouldGetMovements(false)
             }
             else {
+                console.log(2)
                 setShouldGetMovements(true)
             }
         }
         else {
-            setShouldGetMovements(shouldGetMovements => !shouldGetMovements)
+            console.log(3)
+            setShouldGetMovements(true)
             setMovementState([{id: 0, dataMovement: "", scooter: {chassisNumber: ""}, logisticOperator: {description: ""},
                 deliveryman: {name: ""}, typeMovement: "", destiny: "", accessoriesHelmet: false, accessoriesBag: false,
                 accessoriesCase: false, accessoriesCharger: false, observation: "", timePickUpFormatted: "", timeReturnFormatted: ""

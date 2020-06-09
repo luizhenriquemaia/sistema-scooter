@@ -154,13 +154,18 @@ class MovementViewSet(viewsets.ViewSet):
     
     def update(self, request, pk):
         print(f'\n\n\ndata = {request.data}\n\n\n')
-        try:
-            request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
-            request.data['logisticOperator_id'] = LogisticOperator.objects.get(description=request.data['LO']).id
-            request.data['deliveryman_id'] = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman']).id
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
         movement = Movement.objects.get(id=pk)
+        if request.user.is_staff:
+            try:
+                request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
+                request.data['logisticOperator_id'] = LogisticOperator.objects.get(description=request.data['LO']).id
+                request.data['deliveryman_id'] = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman']).id
+            except:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            request.data['scooter_id'] = movement.scooter_id
+            request.data['logisticOperator_id'] = movement.logisticOperator_id
+            request.data['deliveryman_id'] = movement.deliveryman_id
         serializer = MovementSerializer(movement, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
