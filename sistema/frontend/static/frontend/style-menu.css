@@ -1,7 +1,93 @@
-html, body {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    border: 1px solid black;
 }
+
+#app {
+    display: flex;
+}
+
+/* Menu  aberto */
+.menuBlock {
+    background: rgba(0, 0, 0, 0.6);
+    width: max-content;
+    height: 100vh;
+}
+
+.menuIconBox {
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 14px;
+}
+
+.menuIconBox span {
+    width: 37px;
+    height: 37px;
+    background: url(../../../static/imgs/menuX_1.png) no-repeat center center;
+    background-size: 15px;
+    border: 1px solid #f6f6f6;
+    border-radius: 10px;
+}
+
+.navBlock {
+    font-family: sans-serif;
+    font-size: 18px;
+}
+
+.navBlock hr {
+    margin-bottom: 30px;
+}
+
+.navBlock a {
+    text-decoration: none;
+}
+
+.userBox, .navBox {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px 25px 10px 20px;
+} 
+
+.userBox img, .navBox img {
+    width: 50px;
+}
+
+.userBox p, .navBox p {
+    text-transform: capitalize;
+    color: #f6f6f6;
+    padding-left: 12px;
+}
+
+.navSubBox::-webkit-scrollbar {
+    width: 5px;
+    background-color: #303030;
+    border-radius: 10px;
+}
+
+.navSubBox::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #f6f6f6;
+}
+ 
+/* Menu Fechado */
+
+.menuBlock.closedMenu {
+    width: 82px;
+    overflow-x: hidden;
+}
+
+.menuBlock.closedMenu .menuIconBox {
+    padding-right: 26px;
+}
+
+.menuBlock.closedMenu .menuIconBox span {
+    background: url(../../../static/imgs/menuFechado_1.png) no-repeat center center;
+    background-size: contain;
+}
+
+/* Menu Fechado Mobile */
 

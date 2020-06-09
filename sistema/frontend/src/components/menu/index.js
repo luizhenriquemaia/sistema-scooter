@@ -1,43 +1,48 @@
 import React, { useEffect, useState } from 'react';
-
+import { Link } from 'react-router-dom';
 
 export default function Menu() {
-return (
-    <header>
-        <nav className="menuBlock">
-            <div className="userBlock">
-                <div className="userBox">
-                    <img src="# " />
-                    <p>Admin</p>
+    return (
+        <header>
+            <nav className="menuBlock">
+                <div className="menuIconBox">
+                    <span></span>
                 </div>
-            </div>
-            <hr />
-            <div className="navBlock">
-                <div className="navBox">
-                    <img src="#" />
-                    <p>cadastrar</p>
-                </div>
-                <div className="navBox">
-                    <img src="#" />
-                    <p>nova movimentação</p>
-                    <div className="navSubBox">
-                        <img src="#" />
-                        <p>movimentação interna</p>
+                <hr />
+                <div className="navBlock">
+                    <div className="userBox">
+                        <img src='../../../static/imgs/mulher_1.png'/>
+                        <p>Admin</p>
                     </div>
-                    <div className="navSubBox">
-                        <img src="#" />
-                        <p>movimentação interna</p>
-                    </div>
-                    <div className="navSubBox">
-                        <img src="#" />
-                        <p>movimentação interna</p>
-                    </div>
+                    <hr />
+                    <Link to="/register">
+                        <div className="navBox">
+                            <img src='../../../static/imgs/cadastrar_1.png'/>
+                            <p>cadastrar</p>
+                        </div>
+                    </Link>
+                    <Link to="./moviment">
+                        <div className="navBox">
+                            <img src="../../../static/imgs/adicionar_1.png" />
+                            <p>nova movimentação</p>
+                        </div>
+                    </Link>
+                        <div className="navSubBox">  {/* exemplo de submenu caso seja necessáiro futuramente */}
+                            <Link to="./details-moviment">
+                                <div className="navBox">
+                                    <img src="../../../static/imgs/carimbo_1.png" />
+                                    <p>movimentação interna</p>
+                                </div>
+                            </Link>
+                        </div>
+                    <Link to="/">    
+                        <div className="navBox">
+                            <img src="../../../static/imgs/lista-de-controle_1.png" />
+                            <p>Registros</p>
+                        </div>
+                    </Link>
                 </div>
-                <div className="navBox">
-                    <img src="#" />
-                    <p>Registros</p>
-                </div>
-            </div>
-        </nav>
-    </header>
-)};
+            </nav>
+        </header>
+    )
+};
