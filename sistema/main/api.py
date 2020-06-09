@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
@@ -111,15 +112,20 @@ class MovementViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        if request.user.is_staff or request.user.is_superuser:
-            queryset_list = Movement.objects.all()
-        else:
-            queryset_list = Movement.objects.filter(owner=request.user)
         query_from_url_initial_date = request.GET.get("initialDate")
         query_from_url_final_date = request.GET.get("finalDate")
-        if query_from_url_initial_date and query_from_url_final_date:
-            queryset_list = Movement.objects.filter(dateMovement__range=(
-                query_from_url_initial_date, query_from_url_final_date))
+        if request.user.is_staff or request.user.is_superuser:
+            if query_from_url_initial_date and query_from_url_final_date:
+                queryset_list = Movement.objects.filter(dateMovement__range=(
+                    query_from_url_initial_date, query_from_url_final_date))
+            else:
+                queryset_list = Movement.objects.filter(dateMovement=datetime.today())
+        else:
+            if query_from_url_initial_date and query_from_url_final_date:
+                queryset_list = Movement.objects.filter(dateMovement__range=(
+                    query_from_url_initial_date, query_from_url_final_date), owner=request.user)
+            else:
+                queryset_list = Movement.objects.filter(dateMovement=datetime.today(), owner=request.user)
         serializer = MovementSerializer(queryset_list, many=True)
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)

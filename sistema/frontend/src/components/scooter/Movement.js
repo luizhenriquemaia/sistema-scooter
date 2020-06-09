@@ -7,6 +7,7 @@ import { getMovements, getMovementsWithFilters, addMovement } from '../../action
 export default function Movement() {
     const dispatch = useDispatch()
     const history = useHistory()
+    const today = new Date()
     const [MovementState, setMovementState] = useState([{
         id: 0,
         dataMovement: "",
@@ -37,8 +38,8 @@ export default function Movement() {
     })
 
     const [filtersMovements, setFiltersMovements] = useState({
-        filterInitialDate: "",
-        filterFinalDate: "",
+        filterInitialDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
+        filterFinalDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
         filterShowReturnedScooters: true,
         filterShowJustOneOL: "",
         filterByNameDeliveryman: ""
@@ -184,17 +185,17 @@ export default function Movement() {
                 <h1 className="title-page">Movimentações Patenetes</h1>
                 <div>
                     <label>Data</label>
-                    <input type="date" name="filterInitialDate" onChange={handleFiltersChange} />
-                    <input type="date" name="filterFinalDate" onChange={handleFiltersChange} />
+                    <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
+                    <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
                     <button onClick={handleSetFilters}>Aplicar Filtros</button>
                 </div>
                 <div>
                     <label>Mostrar Patinetes Devolvidos</label>
                     <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
                     <label>Mostrar Apenas a OL</label>
-                    <input type="text" name="filterShowJustOneOL" onChange={handleFiltersChange} />
+                    <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
                     <label>Mostrar Apenas o Entregador</label>
-                    <input type="text" name="filterByNameDeliveryman" onChange={handleFiltersChange} />
+                    <input type="text" name="filterByNameDeliveryman" value={filtersMovements.filterByNameDeliveryman || ''} onChange={handleFiltersChange} />
                 </div>
 
                 <table className="table-movements">
@@ -248,15 +249,17 @@ export default function Movement() {
                 <h1 className="title-page">Movimentações Patenetes</h1>
                 <div>
                     <label>Data</label>
-                    <input type="date" name="filterInitialDate" onChange={handleFiltersChange} />
-                    <input type="date" name="filterFinalDate" onChange={handleFiltersChange} />
+                    <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
+                    <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
                     <button onClick={handleSetFilters}>Aplicar Filtros</button>
                 </div>
                 <div>
                     <label>Mostrar Patinetes Devolvidos</label>
                     <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
                     <label>Mostrar Apenas a OL</label>
-                    <input type="text" name="filterShowJustOneOL" onChange={handleFiltersChange} />
+                    <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
+                    <label>Mostrar Apenas o Entregador</label>
+                    <input type="text" name="filterByNameDeliveryman" value={filtersMovements.filterByNameDeliveryman || ''} onChange={handleFiltersChange} />
                 </div>
 
                 <table className="table-movements">
