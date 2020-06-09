@@ -127,13 +127,11 @@ export default function Movement() {
 
     // HANDLE FILTER THINGS
     useEffect(() => {
+        if (!filtersMovements.filterShowReturnedScooters) {
+            setMovementState(movements.filter(movement => movement.returnTime === null))
+        }
         if (filtersMovements.filterShowReturnedScooters) {
-            if (filtersMovements.filterShowReturnedScooters === false) {
-                setMovementState(movements.filter(movement => movement.returnTime === null))
-            }
-            else {
-                setMovementState(movements)
-            }
+            setMovementState(movements)
         }
         if (filtersMovements.filterShowJustOneOL) {
             if (filtersMovements.filterShowJustOneOL !== "") {
@@ -150,13 +148,15 @@ export default function Movement() {
         })    
     }
 
-    const handleCheckFilter = e => {
+    const handleCheckFilter = e => {        
         const { name, checked } = e.target
+        console.log(`checked? ${checked}`)
         setFiltersMovements({
             ...filtersMovements,
             [name]: checked
         })
     }
+
 
     const handleSetFilters = e => {
         const { filterInitialDate, filterFinalDate  } = filtersMovements
@@ -171,7 +171,6 @@ export default function Movement() {
         }
     }
 
-    console.log(shouldGetMovements)
     if (shouldGetMovements === false) {
         return (
             <div className="content">
