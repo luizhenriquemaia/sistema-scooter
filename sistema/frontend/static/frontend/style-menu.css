@@ -10,9 +10,11 @@
 
 /* Menu  aberto */
 .menuBlock {
-    background: rgba(0, 0, 0, 0.6);
-    width: max-content;
+    background: rgba(0, 0, 0, 0.85);
+    width: 286px;
     height: 100vh;
+    transition: width ease-in-out 1s;
+    position: absolute;
 }
 
 .menuIconBox {
@@ -26,13 +28,14 @@
 .menuIconBox span {
     width: 37px;
     height: 37px;
-    background: url(../../../static/imgs/menuX_1.png) no-repeat center center;
-    background-size: 15px;
+    background: url(../../../static/imgs/menuX.png) no-repeat center center;
+    background-size: contain;
     border: 1px solid #f6f6f6;
     border-radius: 10px;
+    transition: transform 1s, background 1s;
 }
 
-.navBlock {
+.navBlock { 
     font-family: sans-serif;
     font-size: 18px;
 }
@@ -50,6 +53,7 @@
     justify-content: flex-start;
     align-items: center;
     padding: 10px 25px 10px 20px;
+    width: 286px;
 } 
 
 .userBox img, .navBox img {
@@ -85,8 +89,9 @@
 }
 
 .menuBlock.closedMenu .menuIconBox span {
-    background: url(../../../static/imgs/menuFechado_1.png) no-repeat center center;
+    background: url(../../../static/imgs/menuFechado.png) no-repeat center center;
     background-size: contain;
+    transform: rotate(90deg);
 }
 
 /* Menu Fechado Mobile */

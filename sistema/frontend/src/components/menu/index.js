@@ -9,7 +9,7 @@ export default function Menu() {
         <header>
             <nav className={isOpenMenuState ? "menuBlock" : "menuBlock closedMenu"}>
                 <div className="menuIconBox">
-                    <span onClick={() => setIsOpenMenuState(!isOpenMenuState)}>SSSSSSSSSSSSSSSSSSSSSSSSSSSSS</span>
+                    <span onClick={() => setIsOpenMenuState(!isOpenMenuState)}></span>
                 </div>
                 <hr />
                 <div className="navBlock">
