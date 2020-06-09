@@ -40,7 +40,8 @@ export default function Movement() {
         filterInitialDate: "",
         filterFinalDate: "",
         filterShowReturnedScooters: true,
-        filterShowJustOneOL: ""
+        filterShowJustOneOL: "",
+        filterByNameDeliveryman: ""
     })
 
     const [shouldGetMovements, setShouldGetMovements] = useState(false)
@@ -138,6 +139,11 @@ export default function Movement() {
                 setMovementState(movements.filter(movement => movement.logisticOperator.description === filtersMovements.filterShowJustOneOL))
             }
         }
+        if (filtersMovements.filterByNameDeliveryman) {
+            if (filtersMovements.filterByNameDeliveryman != "") {
+                setMovementState(movements.filter(movement => movement.deliveryman.name === filtersMovements.filterByNameDeliveryman))
+            }
+        }
     }, [filtersMovements])
 
     const handleFiltersChange = e => {
@@ -150,7 +156,6 @@ export default function Movement() {
 
     const handleCheckFilter = e => {        
         const { name, checked } = e.target
-        console.log(`checked? ${checked}`)
         setFiltersMovements({
             ...filtersMovements,
             [name]: checked
@@ -186,6 +191,8 @@ export default function Movement() {
                     <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
                     <label>Mostrar Apenas a OL</label>
                     <input type="text" name="filterShowJustOneOL" onChange={handleFiltersChange} />
+                    <label>Mostrar Apenas o Entregador</label>
+                    <input type="text" name="filterByNameDeliveryman" onChange={handleFiltersChange} />
                 </div>
 
                 <table className="table-movements">
