@@ -41,6 +41,10 @@
     transition: transform 0.5s, background 0.6s;
 }
 
+.menuIconBox span:hover {
+    background-color: rgba(0, 0, 0, 1);
+}
+
 .navBlock { 
     font-family: sans-serif;
     font-size: 18px;
@@ -60,7 +64,11 @@
     align-items: center;
     padding: 10px 25px 10px 20px;
     width: 286px;
-} 
+}
+
+.navBlock a :hover {
+    background-color: rgba(0, 0, 0, 0.95);
+}
 
 .userBox img, .navBox img {
     width: 50px;
@@ -98,6 +106,10 @@
     background: url(../../../static/imgs/menuFechado.png) no-repeat center center;
     background-size: contain;
     transform: rotate(90deg);
+}
+
+.menuBlock.closedMenu .menuIconBox span:hover {
+    background-color: rgba(0, 0, 0, 0.95);
 }
 
 /* Menu Fechado Mobile */
