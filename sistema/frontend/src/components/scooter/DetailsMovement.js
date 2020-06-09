@@ -84,7 +84,7 @@ export default function Movement() {
         e.preventDefault()
         const { scooter, cpfDeliveryman, LO, typeMovement, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
         const updateMovementData = { scooter, cpfDeliveryman, LO, typeMovement, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
-        dispatch(updateMovement(idMovement, updateMovementData))
+        dispatch(updateMovement(idMovement, updateMovementData))        
         history.push("/")
     }
 
