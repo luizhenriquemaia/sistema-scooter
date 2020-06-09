@@ -128,20 +128,22 @@ export default function Movement() {
 
     // HANDLE FILTER THINGS
     useEffect(() => {
-        if (!filtersMovements.filterShowReturnedScooters) {
-            setMovementState(movements.filter(movement => movement.returnTime === null))
-        }
-        if (filtersMovements.filterShowReturnedScooters) {
-            setMovementState(movements)
-        }
-        if (filtersMovements.filterShowJustOneOL) {
-            if (filtersMovements.filterShowJustOneOL !== "") {
-                setMovementState(movements.filter(movement => movement.logisticOperator.description === filtersMovements.filterShowJustOneOL))
+        if (movements !== '') {
+            if (!filtersMovements.filterShowReturnedScooters) {
+                setMovementState(movements.filter(movement => movement.returnTime === null))
             }
-        }
-        if (filtersMovements.filterByNameDeliveryman) {
-            if (filtersMovements.filterByNameDeliveryman != "") {
-                setMovementState(movements.filter(movement => movement.deliveryman.name === filtersMovements.filterByNameDeliveryman))
+            if (filtersMovements.filterShowReturnedScooters) {
+                setMovementState(movements)
+            }
+            if (filtersMovements.filterShowJustOneOL) {
+                if (filtersMovements.filterShowJustOneOL !== "") {
+                    setMovementState(movements.filter(movement => movement.logisticOperator.description === filtersMovements.filterShowJustOneOL))
+                }
+            }
+            if (filtersMovements.filterByNameDeliveryman) {
+                if (filtersMovements.filterByNameDeliveryman != "") {
+                    setMovementState(movements.filter(movement => movement.deliveryman.name === filtersMovements.filterByNameDeliveryman))
+                }
             }
         }
     }, [filtersMovements])
