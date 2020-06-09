@@ -19,7 +19,7 @@ export default function App() {
                     <Menu/>
                         <div className="container">
                             <Switch>
-                            <Route exact path="/" component={Movement} />
+                            <Route exact path="/" exact component={Movement} />
                             <Route exact path="/details-movement/:idMovement" component={DetailsMovement} />
                             <Route exact path="/register" component={Register} />
                             </Switch>
