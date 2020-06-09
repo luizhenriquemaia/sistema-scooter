@@ -216,10 +216,10 @@ export default function Movement() {
             <h2>Adicionar Nova Movimentação</h2>
             <label>Scooter</label>
             <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
-            <label>Operador Logístico</label>
-            <input type="text" name="OL" value={newMovementState.OL} onChange={handleChange} />
             <label>CPF Entregador</label>
             <input type="text" name="cpfDeliverymanState" checked={newMovementState.cpfDeliverymanState} onChange={handleChange} />
+            <label>Operador Logístico</label>
+            <input type="text" name="OL" value={newMovementState.OL} onChange={handleChange} />
             <label>Capacete</label>
             <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
             <label>Bag</label>

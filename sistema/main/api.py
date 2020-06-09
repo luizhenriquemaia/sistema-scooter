@@ -95,6 +95,8 @@ class DeliverymanViewSet(viewsets.ViewSet):
         request.data['name'] = request.data['deliverymanName']
         request.data['cpf'] = request.data['cpfDeliverymanToAPI']
         request.data['active'] = request.data['deliverymanActive']
+        request.data['logisticOperator_id'] = LogisticOperator.objects.get(
+            description=request.data['logisticOperatorDeliveryman']).id
         serializer = DeliverymanSerializer(data=request.data)
         try:
             if serializer.is_valid(raise_exception=True):
