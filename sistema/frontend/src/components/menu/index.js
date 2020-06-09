@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Menu() {
+
+    const [isOpenMenuState, setIsOpenMenuState] = useState(true)
+
     return (
         <header>
-            <nav className="menuBlock">
+            <nav className={isOpenMenuState ? "menuBlock" : "menuBlock closedMenu"}>
                 <div className="menuIconBox">
-                    <span></span>
+                    <span onClick={() => setIsOpenMenuState(!isOpenMenuState)}>SSSSSSSSSSSSSSSSSSSSSSSSSSSSS</span>
                 </div>
                 <hr />
                 <div className="navBlock">
