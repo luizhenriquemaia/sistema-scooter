@@ -28,7 +28,6 @@ export default function Movement() {
     }])
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
-        OL: "",
         cpfDeliverymanState: "",
         accessoriesHelmet: false,
         accessoriesBag: false,
@@ -110,16 +109,16 @@ export default function Movement() {
 
     const handleClick = (idMovement) => history.push(`details-movement/${idMovement}`)
     const handleClickAdd = e => {
-        const { scooter, OL, cpfDeliverymanState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
+        const { scooter, cpfDeliverymanState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfDeliveryman = cpfDeliverymanState.replace(/\D/g, '')
         if (cpfDeliveryman.length !== 11) {
             console.log("invalid cpf")
         }
         else {
             const typeMovement = "retirada"
-            const newMovementToAPI = { scooter, OL, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+            const newMovementToAPI = { scooter, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
             dispatch(addMovement(newMovementToAPI))
-            setNewMovementState({scooter: "", OL: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: ""})
+            setNewMovementState({scooter: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: ""})
         }
     }
 
@@ -218,8 +217,6 @@ export default function Movement() {
             <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
             <label>CPF Entregador</label>
             <input type="text" name="cpfDeliverymanState" checked={newMovementState.cpfDeliverymanState} onChange={handleChange} />
-            <label>Operador Logístico</label>
-            <input type="text" name="OL" value={newMovementState.OL} onChange={handleChange} />
             <label>Capacete</label>
             <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
             <label>Bag</label>
