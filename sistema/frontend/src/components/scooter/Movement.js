@@ -67,23 +67,22 @@ export default function Movement() {
     useEffect(() => {
         if (movements.length !== 0 && movements !== undefined) {
             if (isDetails !== undefined && isDetails === false) {      
-                console.log(movements)          
                 movements.map(movement => {
                     movement.timePickUpFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
                     if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.dateMovement, movement.returnTime)
                 })
                 setMovementState(movements)
-                console.log(1)
                 setShouldGetMovements(false)
             }
             else {
-                console.log(2)
                 setShouldGetMovements(true)
             }
         }
         else {
-            console.log(3)
-            setShouldGetMovements(true)
+            // api returns "" so if movements is empty is because there is not a movement in database
+            if (movements !== ''){
+                setShouldGetMovements(true)
+            }
             setMovementState([{id: 0, dataMovement: "", scooter: {chassisNumber: ""}, logisticOperator: {description: ""},
                 deliveryman: {name: ""}, typeMovement: "", destiny: "", accessoriesHelmet: false, accessoriesBag: false,
                 accessoriesCase: false, accessoriesCharger: false, observation: "", timePickUpFormatted: "", timeReturnFormatted: ""
