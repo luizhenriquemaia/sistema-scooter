@@ -141,7 +141,7 @@ class MovementViewSet(viewsets.ViewSet):
 
     def create(self, request):
         request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
-        if request.data['typeMovement'] == 'devolução':
+        if request.data['typeMovement'] != 'devolução':
             scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
             if scooter_db.status.description == "Disponível":
                 deliverymanMovement = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman'])
@@ -156,7 +156,7 @@ class MovementViewSet(viewsets.ViewSet):
             else:
                 return Response("Patinete não disponível", status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response("Tipo de movimentação diferente de devolução", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Tipo de movimentação incorreta", status=status.HTTP_400_BAD_REQUEST)
     
     def update(self, request, pk):
         movement = Movement.objects.get(id=pk)
