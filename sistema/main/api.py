@@ -140,20 +140,25 @@ class MovementViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request):
-        request.data['scooter_id'] = Scooter.objects.get(
-            chassisNumber=request.data['scooter']).id
-        deliverymanMovement = Deliveryman.objects.get(
-            cpf=request.data['cpfDeliveryman'])
-        request.data['logisticOperator_id'] = deliverymanMovement.logisticOperator_id
-        request.data['deliveryman_id'] = deliverymanMovement.id
-        serializer = MovementSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            new_movement = serializer.save(owner=self.request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
+        if request.data['typeMovement'] == 'devolução':
+            scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
+            if scooter_db.status.description == "Disponível":
+                deliverymanMovement = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman'])
+                request.data['logisticOperator_id'] = deliverymanMovement.logisticOperator_id
+                request.data['deliveryman_id'] = deliverymanMovement.id
+                serializer = MovementSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=True):
+                    new_movement = serializer.save(owner=self.request.user)
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response("Patinete não disponível", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response("Tipo de movimentação diferente de devolução", status=status.HTTP_400_BAD_REQUEST)
     
     def update(self, request, pk):
-        print(f'\n\n\ndata = {request.data}\n\n\n')
         movement = Movement.objects.get(id=pk)
         if request.user.is_staff:
             try:

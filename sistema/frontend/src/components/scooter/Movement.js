@@ -125,8 +125,8 @@ export default function Movement() {
             const typeMovement = "retirada"
             const newMovementToAPI = { scooter, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
             dispatch(addMovement(newMovementToAPI))
-            setNewMovementState({scooter: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: ""})
         }
+        setNewMovementState({scooter: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: ""})
     }
 
 
@@ -217,7 +217,7 @@ export default function Movement() {
                         {MovementState.map(movement => (
                             <tr key={movement.id}>
                                 <td onClick={() => handleClick(movement.id)}>{movement.dateMovement}</td>
-                                <td>{movement.scooter.chassisNumber}</td>
+                                <td onClick={() => handleClick(movement.id)}>{movement.scooter.chassisNumber}</td>
                                 <td>{movement.deliveryman.name}</td>
                                 <td>{movement.logisticOperator.description}</td>
                                 <td>{movement.timePickUpFormatted}</td>

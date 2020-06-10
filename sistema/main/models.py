@@ -109,29 +109,29 @@ class Movement(models.Model):
         return movement_dict
 
     def create(self, **validated_data):
-        print(f"\n\n\n\n validated_data: {validated_data}\n\n\n\n")
-        if validated_data['typeMovement'] != 'devolução':
-            new_movement = Movement(
-                scooter=Scooter.objects.get(id=validated_data['scooter_id']),
-                deliveryman=Deliveryman.objects.get(id=validated_data['deliveryman_id']),
-                logisticOperator=LogisticOperator.objects.get(id=validated_data['logisticOperator_id']),
-                dateMovement=date.today(),
-                pickUpTime=datetime.now().time(),
-                accessoriesHelmet=validated_data['accessoriesHelmet'],
-                accessoriesBag=validated_data['accessoriesBag'],
-                accessoriesCase=validated_data['accessoriesCase'],
-                accessoriesCharger=validated_data['accessoriesCharger'],
-                observation=validated_data['observation'],
-                owner=validated_data['owner']
-            )
-            new_movement.save()
-            return new_movement
+        scooter_db = Scooter.objects.get(id=validated_data['scooter_id'])
+        new_movement = Movement(
+            scooter=scooter_db,
+            deliveryman=Deliveryman.objects.get(id=validated_data['deliveryman_id']),
+            logisticOperator=LogisticOperator.objects.get(id=validated_data['logisticOperator_id']),
+            dateMovement=date.today(),
+            pickUpTime=datetime.now().time(),
+            accessoriesHelmet=validated_data['accessoriesHelmet'],
+            accessoriesBag=validated_data['accessoriesBag'],
+            accessoriesCase=validated_data['accessoriesCase'],
+            accessoriesCharger=validated_data['accessoriesCharger'],
+            observation=validated_data['observation'],
+            owner=validated_data['owner']
+        )
+        new_movement.save()
+        # update status of scooter
+        scooter_db.status = StatusScooter.objects.get_or_create(description="Em uso")[0]
+        scooter_db.save()
+        return new_movement
     
     def update(self, movement, **validated_data):
-        print(f"\n\n\nvalidated_data: {validated_data}")
-        print(f"\Movement: {movement}\n\n\n")
-        movement.scooter = Scooter.objects.get(
-            id=validated_data['scooter_id'])
+        scooter_db = Scooter.objects.get(id=validated_data['scooter_id'])
+        movement.scooter = scooter_db
         movement.deliveryman = Deliveryman.objects.get(
             id=validated_data['deliveryman_id'])
         movement.accessoriesHelmet = validated_data['accessoriesHelmet']
@@ -141,10 +141,16 @@ class Movement(models.Model):
         movement.observation = validated_data['observation']
         if validated_data['typeMovement'] == 'devolução':
             # don't let the user changes the return time in update
-            if movement.returnTime:
-                pass
-            else:
+            if not movement.returnTime:
                 movement.returnTime = datetime.now().time()
+            if validated_data['destinyScooter'] == "manutenção":
+                scooter_db.status = StatusScooter.objects.get_or_create(
+                    description="Manutenção")[0]
+                scooter_db.save()
+            if validated_data['destinyScooter'] == "base":
+                scooter_db.status = StatusScooter.objects.get_or_create(
+                    description="Disponível")[0]
+                scooter_db.save()
             movement.destinyScooter = validated_data['destinyScooter']
         movement.save()
         return movement
