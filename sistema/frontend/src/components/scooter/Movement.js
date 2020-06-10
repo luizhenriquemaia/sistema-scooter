@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import { useAlert } from 'react-alert'
 import { getMovements, getMovementsWithFilters, addMovement } from '../../actions/movement'
 
 
 export default function Movement() {
     const dispatch = useDispatch()
     const history = useHistory()
+    const alert = useAlert()
     const today = new Date()
     const [MovementState, setMovementState] = useState([{
         id: 0,
@@ -66,7 +68,7 @@ export default function Movement() {
     
     useEffect(() => {
         if (movements.length !== 0 && movements !== undefined) {
-            if (isDetails !== undefined && isDetails === false) {      
+            if (isDetails === false) {      
                 movements.map(movement => {
                     movement.timePickUpFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
                     if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.dateMovement, movement.returnTime)
@@ -119,7 +121,7 @@ export default function Movement() {
         const { scooter, cpfDeliverymanState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfDeliveryman = cpfDeliverymanState.replace(/\D/g, '')
         if (cpfDeliveryman.length !== 11) {
-            console.log("invalid cpf")
+            alert.error("cpf inválido")
         }
         else {
             const typeMovement = "retirada"
@@ -231,7 +233,7 @@ export default function Movement() {
                 <label>Scooter</label>
                 <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
                 <label>CPF Entregador</label>
-                <input type="text" name="cpfDeliverymanState" checked={newMovementState.cpfDeliverymanState} onChange={handleChange} />
+                <input type="text" name="cpfDeliverymanState" value={newMovementState.cpfDeliverymanState} onChange={handleChange} />
                 <label>Capacete</label>
                 <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
                 <label>Bag</label>
@@ -285,7 +287,7 @@ export default function Movement() {
                 <label>Scooter</label>
                 <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
                 <label>CPF Entregador</label>
-                <input type="text" name="cpfDeliverymanState" checked={newMovementState.cpfDeliverymanState} onChange={handleChange} />
+                <input type="text" name="cpfDeliverymanState" value={newMovementState.cpfDeliverymanState} onChange={handleChange} />
                 <label>Capacete</label>
                 <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
                 <label>Bag</label>
