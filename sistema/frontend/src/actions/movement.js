@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from './types'
+import { returnErrors } from './messages'
 
 
 export function getMovements() {
@@ -11,9 +12,7 @@ export function getMovements() {
                     payload: res.data
                 })
             })
-            .catch(
-                err => dispatch(returnErrors(err.response.data, err.response.status))
-            )
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
     }
 }
 
@@ -26,9 +25,7 @@ export const getMovementsWithFilters = (filters) => {
                     payload: res.data
                 })
             })
-            .catch(
-                err => dispatch(returnErrors(err.response.data, err.response.status))
-            )
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
     }
 }
 
@@ -42,9 +39,7 @@ export function getMovement(id) {
                     payload: res.data
                 })
             })
-            .catch(
-                err => dispatch(returnErrors(err.response.data, err.response.status))
-            )
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
     }
 }
 
@@ -58,7 +53,7 @@ export const addMovement = (movement) => {
                     payload: res.data
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
     }
 }
 
@@ -71,7 +66,7 @@ export const updateMovement = (id, movementData) => {
                     payload: res.data
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
     }
 }
 
@@ -85,6 +80,6 @@ export const deleteReport = (id) => {
                     payload: id
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
     }
 }

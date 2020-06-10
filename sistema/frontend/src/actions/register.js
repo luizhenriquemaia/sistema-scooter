@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ADD_DELIVERYMAN, ADD_LOGISTICOPERATOR } from './types'
+import { returnErrors } from './messages'
 
 
 export const addDeliveryman = (deliveryman) => {
@@ -11,7 +12,7 @@ export const addDeliveryman = (deliveryman) => {
                     payload: res.data
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
     }
 }
 
@@ -24,6 +25,6 @@ export const addLogisticOperator = (LO) => {
                     payload: res.data
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
     }
 }
