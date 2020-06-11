@@ -212,6 +212,10 @@ export default function Movement() {
                             <th>OL</th>
                             <th>Hora Retirada</th>
                             <th>Hora Devolução</th>
+                            <th>Capacete</th>
+                            <th>Bag</th>
+                            <th>Case</th>
+                            <th>Carregador</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -224,6 +228,11 @@ export default function Movement() {
                                 <td>{movement.logisticOperator.description}</td>
                                 <td>{movement.timePickUpFormatted}</td>
                                 <td>{movement.timeReturnFormatted}</td>
+                                <td><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
+                                <td><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
+                                <td><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
+                                <td><input type="checkbox" checked={movement.accessoriesCharger} disabled /></td>
+                                <td>Delete</td>
                             </tr>
                         ))}
                     </tbody>
@@ -276,6 +285,10 @@ export default function Movement() {
                             <th>OL</th>
                             <th>Hora Retirada</th>
                             <th>Hora Devolução</th>
+                            <th>Capacete</th>
+                            <th>Bag</th>
+                            <th>Case</th>
+                            <th>Carregador</th>
                             <th></th>
                         </tr>
                     </thead>
