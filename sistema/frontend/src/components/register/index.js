@@ -51,6 +51,19 @@ export default function Register() {
         })
     }
 
+    const handleClean = e => {
+        setRegisterState({
+            ...RegisterState,
+            logisticOperatorDescription: "",
+            deliverymanName: "",
+            cpfDeliveryman: "",
+            logisticOperatorDeliveryman: "",
+            deliverymanActive: true,
+            chassisScooter: "",
+            statusScooter: ""
+        })
+    }
+
     const handleClickAdicionar = e => {
         const { registerType } = RegisterState
         if (registerType === "deliveryman") {
@@ -140,7 +153,7 @@ export default function Register() {
                     </select>
                     
                 </div>
-                <button className="submit-button" onClick={handleClickAdicionar}>Limpar</button>
+                <button className="submit-button" onClick={handleClean}>Limpar</button>
                 <button className="submit-button" onClick={handleClickAdicionar}>Registrar</button>
             </section>
         </main>
