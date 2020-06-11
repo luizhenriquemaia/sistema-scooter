@@ -59,6 +59,9 @@ export default function Register() {
             if (cpfDeliverymanToAPI.length !== 11) {
                 alert.error("cpf inválido")
             }
+            if (deliverymanName === "" || logisticOperatorDeliveryman === "") {
+                alert.error("preencha todos os campos")
+            }
             else {
                 var newRegisterToAPI = { deliverymanName, deliverymanActive, cpfDeliverymanToAPI, logisticOperatorDeliveryman }
                 console.log(newRegisterToAPI)

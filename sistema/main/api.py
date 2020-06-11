@@ -93,9 +93,13 @@ class DeliverymanViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request):
+        if Deliveryman.objects.get(cpf=request.data['cpfDeliverymanToAPI']):
+            return Response("CPF já cadastrado", status.HTTP_400_BAD_REQUEST)
         request.data['name'] = request.data['deliverymanName']
         request.data['cpf'] = request.data['cpfDeliverymanToAPI']
         request.data['active'] = request.data['deliverymanActive']
+        try: LogisticOperator.objects.get(description=request.data['logisticOperatorDeliveryman'])
+        except: return Response("OL não cadastrada", status=status.HTTP_400_BAD_REQUEST)
         request.data['logisticOperator_id'] = LogisticOperator.objects.get(
             description=request.data['logisticOperatorDeliveryman']).id
         serializer = DeliverymanSerializer(data=request.data)
