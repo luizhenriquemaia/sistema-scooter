@@ -77,9 +77,14 @@ export default function Register() {
         }
         else if (registerType === "logisticOperator") {
                 const { logisticOperatorDescription } = RegisterState
-                var newRegisterToAPI = { registerType, logisticOperatorDescription }
-                dispatch(addLogisticOperator(newRegisterToAPI))
-                setRegisterState({registerType: "logisticOperator", logisticOperatorDescription: ""})
+                if (logisticOperatorDescription === "") {
+                    alert.error("preencha todos os campos")
+                }
+                else {
+                    var newRegisterToAPI = { registerType, logisticOperatorDescription }
+                    dispatch(addLogisticOperator(newRegisterToAPI))
+                    setRegisterState({ registerType: "logisticOperator", logisticOperatorDescription: "" })
+                }
             }
         else if (registerType === "scooter") {
                     const { chassisScooter, statusScooter } = RegisterState
@@ -111,7 +116,7 @@ export default function Register() {
                     <label>Tipo de cadastro</label>
                     <select name="registerType" onChange={handleChange} >
                         <option value="deliveryman">Entregador</option>
-                        <option value="logisticOperator">Operador Oligstico</option>
+                        <option value="logisticOperator">Operador Logístico</option>
                         <option value="scooter">Patinete</option>
                     </select>
                     <label>Operador Logístico</label>

@@ -41,9 +41,11 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+            return Response("Nenhum operador logístico encontrado", status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request):
+        if LogisticOperator.objects.get(description=request.data['logisticOperatorDescription']):
+            return Response("OL já cadastrada", status=status.HTTP_400_BAD_REQUEST) 
         request.data['description'] = request.data['logisticOperatorDescription']
         serializer = LogisticOperatorSerializer(data=request.data)
         try:
