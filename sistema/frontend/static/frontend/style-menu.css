@@ -4,11 +4,7 @@
     box-sizing: border-box;
 }
 
-#app {
-    display: flex;
-}
-
-/* Menu  aberto */
+/* Menu  aberto -------------------------------*/
 .menuBlock {
     background: rgba(0, 0, 0, 0.85);
     width: 286px;
@@ -123,4 +119,51 @@
     .menuBlock.closedMenu .menuIconBox {
         padding-right: 23px;
     }
+
+    .content section.register-section {
+        margin: 20px 20px 20px 28px;
+    }
 }
+
+/* Register Section  -------------------------------*/
+
+main.content {
+    background: #d3d3d3;
+    height: 100vh;
+    display: flex;
+    background: url(../../../static/imgs/teste3.jpg) no-repeat center center;
+    background-size: cover;
+}
+
+section.register-section {
+    margin: 20px 20px 20px 110px;
+    border: 1px solid darkgrey;
+    border-radius: 14px;
+    box-shadow: -4px 0px 6px grey;
+    background: #fafafa;
+    font-family: sans-serif;
+    display: inherit;
+    flex-direction: column;
+    width: 100%;
+    transition: 0.4s 0.8s;
+}
+
+.title-page {
+    text-align: center;
+    font-size: 28px;
+    padding: 34px 0px;
+}
+
+.register-content {
+    padding: 0 40px;
+    height: 100%;
+    font-size: 20px;
+}
+
+
+
+.buttonBox {
+    display: flex;
+    justify-content: flex-end;
+}
+
