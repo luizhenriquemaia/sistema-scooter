@@ -83,13 +83,18 @@ export default function Register() {
             }
         else if (registerType === "scooter") {
                     const { chassisScooter, statusScooter } = RegisterState
-                    if (statusScooter !== "0" && statusScooter !== "") {
-                        var newRegisterToAPI = { chassisScooter, statusScooter }
-                        dispatch(addScooter(newRegisterToAPI))
-                        setRegisterState({registerType: "scooter", chassisScooter: "", statusScooter: ""})
+                    if (chassisScooter === "") {
+                        alert.error("preencha todos os campos")
                     }
                     else {
-                        alert.error("Status Inválido")
+                        if (statusScooter !== "0" && statusScooter !== "") {
+                            var newRegisterToAPI = { chassisScooter, statusScooter }
+                            dispatch(addScooter(newRegisterToAPI))
+                            setRegisterState({ registerType: "scooter", chassisScooter: "", statusScooter: "" })
+                        }
+                        else {
+                            alert.error("Status Inválido")
+                        }
                     }
                 }
         else {
