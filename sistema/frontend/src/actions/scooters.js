@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { GET_SCOOTERS, GET_SCOOTER, GET_STATUS_SCOOTERS, DELETE_SCOOTER, ADD_SCOOTER } from './types'
+import { returnErrors } from './messages'
 
 
 export function getScooters() {
@@ -11,9 +12,7 @@ export function getScooters() {
                     payload: res.data
                 })
             })
-            .catch(
-                err => dispatch(returnErrors(err.response.data, err.response.status))
-            )
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
     }
 }
 
@@ -27,9 +26,7 @@ export function getScooter(id) {
                     payload: res.data
                 })
             })
-            .catch(
-                err => dispatch(returnErrors(err.response.data, err.response.status))
-            )
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
     }
 }
 
@@ -43,9 +40,7 @@ export function getStatusScooters() {
                     payload: res.data
                 })
             })
-            .catch(
-                err => dispatch(returnErrors(err.response.data, err.response.status))
-            )
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
     }
 }
 
@@ -59,7 +54,7 @@ export const addScooter = (scooter) => {
                     payload: res.data
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
     }
 }
 
@@ -73,6 +68,6 @@ export const deleteScooter = (id) => {
                     payload: id
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
     }
 }

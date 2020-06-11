@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useAlert } from 'react-alert'
 import { addDeliveryman, addLogisticOperator } from '../../actions/register'
 import { getStatusScooters, addScooter } from '../../actions/scooters'
 
 
 export default function Register() {
     const dispatch = useDispatch()
+    const alert = useAlert()
     const [RegisterState, setRegisterState] = useState({
         registerType: "deliveryman",
         logisticOperatorDescription: "",
@@ -49,32 +51,30 @@ export default function Register() {
         })
     }
 
-    console.log(RegisterState)
-
     const handleClickAdicionar = e => {
         const { registerType } = RegisterState
         if (registerType === "deliveryman") {
             const { deliverymanName, cpfDeliveryman, deliverymanActive, logisticOperatorDeliveryman } = RegisterState
             const cpfDeliverymanToAPI = cpfDeliveryman.replace(/\D/g, '')
             if (cpfDeliverymanToAPI.length !== 11) {
-                console.log("cpf inválido")
+                alert.error("cpf inválido")
             }
             else {
                 var newRegisterToAPI = { deliverymanName, deliverymanActive, cpfDeliverymanToAPI, logisticOperatorDeliveryman }
                 console.log(newRegisterToAPI)
                 dispatch(addDeliveryman(newRegisterToAPI))
-                setRegisterState({ 
-                    registerType: "deliveryman",
-                    deliverymanName: "", 
-                    cpfDeliveryman: "", 
-                    logisticOperatorDeliveryman: "", 
-                    deliverymanActive: true})
             }
+            setRegisterState({
+                registerType: "deliveryman",
+                deliverymanName: "",
+                cpfDeliveryman: "",
+                logisticOperatorDeliveryman: "",
+                deliverymanActive: true
+            })
         }
         else if (registerType === "logisticOperator") {
                 const { logisticOperatorDescription } = RegisterState
                 var newRegisterToAPI = { registerType, logisticOperatorDescription }
-                console.log(newRegisterToAPI)
                 dispatch(addLogisticOperator(newRegisterToAPI))
                 setRegisterState({registerType: "logisticOperator", logisticOperatorDescription: ""})
             }
@@ -82,16 +82,15 @@ export default function Register() {
                     const { chassisScooter, statusScooter } = RegisterState
                     if (statusScooter !== "0" && statusScooter !== "") {
                         var newRegisterToAPI = { chassisScooter, statusScooter }
-                        console.log(newRegisterToAPI)
                         dispatch(addScooter(newRegisterToAPI))
                         setRegisterState({registerType: "scooter", chassisScooter: "", statusScooter: ""})
                     }
                     else {
-                        console.log("invalid status scooter")
+                        alert.error("Status Inválido")
                     }
                 }
         else {
-            console.log("invalid register type")
+            alert.error("Tipo de Registro Inválido")
         }
     }
 

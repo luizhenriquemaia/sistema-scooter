@@ -48,6 +48,7 @@ class DeliverymanSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         return Deliveryman.create(Deliveryman, **validated_data)
+            
 
 
 class MovementSerializer(serializers.ModelSerializer):
