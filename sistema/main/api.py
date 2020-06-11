@@ -8,7 +8,6 @@ from .serializers import UserSerializer, StatusScooterSerializer, LogisticOperat
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -68,11 +67,10 @@ class ScooterViewSet(viewsets.ViewSet):
         else:
             return Response("nenhum patinete encontrado", status=status.HTTP_204_NO_CONTENT)
         
-    
     def create(self, request):
-        request.data['status_id'] = request.data['statusScooter']
         if Scooter.objects.get(chassisNumber=request.data['chassisScooter']):
             return Response("patinete já cadastrado", status=status.HTTP_400_BAD_REQUEST)
+        request.data['status_id'] = request.data['statusScooter']
         request.data['chassisNumber'] = request.data['chassisScooter']
         serializer = ScooterSerializer(data=request.data)
         try:
@@ -189,3 +187,12 @@ class MovementViewSet(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def destroy(self, request, pk):
+        permission_classes = [permissions.IsAuthenticated]
+        if request.user.is_staff or request.user.is_superuser:
+            serializer = MovementSerializer
+            Movement.destroy(Movement, id=pk)
+            return Response("movimentação deletada com sucesso", status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response("é necessário ser administrador para excluir um registro", status=status.HTTP_401_UNAUTHORIZED)

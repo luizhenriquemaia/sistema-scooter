@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { useAlert } from 'react-alert'
-import { getMovements, getMovementsWithFilters, addMovement } from '../../actions/movement'
+import { getMovements, getMovementsWithFilters, addMovement, deleteMovement } from '../../actions/movement'
 
 
 export default function Movement() {
@@ -117,6 +117,12 @@ export default function Movement() {
     }
 
     const handleClick = (idMovement) => history.push(`details-movement/${idMovement}`)
+
+    const handleDeleteMovement = (idMovement) => {
+        alert.info("a movimentação será excluida")
+        dispatch(deleteMovement(idMovement))
+    }
+
     const handleClickAdd = e => {
         const { scooter, cpfDeliverymanState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfDeliveryman = cpfDeliverymanState.replace(/\D/g, '')
@@ -232,7 +238,7 @@ export default function Movement() {
                                 <td><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
                                 <td><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
                                 <td><input type="checkbox" checked={movement.accessoriesCharger} disabled /></td>
-                                <td>Delete</td>
+                                <td onClick={() => handleDeleteMovement(movement.id)}>Delete</td>
                             </tr>
                         ))}
                     </tbody>

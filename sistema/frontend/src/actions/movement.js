@@ -71,7 +71,7 @@ export const updateMovement = (id, movementData) => {
 }
 
 
-export const deleteReport = (id) => {
+export const deleteMovement = (id) => {
     return dispatch => {
         axios.delete(`/api/movement/${id}/`)
             .then(res => {

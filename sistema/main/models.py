@@ -154,5 +154,9 @@ class Movement(models.Model):
             movement.destinyScooter = validated_data['destinyScooter']
         movement.save()
         return movement
+    
+    def destroy(self, id):
+        Movement.objects.get(id=id).delete()
+
 
 
