@@ -5,7 +5,7 @@ import { useAlert } from 'react-alert'
 import { getMovements, getMovementsWithFilters, addMovement, deleteMovement } from '../../actions/movement'
 
 
-export default function Movement() {
+export default function externalMovement() {
     const dispatch = useDispatch()
     const history = useHistory()
     const alert = useAlert()

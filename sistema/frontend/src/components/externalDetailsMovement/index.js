@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { getMovement, updateMovement } from '../../actions/movement'
 
 
-export default function Movement() {
+export default function externalDetailsMovement() {
     const params = useParams()
     const dispatch = useDispatch()
     const history = useHistory()
