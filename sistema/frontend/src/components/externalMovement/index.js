@@ -14,7 +14,7 @@ export default function externalMovement() {
     const today = new Date()
     const [MovementState, setMovementState] = useState([{
         id: 0,
-        dataMovement: "",
+        intialDateMovement: "",
         scooter: {
             chassisNumber: ""},
         logisticOperator: {
@@ -88,8 +88,8 @@ export default function externalMovement() {
         if (movements.length !== 0 && movements !== undefined) {
             if (isDetails === false) {      
                 movements.map(movement => {
-                    movement.timePickUpFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
-                    if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.dateMovement, movement.returnTime)
+                    movement.timePickUpFormatted = formattingTime(movement.intialDateMovement, movement.pickUpTime)
+                    if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.intialDateMovement, movement.returnTime)
                 })
                 setMovementState(movements)
                 setShouldGetMovements(false)
@@ -178,9 +178,7 @@ export default function externalMovement() {
             dispatch(addMovement(newMovementToAPI))
         }
         setNewMovementState({scooter: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: ""})
-    }
-
-    console.log(scooters)
+    }    
 
 
     // HANDLE FILTER THINGS
@@ -235,7 +233,7 @@ export default function externalMovement() {
                 dispatch(getMovementsWithFilters(filtersMovements))
             }
             else {
-                console.log("initial date must be before final date")
+                alert.error("initial date must be before final date")
             }
         }
     }
@@ -290,7 +288,7 @@ export default function externalMovement() {
                     <tbody>
                         {MovementState.map(movement => (
                             <tr key={movement.id}>
-                                <td onClick={() => handleGoToDetails(movement.id)}>{movement.dateMovement}</td>
+                                <td onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
                                 <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
                                 <td>{movement.deliveryman.name}</td>
                                 <td>{movement.logisticOperator.description}</td>

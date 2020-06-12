@@ -132,16 +132,17 @@ class MovementViewSet(viewsets.ViewSet):
         query_from_url_final_date = request.GET.get("finalDate")
         if request.user.is_staff or request.user.is_superuser:
             if query_from_url_initial_date and query_from_url_final_date:
-                queryset_list = Movement.objects.filter(dateMovement__range=(
+                queryset_list = Movement.objects.filter(intialDateMovement__range=(
                     query_from_url_initial_date, query_from_url_final_date))
             else:
-                queryset_list = Movement.objects.filter(dateMovement=datetime.today())
+                queryset_list = Movement.objects.filter(intialDateMovement=datetime.today())
         else:
             if query_from_url_initial_date and query_from_url_final_date:
-                queryset_list = Movement.objects.filter(dateMovement__range=(
+                queryset_list = Movement.objects.filter(intialDateMovement__range=(
                     query_from_url_initial_date, query_from_url_final_date), owner=request.user)
             else:
-                queryset_list = Movement.objects.filter(dateMovement=datetime.today(), owner=request.user)
+                queryset_list = Movement.objects.filter(
+                    intialDateMovement=datetime.today(), owner=request.user)
         serializer = MovementSerializer(queryset_list, many=True)
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
