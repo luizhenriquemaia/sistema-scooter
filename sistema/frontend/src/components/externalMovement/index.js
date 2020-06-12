@@ -74,13 +74,7 @@ export default function externalMovement() {
         var dateSplited = dateMovement.split("-")
         var timeSplited = timeMovement.split(":")
         var dateMovementFormatted = new Date(dateSplited[0], dateSplited[1]-1, dateSplited[2], timeSplited[0], timeSplited[1])
-        // add 0 digit to hours below 10
-        if (dateMovementFormatted.getHours() < 10) {
-            var timeMovementFormatted = `0${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
-        }
-        else {
-            var timeMovementFormatted = `${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
-        }
+        var timeMovementFormatted = `${String(dateMovementFormatted.getHours()).padStart(2, '0')}:${String(dateMovementFormatted.getMinutes()).padStart(2, '0')}`
         return timeMovementFormatted
     }
     
