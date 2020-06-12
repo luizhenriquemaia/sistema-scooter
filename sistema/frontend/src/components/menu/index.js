@@ -31,7 +31,7 @@ export default function Menu() {
                         </div>
                     </Link>
                         <div className="navSubBox">  {/* exemplo de submenu caso seja necessáiro futuramente */}
-                            <Link to="./details-moviment">
+                            <Link to="./internal-movement">
                                 <div className="navBox">
                                     <img src="../../../static/imgs/carimbo_1.png" />
                                     <p>movimentação interna</p>

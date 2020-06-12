@@ -30,7 +30,7 @@ export default function App() {
                             <div className="container">
                                 <Switch>
                                     <Route exact path="/" component={externalMovement} />
-                                    <Route exact path="/details-movement/:idMovement" component={externalDetailsMovement} />
+                                    <Route exact path="/external-details-movement/:idMovement" component={externalDetailsMovement} />
                                     <Route exact path="/internal-movement/" component={internalMovement} />
                                     <Route exact path="/register" component={Register} />
                                 </Switch>
