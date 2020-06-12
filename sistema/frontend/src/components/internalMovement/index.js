@@ -14,11 +14,14 @@ export default function externalMovement() {
         id: 0,
         dataMovement: "",
         scooter: {
-            chassisNumber: ""},
+            chassisNumber: ""
+        },
         logisticOperator: {
-            description: ""},
+            description: ""
+        },
         deliveryman: {
-            name: ""},
+            name: ""
+        },
         typeMovement: "",
         destiny: "",
         accessoriesHelmet: false,
@@ -56,7 +59,7 @@ export default function externalMovement() {
     const formattingTime = (dateMovement, timeMovement) => {
         var dateSplited = dateMovement.split("-")
         var timeSplited = timeMovement.split(":")
-        var dateMovementFormatted = new Date(dateSplited[0], dateSplited[1]-1, dateSplited[2], timeSplited[0], timeSplited[1])
+        var dateMovementFormatted = new Date(dateSplited[0], dateSplited[1] - 1, dateSplited[2], timeSplited[0], timeSplited[1])
         // add 0 digit to hours below 10
         if (dateMovementFormatted.getHours() < 10) {
             var timeMovementFormatted = `0${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
@@ -66,10 +69,10 @@ export default function externalMovement() {
         }
         return timeMovementFormatted
     }
-    
+
     useEffect(() => {
         if (movements.length !== 0 && movements !== undefined) {
-            if (isDetails === false) {      
+            if (isDetails === false) {
                 movements.map(movement => {
                     movement.timePickUpFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
                     if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.dateMovement, movement.returnTime)
@@ -83,18 +86,19 @@ export default function externalMovement() {
         }
         else {
             // api returns "" so if movements is empty is because there is not a movement in database
-            if (movements !== ''){
+            if (movements !== '') {
                 setShouldGetMovements(true)
             }
-            setMovementState([{id: 0, dataMovement: "", scooter: {chassisNumber: ""}, logisticOperator: {description: ""},
-                deliveryman: {name: ""}, typeMovement: "", destiny: "", accessoriesHelmet: false, accessoriesBag: false,
+            setMovementState([{
+                id: 0, dataMovement: "", scooter: { chassisNumber: "" }, logisticOperator: { description: "" },
+                deliveryman: { name: "" }, typeMovement: "", destiny: "", accessoriesHelmet: false, accessoriesBag: false,
                 accessoriesCase: false, accessoriesCharger: false, observation: "", timePickUpFormatted: "", timeReturnFormatted: ""
             }])
         }
     }, [movements])
 
 
-    useEffect(() => {        
+    useEffect(() => {
         if (shouldGetMovements === true) {
             dispatch(getMovements())
         }
@@ -135,7 +139,7 @@ export default function externalMovement() {
             const newMovementToAPI = { scooter, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
             dispatch(addMovement(newMovementToAPI))
         }
-        setNewMovementState({scooter: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: ""})
+        setNewMovementState({ scooter: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: "" })
     }
 
 
@@ -154,13 +158,14 @@ export default function externalMovement() {
                 }
             }
             if (filtersMovements.filterByNameDeliveryman) {
-                if (filtersMovements.filterByNameDeliveryman !== "") {
+                if (filtersMovements.filterByNameDeliveryman != "") {
                     setMovementState(movements.filter(movement => movement.deliveryman.name === filtersMovements.filterByNameDeliveryman))
                 }
             }
             if (filtersMovements.filterByChassis) {
-                if (filtersMovements.filterByChassis !== "") {
-                    setMovementState(movements.filter(movement => movement.scooter.chassisNumber == filtersMovements.filterByChassis))
+                if (filtersMovements.filterByChassis != "") {
+                    console.log(movements)
+                    setMovementState(movements.filter(movement => movement.scooter.chassisNumber === filtersMovements.filterByChassis))
                 }
             }
         }
@@ -171,10 +176,10 @@ export default function externalMovement() {
         setFiltersMovements({
             ...filtersMovements,
             [name]: value
-        })    
+        })
     }
 
-    const handleCheckFilter = e => {        
+    const handleCheckFilter = e => {
         const { name, checked } = e.target
         setFiltersMovements({
             ...filtersMovements,
@@ -184,7 +189,7 @@ export default function externalMovement() {
 
 
     const handleSetFilters = e => {
-        const { filterInitialDate, filterFinalDate  } = filtersMovements
+        const { filterInitialDate, filterFinalDate } = filtersMovements
         if (filterInitialDate && filterFinalDate) {
             if (filterInitialDate <= filterFinalDate) {
                 const filtersMovements = { filterInitialDate, filterFinalDate }
