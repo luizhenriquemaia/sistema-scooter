@@ -108,7 +108,10 @@ export default function Register() {
                         if (statusScooter !== "0" && statusScooter !== "") {
                             var newRegisterToAPI = { chassisScooter, statusScooter }
                             dispatch(addScooter(newRegisterToAPI))
-                            setRegisterState({ registerType: "scooter", chassisScooter: "", statusScooter: "" })
+                            setRegisterState({
+                                ...RegisterState,
+                                registerType: "scooter", chassisScooter: "" 
+                            })
                         }
                         else {
                             alert.error("Status Inválido")
