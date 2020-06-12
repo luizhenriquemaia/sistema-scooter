@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import { getMovements, getMovementsWithFilters, addMovement, deleteMovement } from '../../actions/movement'
+import { getScooters } from '../../actions/scooters'
+
 
 
 export default function externalMovement() {
@@ -29,6 +31,20 @@ export default function externalMovement() {
         timePickUpFormatted: "",
         timeReturnFormatted: ""
     }])
+
+    const [ScootersState, setScootersState] = useState([{
+        scooter: {
+            chassisNumber: ""
+        }
+    }])
+
+    const [NumbersOfScootersState, setNumbersOfScootersState] = useState({
+        numberOfScooters: 0,
+        numberOfScootersInUse: 0,
+        numberOfScootersAvailable: 0,
+        numberOfScootersUnderMaintenance: 0
+    })
+
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
         cpfDeliverymanState: "",
@@ -50,6 +66,7 @@ export default function externalMovement() {
 
     const [shouldGetMovements, setShouldGetMovements] = useState(false)
     const movements = useSelector(state => state.movements.movement)
+    const scooters = useSelector(state => state.scooters.scooter)
     const isDetails = useSelector(state => state.movements.isDetails)
 
 
@@ -94,9 +111,34 @@ export default function externalMovement() {
     }, [movements])
 
 
+    useEffect(() => {
+        if (scooters.length !== 0 && scooters !== undefined) {
+            let numberOfScooters = 0
+            let numberOfScootersInUse = 0
+            let numberOfScootersAvailable = 0
+            let numberOfScootersUnderMaintenance = 0
+
+            scooters.map(scooter => {
+                if (scooter.status.description === "Em uso") numberOfScootersInUse += 1
+                if (scooter.status.description === "Disponível") numberOfScootersAvailable += 1
+                if (scooter.status.description === "Em manutenção") numberOfScootersUnderMaintenance += 1
+                numberOfScooters += 1
+            })
+            setNumbersOfScootersState({
+                numberOfScooters,
+                numberOfScootersInUse,
+                numberOfScootersAvailable,
+                numberOfScootersUnderMaintenance
+            })
+            setScootersState(scooters)
+        }
+    }, [scooters])
+
+
     useEffect(() => {        
         if (shouldGetMovements === true) {
             dispatch(getMovements())
+            dispatch(getScooters())
         }
     }, [shouldGetMovements])
 
@@ -117,7 +159,7 @@ export default function externalMovement() {
         })
     }
 
-    const handleClick = (idMovement) => history.push(`details-movement/${idMovement}`)
+    const handleGoToDetails = (idMovement) => history.push(`external-details-movement/${idMovement}`)
 
     const handleDeleteMovement = (idMovement) => {
         alert.info("a movimentação será excluida")
@@ -137,6 +179,8 @@ export default function externalMovement() {
         }
         setNewMovementState({scooter: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: ""})
     }
+
+    console.log(scooters)
 
 
     // HANDLE FILTER THINGS
@@ -216,6 +260,16 @@ export default function externalMovement() {
                     <label>Mostrar Apenas o Patinete</label>
                     <input type="text" name="filterByChassis" value={filtersMovements.filterByChassis || ''} onChange={handleFiltersChange} />
                 </div>
+                <div>
+                    <label>Patinetes Totais</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                    <label>Patinetes Disponíveis</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                    <label>Patinetes Sendo Utilizados</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                    <label>Patinetes em Manutenção</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
+                </div>
 
                 <table className="table-movements">
                     <thead>
@@ -236,8 +290,8 @@ export default function externalMovement() {
                     <tbody>
                         {MovementState.map(movement => (
                             <tr key={movement.id}>
-                                <td onClick={() => handleClick(movement.id)}>{movement.dateMovement}</td>
-                                <td onClick={() => handleClick(movement.id)}>{movement.scooter.chassisNumber}</td>
+                                <td onClick={() => handleGoToDetails(movement.id)}>{movement.dateMovement}</td>
+                                <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
                                 <td>{movement.deliveryman.name}</td>
                                 <td>{movement.logisticOperator.description}</td>
                                 <td>{movement.timePickUpFormatted}</td>
@@ -280,6 +334,16 @@ export default function externalMovement() {
                     <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
                     <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
                     <button onClick={handleSetFilters}>Aplicar Filtros</button>
+                </div>
+                <div>
+                    <label>Patinetes Totais</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                    <label>Patinetes Disponíveis</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                    <label>Patinetes Sendo Utilizados</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                    <label>Patinetes em Manutenção</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
                 </div>
 
                 <table className="table-movements">
