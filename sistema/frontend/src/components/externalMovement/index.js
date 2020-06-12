@@ -121,7 +121,7 @@ export default function externalMovement() {
             scooters.map(scooter => {
                 if (scooter.status.description === "Em uso") numberOfScootersInUse += 1
                 if (scooter.status.description === "Disponível") numberOfScootersAvailable += 1
-                if (scooter.status.description === "Em manutenção") numberOfScootersUnderMaintenance += 1
+                if (scooter.status.description === "Manutenção") numberOfScootersUnderMaintenance += 1
                 numberOfScooters += 1
             })
             setNumbersOfScootersState({
