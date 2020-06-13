@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from .models import StatusScooter, LogisticOperator, Scooter, Deliveryman, Movement
@@ -8,7 +9,6 @@ from .serializers import UserSerializer, StatusScooterSerializer, LogisticOperat
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -41,18 +41,22 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+            return Response("Nenhum operador logístico encontrado", status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request):
-        request.data['description'] = request.data['logisticOperatorDescription']
-        serializer = LogisticOperatorSerializer(data=request.data)
         try:
-            if serializer.is_valid(raise_exception=True):
-                new_logistic_operator = serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except AttributeError:
+            LogisticOperator.objects.get(description=request.data['logisticOperatorDescription'])
+            return Response("OL já cadastrada", status=status.HTTP_400_BAD_REQUEST) 
+        except ObjectDoesNotExist:
+            request.data['description'] = request.data['logisticOperatorDescription']
+            serializer = LogisticOperatorSerializer(data=request.data)
+            try:
+                if serializer.is_valid(raise_exception=True):
+                    new_logistic_operator = serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except AttributeError:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ScooterViewSet(viewsets.ViewSet):
@@ -64,20 +68,23 @@ class ScooterViewSet(viewsets.ViewSet):
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+            return Response("nenhum patinete encontrado", status=status.HTTP_204_NO_CONTENT)
         
-    
     def create(self, request):
-        request.data['status_id'] = request.data['statusScooter']
-        request.data['chassisNumber'] = request.data['chassisScooter']
-        serializer = ScooterSerializer(data=request.data)
-        try:
-            if serializer.is_valid(raise_exception=True):
-                new_scooter = serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except AttributeError:
+        try: 
+            Scooter.objects.get(chassisNumber=request.data['chassisScooter'])
+            return Response("patinete já cadastrado", status=status.HTTP_400_BAD_REQUEST)
+        except ObjectDoesNotExist:
+            request.data['status_id'] = request.data['statusScooter']
+            request.data['chassisNumber'] = request.data['chassisScooter']
+            serializer = ScooterSerializer(data=request.data)
+            try:
+                if serializer.is_valid(raise_exception=True):
+                    new_scooter = serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except AttributeError:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
 
@@ -90,22 +97,31 @@ class DeliverymanViewSet(viewsets.ViewSet):
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+            return Response("nenhum entregador encontrado", status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request):
-        request.data['name'] = request.data['deliverymanName']
-        request.data['cpf'] = request.data['cpfDeliverymanToAPI']
-        request.data['active'] = request.data['deliverymanActive']
-        request.data['logisticOperator_id'] = LogisticOperator.objects.get(
-            description=request.data['logisticOperatorDeliveryman']).id
-        serializer = DeliverymanSerializer(data=request.data)
         try:
-            if serializer.is_valid(raise_exception=True):
-                new_deliveryman = serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except AttributeError:
+            Deliveryman.objects.get(cpf=request.data['cpfDeliverymanToAPI'])
+            return Response("CPF já cadastrado", status.HTTP_400_BAD_REQUEST)
+        except ObjectDoesNotExist:
+            request.data['name'] = request.data['deliverymanName']
+            request.data['cpf'] = request.data['cpfDeliverymanToAPI']
+            request.data['active'] = request.data['deliverymanActive']
+            try:
+                LogisticOperator.objects.get(
+                    description=request.data['logisticOperatorDeliveryman'])
+            except ObjectDoesNotExist:
+                return Response("OL não cadastrada", status=status.HTTP_400_BAD_REQUEST)
+            request.data['logisticOperator_id'] = LogisticOperator.objects.get(
+                description=request.data['logisticOperatorDeliveryman']).id
+            serializer = DeliverymanSerializer(data=request.data)
+            try:
+                if serializer.is_valid(raise_exception=True):
+                    new_deliveryman = serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except AttributeError:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MovementViewSet(viewsets.ViewSet):
@@ -116,16 +132,17 @@ class MovementViewSet(viewsets.ViewSet):
         query_from_url_final_date = request.GET.get("finalDate")
         if request.user.is_staff or request.user.is_superuser:
             if query_from_url_initial_date and query_from_url_final_date:
-                queryset_list = Movement.objects.filter(dateMovement__range=(
+                queryset_list = Movement.objects.filter(intialDateMovement__range=(
                     query_from_url_initial_date, query_from_url_final_date))
             else:
-                queryset_list = Movement.objects.filter(dateMovement=datetime.today())
+                queryset_list = Movement.objects.filter(intialDateMovement=datetime.today())
         else:
             if query_from_url_initial_date and query_from_url_final_date:
-                queryset_list = Movement.objects.filter(dateMovement__range=(
+                queryset_list = Movement.objects.filter(intialDateMovement__range=(
                     query_from_url_initial_date, query_from_url_final_date), owner=request.user)
             else:
-                queryset_list = Movement.objects.filter(dateMovement=datetime.today(), owner=request.user)
+                queryset_list = Movement.objects.filter(
+                    intialDateMovement=datetime.today(), owner=request.user)
         serializer = MovementSerializer(queryset_list, many=True)
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -142,7 +159,7 @@ class MovementViewSet(viewsets.ViewSet):
     def create(self, request):
         try: 
             Scooter.objects.get(chassisNumber=request.data['scooter'])
-        except:
+        except ObjectDoesNotExist:
             return Response("Patinete não existente", status=status.HTTP_400_BAD_REQUEST)
         else:
             request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
@@ -170,7 +187,7 @@ class MovementViewSet(viewsets.ViewSet):
                 request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
                 request.data['logisticOperator_id'] = LogisticOperator.objects.get(description=request.data['LO']).id
                 request.data['deliveryman_id'] = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman']).id
-            except:
+            except ObjectDoesNotExist:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
             request.data['scooter_id'] = movement.scooter_id
@@ -181,3 +198,12 @@ class MovementViewSet(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def destroy(self, request, pk):
+        permission_classes = [permissions.IsAuthenticated]
+        if request.user.is_staff or request.user.is_superuser:
+            serializer = MovementSerializer
+            Movement.destroy(Movement, id=pk)
+            return Response("movimentação deletada com sucesso", status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response("é necessário ser administrador para excluir um registro", status=status.HTTP_401_UNAUTHORIZED)

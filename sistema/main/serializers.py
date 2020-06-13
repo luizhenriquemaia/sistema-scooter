@@ -61,11 +61,10 @@ class MovementSerializer(serializers.ModelSerializer):
     typeMovement = serializers.CharField(required=False)
     destinyScooter = serializers.CharField(required=False)
 
-
     class Meta:
         model = Movement
         fields = ['id', 'scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
-                  'typeMovement', 'dateMovement', 'pickUpTime', 'returnTime', 'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase',
+                  'typeMovement', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime', 'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase',
                   'accessoriesCharger', 'observation', 'destinyScooter']
     
     def create(self, validated_data):
@@ -89,7 +88,7 @@ class MovementRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movement
         fields = ['id', 'scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
-                  'typeMovement', 'dateMovement', 'pickUpTime', 'returnTime', 'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase',
+                  'typeMovement', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime', 'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase',
                   'accessoriesCharger', 'observation', 'destinyScooter', 'owner']
     
 

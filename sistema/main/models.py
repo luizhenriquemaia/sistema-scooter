@@ -75,7 +75,8 @@ class Movement(models.Model):
     logisticOperator = models.ForeignKey(
         LogisticOperator, on_delete=models.CASCADE, null=True)
     destinyScooter = models.CharField(max_length=200, blank=True)
-    dateMovement = models.DateField(default=date(2000, 1, 1))
+    intialDateMovement = models.DateField(null=True)
+    finalDateMovement = models.DateField(null=True)
     pickUpTime = models.TimeField(null=True)
     returnTime = models.TimeField(null=True)
     accessoriesHelmet = models.BooleanField(default=False)
@@ -97,7 +98,8 @@ class Movement(models.Model):
             "logisticOperator": LogisticOperator.objects.get(id=movement.logisticOperator_id).__dict__,
             "logisticOperator_id": LogisticOperator.objects.get(id=movement.logisticOperator_id).id,
             "destinyScooter": movement.destinyScooter,
-            "dateMovement": movement.dateMovement,
+            "intialDateMovement": movement.intialDateMovement,
+            "finalDateMovement": movement.finalDateMovement,
             "pickUpTime": movement.pickUpTime,
             "returnTime": movement.returnTime,
             "accessoriesHelmet": movement.accessoriesHelmet,
@@ -114,7 +116,7 @@ class Movement(models.Model):
             scooter=scooter_db,
             deliveryman=Deliveryman.objects.get(id=validated_data['deliveryman_id']),
             logisticOperator=LogisticOperator.objects.get(id=validated_data['logisticOperator_id']),
-            dateMovement=date.today(),
+            intialDateMovement=date.today(),
             pickUpTime=datetime.now().time(),
             accessoriesHelmet=validated_data['accessoriesHelmet'],
             accessoriesBag=validated_data['accessoriesBag'],
@@ -143,6 +145,7 @@ class Movement(models.Model):
             # don't let the user changes the return time in update
             if not movement.returnTime:
                 movement.returnTime = datetime.now().time()
+                movement.finalDateMovement = date.today()
             if validated_data['destinyScooter'] == "manutenção":
                 scooter_db.status = StatusScooter.objects.get_or_create(
                     description="Manutenção")[0]
@@ -154,5 +157,9 @@ class Movement(models.Model):
             movement.destinyScooter = validated_data['destinyScooter']
         movement.save()
         return movement
+    
+    def destroy(self, id):
+        Movement.objects.get(id=id).delete()
+
 
 

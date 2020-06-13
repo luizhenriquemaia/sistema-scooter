@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { useAlert } from 'react-alert'
-import { getMovements, getMovementsWithFilters, addMovement } from '../../actions/movement'
+import { getMovements, getMovementsWithFilters, addMovement, deleteMovement } from '../../actions/movement'
+import { getScooters } from '../../actions/scooters'
 
 
-export default function Movement() {
+
+export default function externalMovement() {
     const dispatch = useDispatch()
     const history = useHistory()
     const alert = useAlert()
     const today = new Date()
     const [MovementState, setMovementState] = useState([{
         id: 0,
-        dataMovement: "",
+        intialDateMovement: "",
         scooter: {
             chassisNumber: ""},
         logisticOperator: {
@@ -29,6 +31,20 @@ export default function Movement() {
         timePickUpFormatted: "",
         timeReturnFormatted: ""
     }])
+
+    const [ScootersState, setScootersState] = useState([{
+        scooter: {
+            chassisNumber: ""
+        }
+    }])
+
+    const [NumbersOfScootersState, setNumbersOfScootersState] = useState({
+        numberOfScooters: 0,
+        numberOfScootersInUse: 0,
+        numberOfScootersAvailable: 0,
+        numberOfScootersUnderMaintenance: 0
+    })
+
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
         cpfDeliverymanState: "",
@@ -44,11 +60,13 @@ export default function Movement() {
         filterFinalDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
         filterShowReturnedScooters: true,
         filterShowJustOneOL: "",
-        filterByNameDeliveryman: ""
+        filterByNameDeliveryman: "",
+        filterByChassis: ""
     })
 
     const [shouldGetMovements, setShouldGetMovements] = useState(false)
     const movements = useSelector(state => state.movements.movement)
+    const scooters = useSelector(state => state.scooters.scooter)
     const isDetails = useSelector(state => state.movements.isDetails)
 
 
@@ -56,13 +74,7 @@ export default function Movement() {
         var dateSplited = dateMovement.split("-")
         var timeSplited = timeMovement.split(":")
         var dateMovementFormatted = new Date(dateSplited[0], dateSplited[1]-1, dateSplited[2], timeSplited[0], timeSplited[1])
-        // add 0 digit to hours below 10
-        if (dateMovementFormatted.getHours() < 10) {
-            var timeMovementFormatted = `0${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
-        }
-        else {
-            var timeMovementFormatted = `${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
-        }
+        var timeMovementFormatted = `${String(dateMovementFormatted.getHours()).padStart(2, '0')}:${String(dateMovementFormatted.getMinutes()).padStart(2, '0')}`
         return timeMovementFormatted
     }
     
@@ -70,8 +82,8 @@ export default function Movement() {
         if (movements.length !== 0 && movements !== undefined) {
             if (isDetails === false) {      
                 movements.map(movement => {
-                    movement.timePickUpFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
-                    if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.dateMovement, movement.returnTime)
+                    movement.timePickUpFormatted = formattingTime(movement.intialDateMovement, movement.pickUpTime)
+                    if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.intialDateMovement, movement.returnTime)
                 })
                 setMovementState(movements)
                 setShouldGetMovements(false)
@@ -93,9 +105,34 @@ export default function Movement() {
     }, [movements])
 
 
+    useEffect(() => {
+        if (scooters.length !== 0 && scooters !== undefined) {
+            let numberOfScooters = 0
+            let numberOfScootersInUse = 0
+            let numberOfScootersAvailable = 0
+            let numberOfScootersUnderMaintenance = 0
+
+            scooters.map(scooter => {
+                if (scooter.status.description === "Em uso") numberOfScootersInUse += 1
+                if (scooter.status.description === "Disponível") numberOfScootersAvailable += 1
+                if (scooter.status.description === "Manutenção") numberOfScootersUnderMaintenance += 1
+                numberOfScooters += 1
+            })
+            setNumbersOfScootersState({
+                numberOfScooters,
+                numberOfScootersInUse,
+                numberOfScootersAvailable,
+                numberOfScootersUnderMaintenance
+            })
+            setScootersState(scooters)
+        }
+    }, [scooters])
+
+
     useEffect(() => {        
         if (shouldGetMovements === true) {
             dispatch(getMovements())
+            dispatch(getScooters())
         }
     }, [shouldGetMovements])
 
@@ -116,7 +153,13 @@ export default function Movement() {
         })
     }
 
-    const handleClick = (idMovement) => history.push(`details-movement/${idMovement}`)
+    const handleGoToDetails = (idMovement) => history.push(`external-details-movement/${idMovement}`)
+
+    const handleDeleteMovement = (idMovement) => {
+        alert.info("a movimentação será excluida")
+        dispatch(deleteMovement(idMovement))
+    }
+
     const handleClickAdd = e => {
         const { scooter, cpfDeliverymanState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfDeliveryman = cpfDeliverymanState.replace(/\D/g, '')
@@ -129,7 +172,7 @@ export default function Movement() {
             dispatch(addMovement(newMovementToAPI))
         }
         setNewMovementState({scooter: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: ""})
-    }
+    }    
 
 
     // HANDLE FILTER THINGS
@@ -147,8 +190,13 @@ export default function Movement() {
                 }
             }
             if (filtersMovements.filterByNameDeliveryman) {
-                if (filtersMovements.filterByNameDeliveryman != "") {
+                if (filtersMovements.filterByNameDeliveryman !== "") {
                     setMovementState(movements.filter(movement => movement.deliveryman.name === filtersMovements.filterByNameDeliveryman))
+                }
+            }
+            if (filtersMovements.filterByChassis) {
+                if (filtersMovements.filterByChassis !== "") {
+                    setMovementState(movements.filter(movement => movement.scooter.chassisNumber == filtersMovements.filterByChassis))
                 }
             }
         }
@@ -179,7 +227,7 @@ export default function Movement() {
                 dispatch(getMovementsWithFilters(filtersMovements))
             }
             else {
-                console.log("initial date must be before final date")
+                alert.error("initial date must be before final date")
             }
         }
     }
@@ -201,6 +249,18 @@ export default function Movement() {
                     <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
                     <label>Mostrar Apenas o Entregador</label>
                     <input type="text" name="filterByNameDeliveryman" value={filtersMovements.filterByNameDeliveryman || ''} onChange={handleFiltersChange} />
+                    <label>Mostrar Apenas o Patinete</label>
+                    <input type="text" name="filterByChassis" value={filtersMovements.filterByChassis || ''} onChange={handleFiltersChange} />
+                </div>
+                <div>
+                    <label>Patinetes Totais</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                    <label>Patinetes Disponíveis</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                    <label>Patinetes Sendo Utilizados</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                    <label>Patinetes em Manutenção</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
                 </div>
 
                 <table className="table-movements">
@@ -212,18 +272,27 @@ export default function Movement() {
                             <th>OL</th>
                             <th>Hora Retirada</th>
                             <th>Hora Devolução</th>
+                            <th>Capacete</th>
+                            <th>Bag</th>
+                            <th>Case</th>
+                            <th>Carregador</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {MovementState.map(movement => (
                             <tr key={movement.id}>
-                                <td onClick={() => handleClick(movement.id)}>{movement.dateMovement}</td>
-                                <td onClick={() => handleClick(movement.id)}>{movement.scooter.chassisNumber}</td>
+                                <td onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
+                                <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
                                 <td>{movement.deliveryman.name}</td>
                                 <td>{movement.logisticOperator.description}</td>
                                 <td>{movement.timePickUpFormatted}</td>
                                 <td>{movement.timeReturnFormatted}</td>
+                                <td><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
+                                <td><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
+                                <td><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
+                                <td><input type="checkbox" checked={movement.accessoriesCharger} disabled /></td>
+                                <td onClick={() => handleDeleteMovement(movement.id)}>Delete</td>
                             </tr>
                         ))}
                     </tbody>
@@ -259,12 +328,14 @@ export default function Movement() {
                     <button onClick={handleSetFilters}>Aplicar Filtros</button>
                 </div>
                 <div>
-                    <label>Mostrar Patinetes Devolvidos</label>
-                    <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
-                    <label>Mostrar Apenas a OL</label>
-                    <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
-                    <label>Mostrar Apenas o Entregador</label>
-                    <input type="text" name="filterByNameDeliveryman" value={filtersMovements.filterByNameDeliveryman || ''} onChange={handleFiltersChange} />
+                    <label>Patinetes Totais</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                    <label>Patinetes Disponíveis</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                    <label>Patinetes Sendo Utilizados</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                    <label>Patinetes em Manutenção</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
                 </div>
 
                 <table className="table-movements">
@@ -276,6 +347,10 @@ export default function Movement() {
                             <th>OL</th>
                             <th>Hora Retirada</th>
                             <th>Hora Devolução</th>
+                            <th>Capacete</th>
+                            <th>Bag</th>
+                            <th>Case</th>
+                            <th>Carregador</th>
                             <th></th>
                         </tr>
                     </thead>
