@@ -133,16 +133,16 @@ class MovementViewSet(viewsets.ViewSet):
         if request.user.is_staff or request.user.is_superuser:
             if query_from_url_initial_date and query_from_url_final_date:
                 queryset_list = Movement.objects.filter(intialDateMovement__range=(
-                    query_from_url_initial_date, query_from_url_final_date))
+                    query_from_url_initial_date, query_from_url_final_date), typeMovement="entregas")
             else:
-                queryset_list = Movement.objects.filter(intialDateMovement=datetime.today())
+                queryset_list = Movement.objects.filter(intialDateMovement=datetime.today(), typeMovement="entregas")
         else:
             if query_from_url_initial_date and query_from_url_final_date:
                 queryset_list = Movement.objects.filter(intialDateMovement__range=(
-                    query_from_url_initial_date, query_from_url_final_date), owner=request.user)
+                    query_from_url_initial_date, query_from_url_final_date), owner=request.user, typeMovement="entregas")
             else:
                 queryset_list = Movement.objects.filter(
-                    intialDateMovement=datetime.today(), owner=request.user)
+                    intialDateMovement=datetime.today(), owner=request.user, typeMovement="entregas")
         serializer = MovementSerializer(queryset_list, many=True)
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -150,12 +150,17 @@ class MovementViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk):
-        movement = Movement.retrieve(Movement, id=pk)
-        serializer = MovementRetrieveSerializer(data=movement)
-        if serializer.is_valid(raise_exception=True):
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        print(f"\n\n\n{serializer.errors}\n\n\n")
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not request.user.is_staff or request.user.is_superuser:
+            try:
+                Movement.objects.get(id=pk, owner=request.user)
+            except ObjectDoesNotExist:
+                return Response("você não é autorizado a realizar esta ação", status=status.HTTP_403_FORBIDDEN)
+            movement = Movement.retrieve(Movement, id=pk)
+            serializer = MovementRetrieveSerializer(data=movement)
+            if serializer.is_valid(raise_exception=True):
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
 
     def create(self, request):
         try: 

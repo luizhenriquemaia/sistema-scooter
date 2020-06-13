@@ -120,7 +120,7 @@ class Movement(models.Model):
             "accessoriesBag": movement.accessoriesBag,
             "accessoriesCase": movement.accessoriesCase,
             "accessoriesCharger": movement.accessoriesCharger,
-            "observation": movement.observation
+            "observation": movement.observation,
         }
         return movement_dict
 
