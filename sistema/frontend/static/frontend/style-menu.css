@@ -183,7 +183,7 @@ section.register-section {
     height: auto;
     max-height: 0;
     overflow: hidden;
-    transition: ease-out 0.3s;
+    transition:  max-height ease-out 0.3s, padding linear 0.1s;
 }
 
 .logistic-operator .register-data.logistic-operator,
