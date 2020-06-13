@@ -126,7 +126,7 @@ export default function externalMovement() {
             })
             setScootersState(scooters)
         }
-    }, [scooters])
+    }, [scooters, movements])
 
 
     useEffect(() => {        

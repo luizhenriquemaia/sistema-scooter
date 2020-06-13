@@ -72,8 +72,8 @@ export default function externalDetailsMovement() {
                     accessoriesCase: movement.accessoriesCase,
                     accessoriesCharger: movement.accessoriesCharger,
                     observation: movement.observation,
-                    initialTimeFormatted: movement.intialDateMovement != null ? formattingTime(movement.intialDateMovement, movement.pickUpTime) : "",
-                    finalTimeFormatted: movement.finalDateMovement != null ? formattingTime(movement.finalDateMovement, movement.returnTime) : "",
+                    initialTimeFormatted: movement.intialDateMovement != null && movement.intialDateMovement !=  "" ? formattingTime(movement.intialDateMovement, movement.pickUpTime) : "",
+                    finalTimeFormatted: movement.finalDateMovement != null && movement.finalDateMovement != "" ? formattingTime(movement.finalDateMovement, movement.returnTime) : ""
                 })
             }
         }
@@ -155,7 +155,7 @@ export default function externalDetailsMovement() {
                     <label>Destino</label>
                     <input type="radio" name="destinyScooter" value="base" checked={movementState.destinyScooter == "base"} onChange={handleChange} />
                     <span>Base</span>
-                    <input type="radio" name="destinyScooter" value="manutenção" checked={movementState.destinyScooter == "manutenção"} onChange={handleChange} />
+                    <input type="radio" name="destinyScooter" value="manutencao" checked={movementState.destinyScooter == "manutencao"} onChange={handleChange} />
                     <span>Manutenção</span>
                 </div>
                 <div className="form-input">

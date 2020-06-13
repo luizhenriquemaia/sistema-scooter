@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { useAlert } from 'react-alert'
 import { getMovements, getMovementsWithFilters, addMovement, deleteMovement } from '../../actions/movement'
+import { getScooters } from '../../actions/scooters'
+
 
 
 export default function externalMovement() {
@@ -12,7 +14,7 @@ export default function externalMovement() {
     const today = new Date()
     const [MovementState, setMovementState] = useState([{
         id: 0,
-        dataMovement: "",
+        intialDateMovement: "",
         scooter: {
             chassisNumber: ""
         },
@@ -23,7 +25,7 @@ export default function externalMovement() {
             name: ""
         },
         typeMovement: "",
-        destiny: "",
+        typeRelease: "",
         accessoriesHelmet: false,
         accessoriesBag: false,
         accessoriesCase: false,
@@ -32,6 +34,20 @@ export default function externalMovement() {
         timePickUpFormatted: "",
         timeReturnFormatted: ""
     }])
+
+    const [ScootersState, setScootersState] = useState([{
+        scooter: {
+            chassisNumber: ""
+        }
+    }])
+
+    const [NumbersOfScootersState, setNumbersOfScootersState] = useState({
+        numberOfScooters: 0,
+        numberOfScootersInUse: 0,
+        numberOfScootersAvailable: 0,
+        numberOfScootersUnderMaintenance: 0
+    })
+
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
         cpfDeliverymanState: "",
@@ -53,6 +69,7 @@ export default function externalMovement() {
 
     const [shouldGetMovements, setShouldGetMovements] = useState(false)
     const movements = useSelector(state => state.movements.movement)
+    const scooters = useSelector(state => state.scooters.scooter)
     const isDetails = useSelector(state => state.movements.isDetails)
 
 
@@ -60,13 +77,7 @@ export default function externalMovement() {
         var dateSplited = dateMovement.split("-")
         var timeSplited = timeMovement.split(":")
         var dateMovementFormatted = new Date(dateSplited[0], dateSplited[1] - 1, dateSplited[2], timeSplited[0], timeSplited[1])
-        // add 0 digit to hours below 10
-        if (dateMovementFormatted.getHours() < 10) {
-            var timeMovementFormatted = `0${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
-        }
-        else {
-            var timeMovementFormatted = `${dateMovementFormatted.getHours()}:${dateMovementFormatted.getMinutes()}`
-        }
+        var timeMovementFormatted = `${String(dateMovementFormatted.getHours()).padStart(2, '0')}:${String(dateMovementFormatted.getMinutes()).padStart(2, '0')}`
         return timeMovementFormatted
     }
 
@@ -74,8 +85,8 @@ export default function externalMovement() {
         if (movements.length !== 0 && movements !== undefined) {
             if (isDetails === false) {
                 movements.map(movement => {
-                    movement.timePickUpFormatted = formattingTime(movement.dateMovement, movement.pickUpTime)
-                    if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.dateMovement, movement.returnTime)
+                    movement.timePickUpFormatted = formattingTime(movement.intialDateMovement, movement.pickUpTime)
+                    if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.intialDateMovement, movement.returnTime)
                 })
                 setMovementState(movements)
                 setShouldGetMovements(false)
@@ -91,7 +102,7 @@ export default function externalMovement() {
             }
             setMovementState([{
                 id: 0, dataMovement: "", scooter: { chassisNumber: "" }, logisticOperator: { description: "" },
-                deliveryman: { name: "" }, typeMovement: "", destiny: "", accessoriesHelmet: false, accessoriesBag: false,
+                deliveryman: { name: "" }, typeRelease: "", accessoriesHelmet: false, accessoriesBag: false,
                 accessoriesCase: false, accessoriesCharger: false, observation: "", timePickUpFormatted: "", timeReturnFormatted: ""
             }])
         }
@@ -99,8 +110,33 @@ export default function externalMovement() {
 
 
     useEffect(() => {
+        if (scooters.length !== 0 && scooters !== undefined) {
+            let numberOfScooters = 0
+            let numberOfScootersInUse = 0
+            let numberOfScootersAvailable = 0
+            let numberOfScootersUnderMaintenance = 0
+
+            scooters.map(scooter => {
+                if (scooter.status.description === "Em uso") numberOfScootersInUse += 1
+                if (scooter.status.description === "Disponível") numberOfScootersAvailable += 1
+                if (scooter.status.description === "Manutenção") numberOfScootersUnderMaintenance += 1
+                numberOfScooters += 1
+            })
+            setNumbersOfScootersState({
+                numberOfScooters,
+                numberOfScootersInUse,
+                numberOfScootersAvailable,
+                numberOfScootersUnderMaintenance
+            })
+            setScootersState(scooters)
+        }
+    }, [scooters, movements])
+
+
+    useEffect(() => {
         if (shouldGetMovements === true) {
-            dispatch(getMovements())
+            dispatch(getMovements("manutencao"))
+            dispatch(getScooters())
         }
     }, [shouldGetMovements])
 
@@ -121,7 +157,7 @@ export default function externalMovement() {
         })
     }
 
-    const handleClick = (idMovement) => history.push(`details-movement/${idMovement}`)
+    const handleGoToDetails = (idMovement) => history.push(`external-details-movement/${idMovement}`)
 
     const handleDeleteMovement = (idMovement) => {
         alert.info("a movimentação será excluida")
@@ -135,8 +171,9 @@ export default function externalMovement() {
             alert.error("cpf inválido")
         }
         else {
-            const typeMovement = "retirada"
-            const newMovementToAPI = { scooter, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+            const typeRelease = "retirada"
+            const typeMovement = "entregas"
+            const newMovementToAPI = { scooter, cpfDeliveryman, typeMovement, typeRelease, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
             dispatch(addMovement(newMovementToAPI))
         }
         setNewMovementState({ scooter: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: "" })
@@ -158,14 +195,13 @@ export default function externalMovement() {
                 }
             }
             if (filtersMovements.filterByNameDeliveryman) {
-                if (filtersMovements.filterByNameDeliveryman != "") {
+                if (filtersMovements.filterByNameDeliveryman !== "") {
                     setMovementState(movements.filter(movement => movement.deliveryman.name === filtersMovements.filterByNameDeliveryman))
                 }
             }
             if (filtersMovements.filterByChassis) {
-                if (filtersMovements.filterByChassis != "") {
-                    console.log(movements)
-                    setMovementState(movements.filter(movement => movement.scooter.chassisNumber === filtersMovements.filterByChassis))
+                if (filtersMovements.filterByChassis !== "") {
+                    setMovementState(movements.filter(movement => movement.scooter.chassisNumber == filtersMovements.filterByChassis))
                 }
             }
         }
@@ -193,10 +229,10 @@ export default function externalMovement() {
         if (filterInitialDate && filterFinalDate) {
             if (filterInitialDate <= filterFinalDate) {
                 const filtersMovements = { filterInitialDate, filterFinalDate }
-                dispatch(getMovementsWithFilters(filtersMovements))
+                dispatch(getMovementsWithFilters(filtersMovements, "manutencao"))
             }
             else {
-                console.log("initial date must be before final date")
+                alert.error("initial date must be before final date")
             }
         }
     }
@@ -221,14 +257,22 @@ export default function externalMovement() {
                     <label>Mostrar Apenas o Patinete</label>
                     <input type="text" name="filterByChassis" value={filtersMovements.filterByChassis || ''} onChange={handleFiltersChange} />
                 </div>
+                <div>
+                    <label>Patinetes Totais</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                    <label>Patinetes Disponíveis</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                    <label>Patinetes Sendo Utilizados</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                    <label>Patinetes em Manutenção</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
+                </div>
 
                 <table className="table-movements">
                     <thead>
                         <tr>
                             <th>Data</th>
                             <th>Chassi</th>
-                            <th>Entregador</th>
-                            <th>OL</th>
                             <th>Hora Retirada</th>
                             <th>Hora Devolução</th>
                             <th>Capacete</th>
@@ -241,10 +285,8 @@ export default function externalMovement() {
                     <tbody>
                         {MovementState.map(movement => (
                             <tr key={movement.id}>
-                                <td onClick={() => handleClick(movement.id)}>{movement.dateMovement}</td>
-                                <td onClick={() => handleClick(movement.id)}>{movement.scooter.chassisNumber}</td>
-                                <td>{movement.deliveryman.name}</td>
-                                <td>{movement.logisticOperator.description}</td>
+                                <td onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
+                                <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
                                 <td>{movement.timePickUpFormatted}</td>
                                 <td>{movement.timeReturnFormatted}</td>
                                 <td><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
@@ -285,6 +327,16 @@ export default function externalMovement() {
                     <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
                     <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
                     <button onClick={handleSetFilters}>Aplicar Filtros</button>
+                </div>
+                <div>
+                    <label>Patinetes Totais</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                    <label>Patinetes Disponíveis</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                    <label>Patinetes Sendo Utilizados</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                    <label>Patinetes em Manutenção</label>
+                    <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
                 </div>
 
                 <table className="table-movements">
