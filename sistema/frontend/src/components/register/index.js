@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
-import { addPeopleRegistration, addLogisticOperator } from '../../actions/register'
+import { addPeopleRegistration } from '../../actions/register'
+import { getLogisticOperator, addLogisticOperator } from '../../actions/logisticOperator'
 import { getStatusScooters, addScooter } from '../../actions/scooters'
 
 
@@ -21,10 +22,15 @@ export default function Register() {
         id: "",
         description: ""
     }])
+    const [logisticOperatorFromAPI, setLogisticOperatorFromAPI] = useState([{
+        id: "",
+        description: ""
+    }])
     const [stateValueSelect, setStateValueSelect] = useState("delivery-man")
 
     useEffect(() => {
         dispatch(getStatusScooters())
+        dispatch(getLogisticOperator())
     }, [])
 
     const statusScooter = useSelector(state => state.scooters.statusScooter)
@@ -35,23 +41,25 @@ export default function Register() {
         }
     }, [statusScooter])
 
+    const logisticOperator = useSelector(state => state.logisticOperator.logisticOperator)
+
+    useEffect(() => {
+        if (logisticOperator !== undefined && logisticOperator !== "") {
+            setLogisticOperatorFromAPI(logisticOperator)
+        }
+    }, [logisticOperator])
+
     const handleChange = e => {
         const { name, value } = e.target
-        setRegisterState({
-            ...RegisterState,
-            [name]: value
-        })
         if (name === "register-type") {
             setStateValueSelect(value)
         }
-    }
-
-    const handleCheck = e => {
-        const { name, checked } = e.target
-        setRegisterState({
-            ...RegisterState,
-            [name]: checked
-        })
+        else {
+            setRegisterState({
+                ...RegisterState,
+                [name]: value
+            })
+        }
     }
 
     const handleClean = e => {
@@ -84,8 +92,7 @@ export default function Register() {
                 setRegisterState({
                     peopleRegistrationName: "",
                     cpfPeopleRegistration: "",
-                    typePeople: "",
-                    logisticOperatorPeopleRegistration: ""
+                    typePeople: ""
                 })
             }
         }
@@ -123,7 +130,7 @@ export default function Register() {
             alert.error("Tipo de Registro Inválido")
         }
     }
-    
+
 
     return (
         <main className="content">
@@ -151,7 +158,12 @@ export default function Register() {
                             <label>Nome Entregador</label>
                             <input type="text" name="peopleRegistrationName" value={RegisterState.peopleRegistrationName || ''} onChange={handleChange} />
                             <label>OL do Entregador</label>
-                            <input type="text" name="logisticOperatorPeopleRegistration" value={RegisterState.logisticOperatorPeopleRegistration || ''} onChange={handleChange} />
+                            <select name="logisticOperatorPeopleRegistration" onChange={handleChange}>
+                                <option value="">-----</option>
+                                {logisticOperatorFromAPI.map(logisitcOperator => (
+                                    <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="register-data scooter">
                             <label>Chassi Patinete</label>
