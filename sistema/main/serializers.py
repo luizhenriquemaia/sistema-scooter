@@ -66,7 +66,7 @@ class PeopleRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = PeopleRegistration
         fields = ['id', 'name', 'cpf', 'logisticOperator',
-                  'logisticOperator_id', 'active', 'typePeople',
+                  'logisticOperator_id', 'typePeople',
                   'typePeople_id']
     
     def create(self, validated_data):

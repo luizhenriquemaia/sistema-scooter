@@ -106,7 +106,6 @@ class PeopleRegistrationViewSet(viewsets.ViewSet):
         except ObjectDoesNotExist:
             request.data['name'] = request.data['peopleRegistrationName']
             request.data['cpf'] = request.data['cpfPeopleRegistrationToAPI']
-            request.data['active'] = request.data['peopleRegistrationActive']
             try:
                 LogisticOperator.objects.get(
                     description=request.data['logisticOperatorPeopleRegistration'])

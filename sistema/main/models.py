@@ -74,7 +74,6 @@ class PeopleRegistration(models.Model):
     name = models.CharField(max_length=400)
     cpf = models.CharField(max_length=11, default=0)
     typePeople = models.ForeignKey(TypePeople, on_delete=models.CASCADE, null=True)
-    active = models.BooleanField(default=True)
     logisticOperator = models.ForeignKey(
         LogisticOperator, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
@@ -86,8 +85,7 @@ class PeopleRegistration(models.Model):
                 cpf=validated_data['cpf'],
                 typePeople=TypePeople.objects.get(id=validated_data['typePeople_id']),
                 logisticOperator=LogisticOperator.objects.get(
-                    id=validated_data['logisticOperator_id']),
-                active=validated_data['active']
+                    id=validated_data['logisticOperator_id'])
             )
             new_peopleRegistration.save()
             return new_peopleRegistration
