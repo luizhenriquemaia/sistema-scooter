@@ -151,7 +151,7 @@ class MovementViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk):
-        if not request.user.is_staff or request.user.is_superuser:
+        if not request.user.is_staff or not request.user.is_superuser:
             try:
                 Movement.objects.get(id=pk, owner=request.user)
             except ObjectDoesNotExist:
@@ -198,6 +198,8 @@ class MovementViewSet(viewsets.ViewSet):
                 request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
                 request.data['logisticOperator_id'] = LogisticOperator.objects.get(description=request.data['LO']).id
                 request.data['deliveryman_id'] = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman']).id
+                request.data['pickUpTime'] = request.data['initialTimeFormatted']
+                request.data['returnTime'] = request.data['finalTimeFormatted']
             except ObjectDoesNotExist:
                 return Response("valor(es) não existente(s) na base de dados", status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -209,6 +211,10 @@ class MovementViewSet(viewsets.ViewSet):
             request.data['accessoriesBag'] = movement.accessoriesBag
             request.data['accessoriesCase'] = movement.accessoriesCase
             request.data['accessoriesCharger'] = movement.accessoriesCharger
+            request.data['intialDateMovement'] = movement.intialDateMovement
+            request.data['finalDateMovement'] = movement.finalDateMovement
+            request.data['pickUpTime'] = movement.pickUpTime
+            request.data['returnTime'] = movement.returnTime
         request.data['typeMovement_id'] = movement.typeMovement_id
         serializer = MovementSerializer(movement, data=request.data)
         if serializer.is_valid(raise_exception=True):

@@ -11,6 +11,8 @@ export default function externalDetailsMovement() {
     const idMovementParams = params.idMovement
     const [idMovement, setIdMovement] = useState(-1)
     const [movementState, setMovementState] = useState({
+        intialDateMovement: "",
+        finalDateMovement: "",
         scooter: "",
         cpfDeliveryman: "",
         LO: "",
@@ -21,14 +23,26 @@ export default function externalDetailsMovement() {
         accessoriesBag: false,
         accessoriesCase: false,
         accessoriesCharger: false,
-        observation: ""
+        observation: "",
+        initialTimeFormatted: "",
+        finalTimeFormatted: ""
     })
     const movement = useSelector(state => state.movements.movement)
+
+    const formattingTime = (dateMovement, timeMovement) => {
+        var dateSplited = dateMovement.split("-")
+        var timeSplited = timeMovement.split(":")
+        var dateMovementFormatted = new Date(dateSplited[0], dateSplited[1] - 1, dateSplited[2], timeSplited[0], timeSplited[1])
+        var timeMovementFormatted = `${String(dateMovementFormatted.getHours()).padStart(2, '0')}:${String(dateMovementFormatted.getMinutes()).padStart(2, '0')}`
+        return timeMovementFormatted
+    }
 
     useEffect(() => {
         if (movement.scooter) {
             if (movement.returnTime) {
                 setMovementState({
+                    intialDateMovement: movement.intialDateMovement,
+                    finalDateMovement: movement.finalDateMovement,
                     scooter: movement.scooter.chassisNumber,
                     cpfDeliveryman: movement.deliveryman.cpf,
                     LO: movement.logisticOperator.description,
@@ -39,11 +53,15 @@ export default function externalDetailsMovement() {
                     accessoriesCase: movement.accessoriesCase,
                     accessoriesCharger: movement.accessoriesCharger,
                     observation: movement.observation,
-                    destinyScooter: movement.destinyScooter
+                    destinyScooter: movement.destinyScooter,
+                    initialTimeFormatted: movement.intialDateMovement != null ? formattingTime(movement.intialDateMovement, movement.pickUpTime) : "",
+                    finalTimeFormatted: movement.finalDateMovement != null ? formattingTime(movement.finalDateMovement, movement.returnTime) : "",
                 })
             }
             else {
                 setMovementState({
+                    intialDateMovement: movement.intialDateMovement,
+                    finalDateMovement: movement.finalDateMovement,
                     scooter: movement.scooter.chassisNumber,
                     cpfDeliveryman: movement.deliveryman.cpf,
                     LO: movement.logisticOperator.description,
@@ -53,7 +71,9 @@ export default function externalDetailsMovement() {
                     accessoriesBag: movement.accessoriesBag,
                     accessoriesCase: movement.accessoriesCase,
                     accessoriesCharger: movement.accessoriesCharger,
-                    observation: movement.observation
+                    observation: movement.observation,
+                    initialTimeFormatted: movement.intialDateMovement != null ? formattingTime(movement.intialDateMovement, movement.pickUpTime) : "",
+                    finalTimeFormatted: movement.finalDateMovement != null ? formattingTime(movement.finalDateMovement, movement.returnTime) : "",
                 })
             }
         }
@@ -85,9 +105,9 @@ export default function externalDetailsMovement() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        const { scooter, cpfDeliveryman, LO, typeRelease, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
+        const { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfDeliveryman, LO, typeRelease, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
         const typeMovement = "entregas"
-        const updateMovementData = { scooter, cpfDeliveryman, LO, typeRelease, typeMovement, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
+        const updateMovementData = { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfDeliveryman, LO, typeRelease, typeMovement, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
         dispatch(updateMovement(idMovement, updateMovementData))        
         history.push("/")
     }
@@ -97,6 +117,22 @@ export default function externalDetailsMovement() {
         <div className="content">
             <h1 className="title-page">Registro de movimentação de patinetes</h1>
             <form onSubmit={handleSubmit}>
+                <div className="form-input">
+                    <label>Data Inicial</label>
+                    <input type="date" name="intialDateMovement" value={movementState.intialDateMovement || ""} onChange={handleChange} />
+                </div>
+                <div className="form-input">
+                    <label>Data Final</label>
+                    <input type="date" name="finalDateMovement" value={movementState.finalDateMovement || ""} onChange={handleChange} />
+                </div>
+                <div className="form-input">
+                    <label>Hora Inicial</label>
+                    <input type="time" name="initialTimeFormatted" value={movementState.initialTimeFormatted || ""} onChange={handleChange} />
+                </div>
+                <div className="form-input">
+                    <label>Hora Final</label>
+                    <input type="time" name="finalTimeFormatted" value={movementState.finalTimeFormatted || ""} onChange={handleChange} />
+                </div>
                 <div className="form-input">
                     <label>Número do chassi</label>
                     <input type="text" name="scooter" value={movementState.scooter} onChange={handleChange} />

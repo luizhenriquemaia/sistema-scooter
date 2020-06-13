@@ -156,6 +156,10 @@ class Movement(models.Model):
         movement.accessoriesCase = validated_data['accessoriesCase']
         movement.accessoriesCharger = validated_data['accessoriesCharger']
         movement.observation = validated_data['observation']
+        movement.intialDateMovement = validated_data['intialDateMovement']
+        movement.finalDateMovement = validated_data['finalDateMovement']
+        movement.pickUpTime = validated_data['pickUpTime']
+        movement.returnTime = validated_data['returnTime']
         if validated_data['typeRelease'] == 'devolução':
             # don't let the user changes the return time in update
             if not movement.returnTime:
