@@ -108,11 +108,11 @@ class PeopleRegistrationViewSet(viewsets.ViewSet):
             request.data['cpf'] = request.data['cpfPeopleRegistrationToAPI']
             try:
                 LogisticOperator.objects.get(
-                    description=request.data['logisticOperatorPeopleRegistration'])
+                    id=request.data['logisticOperatorPeopleRegistration'])
             except ObjectDoesNotExist:
                 return Response("OL não cadastrada", status=status.HTTP_400_BAD_REQUEST)
             request.data['logisticOperator_id'] = LogisticOperator.objects.get(
-                description=request.data['logisticOperatorPeopleRegistration']).id
+                id=request.data['logisticOperatorPeopleRegistration']).id
             if request.data['typePeopleToAPI'] != "entregador" and request.data['typePeopleToAPI'] != "manutencao":
                 return Response("Tipo de pessoa incorreto", status=status.HTTP_400_BAD_REQUEST)
             request.data['typePeople_id'] = TypePeople.objects.get_or_create(description=request.data['typePeopleToAPI'])[0].id
