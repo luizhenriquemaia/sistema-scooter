@@ -131,7 +131,7 @@ export default function externalMovement() {
             })
             setScootersState(scooters)
         }
-    }, [scooters, movements])
+    }, [scooters, MovementState, movements])
 
 
     useEffect(() => {
@@ -274,6 +274,7 @@ export default function externalMovement() {
                         <tr>
                             <th>Data</th>
                             <th>Chassi</th>
+                            <th>Reponsável</th>
                             <th>Hora Retirada</th>
                             <th>Hora Devolução</th>
                             <th>Tipo</th>
@@ -289,6 +290,7 @@ export default function externalMovement() {
                             <tr key={movement.id}>
                                 <td onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
                                 <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
+                                <td>{movement.peopleRegistration ? movement.peopleRegistration.name: ""}</td>
                                 <td>{movement.timePickUpFormatted}</td>
                                 <td>{movement.timeReturnFormatted}</td>
                                 <td>{movement.typeMovement.description}</td>

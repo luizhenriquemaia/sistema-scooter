@@ -16,6 +16,7 @@ export const getMovements = (typeMovement) => {
     }
 }
 
+
 export const getMovementsWithFilters = (filters, typeMovement) => {
     return dispatch => {
         axios.get(`/api/movement/?initialDate=${filters.filterInitialDate}&finalDate=${filters.filterFinalDate}&typeMovement=${typeMovement}`)

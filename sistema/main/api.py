@@ -182,21 +182,20 @@ class MovementViewSet(viewsets.ViewSet):
                 if request.data['typeMovement'] != 'entregas':
                     if request.data['typeMovement'] != 'manutencao':
                         return Response("Tipo de movimentação incorreta", status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    request.data['typeMovement_id'] = TypeMovement.objects.get_or_create(description=request.data['typeMovement'])[0].id
-                    scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
-                    if scooter_db.status.description == "Disponível":
-                        people_registration_movement = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration'])
-                        request.data['logisticOperator_id'] = people_registration_movement.logisticOperator_id
-                        request.data['peopleRegistration_id'] = people_registration_movement.id
-                        serializer = MovementSerializer(data=request.data)
-                        if serializer.is_valid(raise_exception=True):
-                            new_movement = serializer.save(owner=self.request.user)
-                            return Response(serializer.data, status=status.HTTP_201_CREATED)
-                        else:
-                            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                request.data['typeMovement_id'] = TypeMovement.objects.get_or_create(description=request.data['typeMovement'])[0].id
+                scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
+                if scooter_db.status.description == "Disponível":
+                    people_registration_movement = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration'])
+                    request.data['logisticOperator_id'] = people_registration_movement.logisticOperator_id
+                    request.data['peopleRegistration_id'] = people_registration_movement.id
+                    serializer = MovementSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=True):
+                        new_movement = serializer.save(owner=self.request.user)
+                        return Response(serializer.data, status=status.HTTP_201_CREATED)
                     else:
-                        return Response("Patinete não disponível", status=status.HTTP_400_BAD_REQUEST)
+                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response("Patinete não disponível", status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response("Tipo de lançamento incorreto", status=status.HTTP_400_BAD_REQUEST)
     

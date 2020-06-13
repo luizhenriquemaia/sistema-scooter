@@ -114,8 +114,10 @@ class MovementRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movement
-        fields = ['id', 'scooter', 'scooter_id', 'peopleRegistration',  'peopleRegistration_id', 'logisticOperator', 'logisticOperator_id',
-                  'typeMovement', 'typeMovement_id', 'typeRelease', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime',
-                  'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 'accessoriesCharger', 'observation', 'destinyScooter', 'owner']
+        fields = ['id', 'scooter', 'scooter_id', 'peopleRegistration',  'peopleRegistration_id', 
+                  'logisticOperator', 'logisticOperator_id', 'typeMovement', 'typeMovement_id', 
+                  'typeRelease', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime',
+                  'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 'accessoriesCharger', 'observation', 
+                  'destinyScooter', 'owner']
     
 
