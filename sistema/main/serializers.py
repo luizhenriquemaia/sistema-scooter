@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from rest_framework import serializers
-from .models import StatusScooter, LogisticOperator, Scooter, Deliveryman, Movement
+from .models import StatusScooter, TypeMovement, LogisticOperator, Scooter, Deliveryman, Movement
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -17,6 +17,16 @@ class StatusScooterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return StatusScooter.create(StatusScooter, **validated_data)
+
+
+class TypeMovementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TypeMovement
+        fields = ['id', 'description']
+
+    def create(self, validated_data):
+        return TypeMovement.create(TypeMovement, **validated_data)
+
 
 
 class LogisticOperatorSerializer(serializers.ModelSerializer):
@@ -58,14 +68,16 @@ class MovementSerializer(serializers.ModelSerializer):
     deliveryman_id = serializers.IntegerField()
     logisticOperator = LogisticOperatorSerializer(read_only=True)
     logisticOperator_id = serializers.IntegerField()
-    typeMovement = serializers.CharField(required=False)
+    typeMovement = TypeMovementSerializer(read_only=True)
+    typeMovement_id = serializers.IntegerField()
+    typeRelease = serializers.CharField(required=False)
     destinyScooter = serializers.CharField(required=False)
 
     class Meta:
         model = Movement
         fields = ['id', 'scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
-                  'typeMovement', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime', 'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase',
-                  'accessoriesCharger', 'observation', 'destinyScooter']
+                  'typeMovement', 'typeMovement_id','typeRelease', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime', 
+                  'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 'accessoriesCharger', 'observation', 'destinyScooter']
     
     def create(self, validated_data):
         return Movement.create(Movement, **validated_data)
@@ -81,14 +93,16 @@ class MovementRetrieveSerializer(serializers.ModelSerializer):
     deliveryman_id = serializers.IntegerField()
     logisticOperator = LogisticOperatorSerializer(read_only=False)
     logisticOperator_id = serializers.IntegerField()
-    typeMovement = serializers.CharField(required=False)
+    typeMovement = TypeMovementSerializer(read_only=False)
+    typeMovement_id = serializers.IntegerField()
+    typeRelease = serializers.CharField(required=False)
     destinyScooter = serializers.CharField(required=False, allow_blank=True)
     owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
         model = Movement
         fields = ['id', 'scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
-                  'typeMovement', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime', 'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase',
-                  'accessoriesCharger', 'observation', 'destinyScooter', 'owner']
+                  'typeMovement', 'typeMovement_id', 'typeRelease', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime',
+                  'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 'accessoriesCharger', 'observation', 'destinyScooter', 'owner']
     
 

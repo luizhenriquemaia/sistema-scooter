@@ -13,6 +13,17 @@ class StatusScooter(models.Model):
         new_status.save()
         return new_status
 
+class TypeMovement(models.Model):
+    description = models.CharField(max_length=200)
+    objects = models.Manager()
+
+    def create(self, **validated_data):
+        new_type_movement = StatusScooter(
+            description=validated_data['description']
+        )
+        new_type_movement.save()
+        return new_type_movement
+
 
 class LogisticOperator(models.Model):
     description = models.CharField(max_length=200)
@@ -74,6 +85,7 @@ class Movement(models.Model):
     deliveryman = models.ForeignKey(Deliveryman, on_delete=models.CASCADE, null=True)
     logisticOperator = models.ForeignKey(
         LogisticOperator, on_delete=models.CASCADE, null=True)
+    typeMovement = models.ForeignKey(TypeMovement, on_delete=models.CASCADE, null=True)
     destinyScooter = models.CharField(max_length=200, blank=True)
     intialDateMovement = models.DateField(null=True)
     finalDateMovement = models.DateField(null=True)
@@ -116,6 +128,7 @@ class Movement(models.Model):
             scooter=scooter_db,
             deliveryman=Deliveryman.objects.get(id=validated_data['deliveryman_id']),
             logisticOperator=LogisticOperator.objects.get(id=validated_data['logisticOperator_id']),
+            typeMovement=TypeMovement.objects.get(id=validated_data['typeMovement_id']),
             intialDateMovement=date.today(),
             pickUpTime=datetime.now().time(),
             accessoriesHelmet=validated_data['accessoriesHelmet'],
@@ -141,7 +154,7 @@ class Movement(models.Model):
         movement.accessoriesCase = validated_data['accessoriesCase']
         movement.accessoriesCharger = validated_data['accessoriesCharger']
         movement.observation = validated_data['observation']
-        if validated_data['typeMovement'] == 'devolução':
+        if validated_data['typeRelease'] == 'devolução':
             # don't let the user changes the return time in update
             if not movement.returnTime:
                 movement.returnTime = datetime.now().time()

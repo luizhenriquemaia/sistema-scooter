@@ -22,6 +22,7 @@ export default function externalMovement() {
         deliveryman: {
             name: ""},
         typeMovement: "",
+        typeRelease: "",
         destiny: "",
         accessoriesHelmet: false,
         accessoriesBag: false,
@@ -98,7 +99,7 @@ export default function externalMovement() {
                 setShouldGetMovements(true)
             }
             setMovementState([{id: 0, dataMovement: "", scooter: {chassisNumber: ""}, logisticOperator: {description: ""},
-                deliveryman: {name: ""}, typeMovement: "", destiny: "", accessoriesHelmet: false, accessoriesBag: false,
+                deliveryman: {name: ""}, typeRelease: "", destiny: "", accessoriesHelmet: false, accessoriesBag: false,
                 accessoriesCase: false, accessoriesCharger: false, observation: "", timePickUpFormatted: "", timeReturnFormatted: ""
             }])
         }
@@ -167,8 +168,9 @@ export default function externalMovement() {
             alert.error("cpf inválido")
         }
         else {
-            const typeMovement = "retirada"
-            const newMovementToAPI = { scooter, cpfDeliveryman, typeMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+            const typeRelease = "retirada"
+            const typeMovement = "entregas"
+            const newMovementToAPI = { scooter, cpfDeliveryman, typeMovement, typeRelease, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
             dispatch(addMovement(newMovementToAPI))
         }
         setNewMovementState({scooter: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: ""})
