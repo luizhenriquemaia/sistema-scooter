@@ -12,7 +12,7 @@ export default function Menu() {
                     <span onClick={() => setIsOpenMenuState(!isOpenMenuState)}></span>
                 </div>
                 <hr />
-                <div className="navBlock">
+                <div className="navBlock"> 
                     <div className="userBox">
                         <img src='../../../static/imgs/mulher_1.png'/>
                         <p>Admin</p>

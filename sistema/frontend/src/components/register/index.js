@@ -9,13 +9,11 @@ export default function Register() {
     const dispatch = useDispatch()
     const alert = useAlert()
     const [RegisterState, setRegisterState] = useState({
-        registerType: "deliveryman",
         logisticOperatorDescription: "",
         peopleRegistrationName: "",
         cpfPeopleRegistration: "",
         typePeople: "",
         logisticOperatorPeopleRegistration: "",
-        peopleRegistrationActive: true,
         chassisScooter: "",
         statusScooter: ""
     })
@@ -23,6 +21,7 @@ export default function Register() {
         id: "",
         description: ""
     }])
+    const [stateValueSelect, setStateValueSelect] = useState("delivery-man")
 
     useEffect(() => {
         dispatch(getStatusScooters())
@@ -42,6 +41,9 @@ export default function Register() {
             ...RegisterState,
             [name]: value
         })
+        if (name === "register-type") {
+            setStateValueSelect(value)
+        }
     }
 
     const handleCheck = e => {
@@ -60,50 +62,45 @@ export default function Register() {
             cpfPeopleRegistration: "",
             typePeople: "",
             logisticOperatorPeopleRegistration: "",
-            peopleRegistrationActive: true,
             chassisScooter: "",
             statusScooter: ""
         })
     }
 
-    const handleClickAdicionar = e => {
-        const { registerType } = RegisterState
-        if (registerType === "deliveryman") {
-            const { peopleRegistrationName, cpfPeopleRegistration, peopleRegistrationActive, logisticOperatorPeopleRegistration } = RegisterState
+    const handleClickAdd = e => {
+        if (stateValueSelect === "delivery-man") {
+            const { peopleRegistrationName, cpfPeopleRegistration, logisticOperatorPeopleRegistration } = RegisterState
             const cpfPeopleRegistrationToAPI = cpfPeopleRegistration.replace(/\D/g, '')
             if (cpfPeopleRegistrationToAPI.length !== 11) {
                 alert.error("cpf inválido")
             }
-            if (peopleRegistrationName === "" || logisticOperatorPeopleRegistration === "") {
+            else if (peopleRegistrationName === "" || logisticOperatorPeopleRegistration === "") {
                 alert.error("preencha todos os campos")
             }
             else {
                 var typePeopleToAPI = "entregador"
-                var newRegisterToAPI = { peopleRegistrationName, typePeopleToAPI, peopleRegistrationActive, cpfPeopleRegistrationToAPI, logisticOperatorPeopleRegistration }
-                console.log(newRegisterToAPI)
+                var newRegisterToAPI = { peopleRegistrationName, typePeopleToAPI, cpfPeopleRegistrationToAPI, logisticOperatorPeopleRegistration }
                 dispatch(addPeopleRegistration(newRegisterToAPI))
+                setRegisterState({
+                    peopleRegistrationName: "",
+                    cpfPeopleRegistration: "",
+                    typePeople: "",
+                    logisticOperatorPeopleRegistration: ""
+                })
             }
-            setRegisterState({
-                registerType: "deliveryman",
-                peopleRegistrationName: "",
-                cpfPeopleRegistration: "",
-                typePeople: "",
-                logisticOperatorPeopleRegistration: "",
-                peopleRegistrationActive: true
-            })
         }
-        else if (registerType === "logisticOperator") {
+        else if (stateValueSelect === "logistic-operator") {
                 const { logisticOperatorDescription } = RegisterState
                 if (logisticOperatorDescription === "") {
                     alert.error("preencha todos os campos")
                 }
                 else {
-                    var newRegisterToAPI = { registerType, logisticOperatorDescription }
+                    var newRegisterToAPI = { stateValueSelect, logisticOperatorDescription }
                     dispatch(addLogisticOperator(newRegisterToAPI))
-                    setRegisterState({ registerType: "logisticOperator", logisticOperatorDescription: "" })
+                    setRegisterState({ logisticOperatorDescription: "" })
                 }
             }
-        else if (registerType === "scooter") {
+        else if (stateValueSelect === "scooter") {
                     const { chassisScooter, statusScooter } = RegisterState
                     if (chassisScooter === "") {
                         alert.error("preencha todos os campos")
@@ -114,7 +111,7 @@ export default function Register() {
                             dispatch(addScooter(newRegisterToAPI))
                             setRegisterState({
                                 ...RegisterState,
-                                registerType: "scooter", chassisScooter: "" 
+                                chassisScooter: "" 
                             })
                         }
                         else {
@@ -126,7 +123,7 @@ export default function Register() {
             alert.error("Tipo de Registro Inválido")
         }
     }
-
+    
 
     return (
         <main className="content">
@@ -138,12 +135,12 @@ export default function Register() {
                     <div className="register-type">
                         <label>Tipo de cadastro</label>
                         <select name="register-type" onChange={handleChange}>
-                            <option value="deliveryman">Entregador</option>
-                            <option value="logisticOperator">Operador Oligstico</option>
+                            <option value="delivery-man">Entregador</option>
+                            <option value="logistic-operator">Operador Oligstico</option>
                             <option value="scooter">Patinete</option>
                         </select>
                     </div>
-                    <fieldset className="register-data-box">
+                    <fieldset className={stateValueSelect ? `register-data-box ${stateValueSelect}` : "register-data-box"} >
                         <div className="register-data logistic-operator">
                             <label>Operador Logístico</label>
                             <input type="text" name="logisticOperatorDescription" value={RegisterState.logisticOperatorDescription || ''} onChange={handleChange} />
@@ -155,28 +152,23 @@ export default function Register() {
                             <input type="text" name="peopleRegistrationName" value={RegisterState.peopleRegistrationName || ''} onChange={handleChange} />
                             <label>OL do Entregador</label>
                             <input type="text" name="logisticOperatorPeopleRegistration" value={RegisterState.logisticOperatorPeopleRegistration || ''} onChange={handleChange} />
-                            <label>Ativo</label>
-                            <input className="check-box" type="checkbox" name="peopleRegistrationActive" checked={RegisterState.peopleRegistrationActive || ''} onChange={handleCheck} />
                         </div>
                         <div className="register-data scooter">
                             <label>Chassi Patinete</label>
                             <input type="text" name="chassisScooter" value={RegisterState.chassisScooter || ''} onChange={handleChange} />
                             <label>Status Patinete</label>
                             <select name="statusScooter" onChange={handleChange} >
-                                <option value="0">Disponível</option>
-                                <option value="1">Backup</option>
-                                <option value="2">em uso</option>
-                                <option value="3">Manutenção</option>
-                                {/* {statusScooterFromAPI.map(status => (
+                                <option value="0">-----</option>
+                                {statusScooterFromAPI.map(status => (
                                     <option value={status.id} key={status.id}>{status.description}</option>
-                                ))} */}
+                                ))}
                             </select>
                         </div>
                     </fieldset>
                 </section>
                 <div className="buttonBox">
-                    <button className="submit-button clean" onClick={handleClickAdicionar}>Limpar</button>
-                    <button className="submit-button confirm" onClick={handleClickAdicionar}>Registrar</button>
+                    <button className="submit-button clean" onClick={handleClean}>Limpar</button>
+                    <button className="submit-button confirm" onClick={handleClickAdd}>Registrar</button>
                 </div>
             </section>
         </main>
