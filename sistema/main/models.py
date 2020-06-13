@@ -165,10 +165,21 @@ class Movement(models.Model):
             else:
                 movement.returnTime = validated_data['returnTime']
                 movement.finalDateMovement = validated_data['finalDateMovement']
-            if validated_data['destinyScooter'] == "manutenção":
+            if validated_data['destinyScooter'] == "manutencao":
                 scooter_db.status = StatusScooter.objects.get_or_create(
-                    description="Manutenção")[0]
+                    description="manutencao")[0]
                 scooter_db.save()
+                # create a internal movement to "manutencao"
+                type_movement_db = TypeMovement.objects.get_or_create(
+                    description="manutencao")[0]
+                new_internal_movement = Movement(
+                    scooter = scooter_db,
+                    typeMovement = type_movement_db,
+                    intialDateMovement=date.today(),
+                    pickUpTime=datetime.now().time(),
+                    owner=validated_data['owner']
+                )
+                new_internal_movement.save()
             if validated_data['destinyScooter'] == "base":
                 scooter_db.status = StatusScooter.objects.get_or_create(
                     description="Disponível")[0]
@@ -178,7 +189,13 @@ class Movement(models.Model):
         return movement
     
     def destroy(self, id):
-        Movement.objects.get(id=id).delete()
+        movement_to_destroy = Movement.objects.get(id=id)
+        if not movement_to_destroy.returnTime:
+            scooter_db = Scooter.objects.get(id=movement_to_destroy.scooter.id)
+            scooter_db.status = StatusScooter.objects.get_or_create(
+                description="Disponível")[0]
+            scooter_db.save()
+        movement_to_destroy.delete()
 
 
 
