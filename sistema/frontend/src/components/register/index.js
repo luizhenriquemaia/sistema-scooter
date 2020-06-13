@@ -171,31 +171,40 @@ export default function Register() {
                             <option value="scooter">Patinete</option>
                         </select>
                     </div>
-                    <fieldset className="register-date">
-                        <label>Operador Logístico</label>
-                        <input type="text" name="logisticOperatorDescription" value={RegisterState.logisticOperatorDescription || ''} onChange={handleChange} />
-                        <label>CPF Entregador</label>
-                        <input type="text" name="cpfDeliveryman" value={RegisterState.cpfDeliveryman || ''} onChange={handleChange} />
-                        <label>Nome Entregador</label>
-                        <input type="text" name="deliverymanName" value={RegisterState.deliverymanName || ''} onChange={handleChange} />
-                        <label>OL do Entregador</label>
-                        <input type="text" name="logisticOperatorDeliveryman" value={RegisterState.logisticOperatorDeliveryman || ''} onChange={handleChange} />
-                        <label>Ativo</label>
-                        <input type="checkbox" name="deliverymanActive" checked={RegisterState.deliverymanActive || ''} onChange={handleCheck} />
-                        <label>Chassi Patinete</label>
-                        <input type="text" name="chassisScooter" value={RegisterState.chassisScooter || ''} onChange={handleChange} />
-                        <label>Status Patinete</label>
-                        <select name="statusScooter" onChange={handleChange}>
-                            <option value="0">-----</option>
-                            {statusScooterFromAPI.map(status => (
-                                <option value={status.id} key={status.id}>{status.description}</option>
-                            ))}
-                        </select>
+                    <fieldset className="register-data-box">
+                        <div className="register-data logistic-operator">
+                            <label>Operador Logístico</label>
+                            <input type="text" name="logisticOperatorDescription" value={RegisterState.logisticOperatorDescription || ''} onChange={handleChange} />
+                        </div>
+                        <div className="register-data delivery-man">
+                            <label>CPF Entregador</label>
+                            <input type="text" name="cpfDeliveryman" value={RegisterState.cpfDeliveryman || ''} onChange={handleChange} />
+                            <label>Nome Entregador</label>
+                            <input type="text" name="deliverymanName" value={RegisterState.deliverymanName || ''} onChange={handleChange} />
+                            <label>OL do Entregador</label>
+                            <input type="text" name="logisticOperatorDeliveryman" value={RegisterState.logisticOperatorDeliveryman || ''} onChange={handleChange} />
+                            <label>Ativo</label>
+                            <input className="check-box" type="checkbox" name="deliverymanActive" checked={RegisterState.deliverymanActive || ''} onChange={handleCheck} />
+                        </div>
+                        <div className="register-data scooter">
+                            <label>Chassi Patinete</label>
+                            <input type="text" name="chassisScooter" value={RegisterState.chassisScooter || ''} onChange={handleChange} />
+                            <label>Status Patinete</label>
+                            <select name="statusScooter" onChange={handleChange} >
+                                <option value="0">Disponível</option>
+                                <option value="1">Backup</option>
+                                <option value="2">em uso</option>
+                                <option value="3">Manutenção</option>
+                                {/* {statusScooterFromAPI.map(status => (
+                                    <option value={status.id} key={status.id}>{status.description}</option>
+                                ))} */}
+                            </select>
+                        </div>
                     </fieldset>
                 </section>
                 <div className="buttonBox">
-                    <button className="submit-button" onClick={handleClickAdicionar}>Limpar</button>
-                    <button className="submit-button" onClick={handleClickAdicionar}>Registrar</button>
+                    <button className="submit-button clean" onClick={handleClickAdicionar}>Limpar</button>
+                    <button className="submit-button confirm" onClick={handleClickAdicionar}>Registrar</button>
                 </div>
             </section>
         </main>
