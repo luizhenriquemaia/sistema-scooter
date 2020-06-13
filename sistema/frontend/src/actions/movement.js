@@ -3,9 +3,9 @@ import { GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVE
 import { returnErrors } from './messages'
 
 
-export function getMovements() {
+export const getMovements = (typeMovement) => {
     return dispatch => {
-        axios.get('/api/movement/')
+        axios.get(`/api/movement/?typeMovement=${typeMovement}`)
             .then(res => {
                 dispatch({
                     type: GET_MOVEMENTS,
@@ -16,9 +16,9 @@ export function getMovements() {
     }
 }
 
-export const getMovementsWithFilters = (filters) => {
+export const getMovementsWithFilters = (filters, typeMovement) => {
     return dispatch => {
-        axios.get(`/api/movement/?initialDate=${filters.filterInitialDate}&finalDate=${filters.filterFinalDate}`)
+        axios.get(`/api/movement/?initialDate=${filters.filterInitialDate}&finalDate=${filters.filterFinalDate}&typeMovement=${typeMovement}`)
             .then(res => {
                 dispatch({
                     type: GET_MOVEMENTS,

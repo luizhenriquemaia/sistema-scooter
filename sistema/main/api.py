@@ -130,7 +130,8 @@ class MovementViewSet(viewsets.ViewSet):
     def list(self, request):
         query_from_url_initial_date = request.GET.get("initialDate")
         query_from_url_final_date = request.GET.get("finalDate")
-        typeMovement = TypeMovement.objects.get(description="entregas").id
+        query_from_url_type_movement = request.GET.get("typeMovement")
+        typeMovement = TypeMovement.objects.get(description=query_from_url_type_movement).id
         if request.user.is_staff or request.user.is_superuser:
             if query_from_url_initial_date and query_from_url_final_date:
                 queryset_list = Movement.objects.filter(intialDateMovement__range=(

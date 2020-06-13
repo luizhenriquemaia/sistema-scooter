@@ -23,7 +23,6 @@ export default function externalMovement() {
             name: ""},
         typeMovement: "",
         typeRelease: "",
-        destiny: "",
         accessoriesHelmet: false,
         accessoriesBag: false,
         accessoriesCase: false,
@@ -99,7 +98,7 @@ export default function externalMovement() {
                 setShouldGetMovements(true)
             }
             setMovementState([{id: 0, dataMovement: "", scooter: {chassisNumber: ""}, logisticOperator: {description: ""},
-                deliveryman: {name: ""}, typeRelease: "", destiny: "", accessoriesHelmet: false, accessoriesBag: false,
+                deliveryman: {name: ""}, typeRelease: "", accessoriesHelmet: false, accessoriesBag: false,
                 accessoriesCase: false, accessoriesCharger: false, observation: "", timePickUpFormatted: "", timeReturnFormatted: ""
             }])
         }
@@ -132,7 +131,7 @@ export default function externalMovement() {
 
     useEffect(() => {        
         if (shouldGetMovements === true) {
-            dispatch(getMovements())
+            dispatch(getMovements("entregas"))
             dispatch(getScooters())
         }
     }, [shouldGetMovements])
@@ -226,7 +225,7 @@ export default function externalMovement() {
         if (filterInitialDate && filterFinalDate) {
             if (filterInitialDate <= filterFinalDate) {
                 const filtersMovements = { filterInitialDate, filterFinalDate }
-                dispatch(getMovementsWithFilters(filtersMovements))
+                dispatch(getMovementsWithFilters(filtersMovements, "entregas"))
             }
             else {
                 alert.error("initial date must be before final date")

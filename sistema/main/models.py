@@ -157,14 +157,14 @@ class Movement(models.Model):
         movement.accessoriesCharger = validated_data['accessoriesCharger']
         movement.observation = validated_data['observation']
         movement.intialDateMovement = validated_data['intialDateMovement']
-        movement.finalDateMovement = validated_data['finalDateMovement']
         movement.pickUpTime = validated_data['pickUpTime']
-        movement.returnTime = validated_data['returnTime']
         if validated_data['typeRelease'] == 'devolução':
-            # don't let the user changes the return time in update
             if not movement.returnTime:
                 movement.returnTime = datetime.now().time()
                 movement.finalDateMovement = date.today()
+            else:
+                movement.returnTime = validated_data['returnTime']
+                movement.finalDateMovement = validated_data['finalDateMovement']
             if validated_data['destinyScooter'] == "manutenção":
                 scooter_db.status = StatusScooter.objects.get_or_create(
                     description="Manutenção")[0]
