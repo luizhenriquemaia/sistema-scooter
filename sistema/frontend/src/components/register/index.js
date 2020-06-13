@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
-import { addDeliveryman, addLogisticOperator } from '../../actions/register'
+import { addPeopleRegistration, addLogisticOperator } from '../../actions/register'
 import { getStatusScooters, addScooter } from '../../actions/scooters'
 
 
@@ -11,10 +11,11 @@ export default function Register() {
     const [RegisterState, setRegisterState] = useState({
         registerType: "deliveryman",
         logisticOperatorDescription: "",
-        deliverymanName: "",
-        cpfDeliveryman: "",
-        logisticOperatorDeliveryman: "",
-        deliverymanActive: true,
+        peopleRegistrationName: "",
+        cpfPeopleRegistration: "",
+        typePeople: "",
+        logisticOperatorPeopleRegistration: "",
+        peopleRegistrationActive: true,
         chassisScooter: "",
         statusScooter: ""
     })
@@ -55,10 +56,11 @@ export default function Register() {
         setRegisterState({
             ...RegisterState,
             logisticOperatorDescription: "",
-            deliverymanName: "",
-            cpfDeliveryman: "",
-            logisticOperatorDeliveryman: "",
-            deliverymanActive: true,
+            peopleRegistrationName: "",
+            cpfPeopleRegistration: "",
+            typePeople: "",
+            logisticOperatorPeopleRegistration: "",
+            peopleRegistrationActive: true,
             chassisScooter: "",
             statusScooter: ""
         })
@@ -67,25 +69,27 @@ export default function Register() {
     const handleClickAdicionar = e => {
         const { registerType } = RegisterState
         if (registerType === "deliveryman") {
-            const { deliverymanName, cpfDeliveryman, deliverymanActive, logisticOperatorDeliveryman } = RegisterState
-            const cpfDeliverymanToAPI = cpfDeliveryman.replace(/\D/g, '')
-            if (cpfDeliverymanToAPI.length !== 11) {
+            const { peopleRegistrationName, cpfPeopleRegistration, peopleRegistrationActive, logisticOperatorPeopleRegistration } = RegisterState
+            const cpfPeopleRegistrationToAPI = cpfPeopleRegistration.replace(/\D/g, '')
+            if (cpfPeopleRegistrationToAPI.length !== 11) {
                 alert.error("cpf inválido")
             }
-            if (deliverymanName === "" || logisticOperatorDeliveryman === "") {
+            if (peopleRegistrationName === "" || logisticOperatorPeopleRegistration === "") {
                 alert.error("preencha todos os campos")
             }
             else {
-                var newRegisterToAPI = { deliverymanName, deliverymanActive, cpfDeliverymanToAPI, logisticOperatorDeliveryman }
+                var typePeopleToAPI = "entregador"
+                var newRegisterToAPI = { peopleRegistrationName, typePeopleToAPI, peopleRegistrationActive, cpfPeopleRegistrationToAPI, logisticOperatorPeopleRegistration }
                 console.log(newRegisterToAPI)
-                dispatch(addDeliveryman(newRegisterToAPI))
+                dispatch(addPeopleRegistration(newRegisterToAPI))
             }
             setRegisterState({
                 registerType: "deliveryman",
-                deliverymanName: "",
-                cpfDeliveryman: "",
-                logisticOperatorDeliveryman: "",
-                deliverymanActive: true
+                peopleRegistrationName: "",
+                cpfPeopleRegistration: "",
+                typePeople: "",
+                logisticOperatorPeopleRegistration: "",
+                peopleRegistrationActive: true
             })
         }
         else if (registerType === "logisticOperator") {
@@ -138,13 +142,13 @@ export default function Register() {
                     <label>Operador Logístico</label>
                     <input type="text" name="logisticOperatorDescription" value={RegisterState.logisticOperatorDescription || ''} onChange={handleChange} />
                     <label>CPF Entregador</label>
-                    <input type="text" name="cpfDeliveryman" value={RegisterState.cpfDeliveryman || ''} onChange={handleChange} />
+                    <input type="text" name="cpfPeopleRegistration" value={RegisterState.cpfPeopleRegistration || ''} onChange={handleChange} />
                     <label>Nome Entregador</label>
-                    <input type="text" name="deliverymanName" value={RegisterState.deliverymanName || ''} onChange={handleChange} />
+                    <input type="text" name="peopleRegistrationName" value={RegisterState.peopleRegistrationName || ''} onChange={handleChange} />
                     <label>OL do Entregador</label>
-                    <input type="text" name="logisticOperatorDeliveryman" value={RegisterState.logisticOperatorDeliveryman || ''} onChange={handleChange} />
+                    <input type="text" name="logisticOperatorPeopleRegistration" value={RegisterState.logisticOperatorPeopleRegistration || ''} onChange={handleChange} />
                     <label>Ativo</label>
-                    <input type="checkbox" name="deliverymanActive" checked={RegisterState.deliverymanActive || ''} onChange={handleCheck} />
+                    <input type="checkbox" name="peopleRegistrationActive" checked={RegisterState.peopleRegistrationActive || ''} onChange={handleCheck} />
                     <label>Chassi Patinete</label>
                     <input type="text" name="chassisScooter" value={RegisterState.chassisScooter || ''} onChange={handleChange} />
                     <label>Status Patinete</label>
@@ -178,13 +182,13 @@ export default function Register() {
                         </div>
                         <div className="register-data delivery-man">
                             <label>CPF Entregador</label>
-                            <input type="text" name="cpfDeliveryman" value={RegisterState.cpfDeliveryman || ''} onChange={handleChange} />
+                            <input type="text" name="cpfPeopleRegistration" value={RegisterState.cpfPeopleRegistration || ''} onChange={handleChange} />
                             <label>Nome Entregador</label>
-                            <input type="text" name="deliverymanName" value={RegisterState.deliverymanName || ''} onChange={handleChange} />
+                            <input type="text" name="peopleRegistrationName" value={RegisterState.peopleRegistrationName || ''} onChange={handleChange} />
                             <label>OL do Entregador</label>
-                            <input type="text" name="logisticOperatorDeliveryman" value={RegisterState.logisticOperatorDeliveryman || ''} onChange={handleChange} />
+                            <input type="text" name="logisticOperatorPeopleRegistration" value={RegisterState.logisticOperatorPeopleRegistration || ''} onChange={handleChange} />
                             <label>Ativo</label>
-                            <input className="check-box" type="checkbox" name="deliverymanActive" checked={RegisterState.deliverymanActive || ''} onChange={handleCheck} />
+                            <input className="check-box" type="checkbox" name="peopleRegistrationActive" checked={RegisterState.peopleRegistrationActive || ''} onChange={handleCheck} />
                         </div>
                         <div className="register-data scooter">
                             <label>Chassi Patinete</label>

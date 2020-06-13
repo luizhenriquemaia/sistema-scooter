@@ -21,7 +21,7 @@ export default function externalMovement() {
         logisticOperator: {
             description: ""
         },
-        deliveryman: {
+        peopleRegistration: {
             name: ""
         },
         typeMovement: "",
@@ -50,7 +50,7 @@ export default function externalMovement() {
 
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
-        cpfDeliverymanState: "",
+        cpfPeopleRegistrationState: "",
         accessoriesHelmet: false,
         accessoriesBag: false,
         accessoriesCase: false,
@@ -63,7 +63,7 @@ export default function externalMovement() {
         filterFinalDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
         filterShowReturnedScooters: true,
         filterShowJustOneOL: "",
-        filterByNameDeliveryman: "",
+        filterByNamePeopleRegistration: "",
         filterByChassis: ""
     })
 
@@ -102,7 +102,7 @@ export default function externalMovement() {
             }
             setMovementState([{
                 id: 0, dataMovement: "", scooter: { chassisNumber: "" }, logisticOperator: { description: "" },
-                deliveryman: { name: "" }, typeRelease: "", accessoriesHelmet: false, accessoriesBag: false,
+                peopleRegistration: { name: "" }, typeRelease: "", accessoriesHelmet: false, accessoriesBag: false,
                 accessoriesCase: false, accessoriesCharger: false, observation: "", timePickUpFormatted: "", timeReturnFormatted: ""
             }])
         }
@@ -165,18 +165,18 @@ export default function externalMovement() {
     }
 
     const handleClickAdd = e => {
-        const { scooter, cpfDeliverymanState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
-        const cpfDeliveryman = cpfDeliverymanState.replace(/\D/g, '')
-        if (cpfDeliveryman.length !== 11) {
+        const { scooter, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
+        const cpfPeopleRegistration = cpfPeopleRegistrationState.replace(/\D/g, '')
+        if (cpfPeopleRegistration.length !== 11) {
             alert.error("cpf inválido")
         }
         else {
             const typeRelease = "retirada"
-            const typeMovement = "entregas"
-            const newMovementToAPI = { scooter, cpfDeliveryman, typeMovement, typeRelease, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+            const typeMovement = "manutencao"
+            const newMovementToAPI = { scooter, cpfPeopleRegistration, typeMovement, typeRelease, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
             dispatch(addMovement(newMovementToAPI))
         }
-        setNewMovementState({ scooter: "", cpfDeliverymanState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: "" })
+        setNewMovementState({ scooter: "", cpfPeopleRegistrationState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: "" })
     }
 
 
@@ -194,9 +194,9 @@ export default function externalMovement() {
                     setMovementState(movements.filter(movement => movement.logisticOperator.description === filtersMovements.filterShowJustOneOL))
                 }
             }
-            if (filtersMovements.filterByNameDeliveryman) {
-                if (filtersMovements.filterByNameDeliveryman !== "") {
-                    setMovementState(movements.filter(movement => movement.deliveryman.name === filtersMovements.filterByNameDeliveryman))
+            if (filtersMovements.filterByNamePeopleRegistration) {
+                if (filtersMovements.filterByNamePeopleRegistration !== "") {
+                    setMovementState(movements.filter(movement => movement.peopleRegistration.name === filtersMovements.filterByNamePeopleRegistration))
                 }
             }
             if (filtersMovements.filterByChassis) {
@@ -252,8 +252,8 @@ export default function externalMovement() {
                     <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
                     <label>Mostrar Apenas a OL</label>
                     <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
-                    <label>Mostrar Apenas o Entregador</label>
-                    <input type="text" name="filterByNameDeliveryman" value={filtersMovements.filterByNameDeliveryman || ''} onChange={handleFiltersChange} />
+                    <label>Mostrar Apenas o Responsável</label>
+                    <input type="text" name="filterByNamePeopleRegistration" value={filtersMovements.filterByNamePeopleRegistration || ''} onChange={handleFiltersChange} />
                     <label>Mostrar Apenas o Patinete</label>
                     <input type="text" name="filterByChassis" value={filtersMovements.filterByChassis || ''} onChange={handleFiltersChange} />
                 </div>
@@ -275,6 +275,7 @@ export default function externalMovement() {
                             <th>Chassi</th>
                             <th>Hora Retirada</th>
                             <th>Hora Devolução</th>
+                            <th>Tipo</th>
                             <th>Capacete</th>
                             <th>Bag</th>
                             <th>Case</th>
@@ -289,6 +290,7 @@ export default function externalMovement() {
                                 <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
                                 <td>{movement.timePickUpFormatted}</td>
                                 <td>{movement.timeReturnFormatted}</td>
+                                <td>{movement.typeMovement.description}</td>
                                 <td><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
                                 <td><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
                                 <td><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
@@ -299,11 +301,11 @@ export default function externalMovement() {
                     </tbody>
                 </table>
                 <br />
-                <h2>Adicionar Nova Movimentação</h2>
+                <h2>Adicionar Nova Movimentação Interna</h2>
                 <label>Scooter</label>
                 <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
-                <label>CPF Entregador</label>
-                <input type="text" name="cpfDeliverymanState" value={newMovementState.cpfDeliverymanState} onChange={handleChange} />
+                <label>CPF Responsável</label>
+                <input type="text" name="cpfPeopleRegistrationState" value={newMovementState.cpfPeopleRegistrationState} onChange={handleChange} />
                 <label>Capacete</label>
                 <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
                 <label>Bag</label>
@@ -363,7 +365,7 @@ export default function externalMovement() {
                 <label>Scooter</label>
                 <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
                 <label>CPF Entregador</label>
-                <input type="text" name="cpfDeliverymanState" value={newMovementState.cpfDeliverymanState} onChange={handleChange} />
+                <input type="text" name="cpfPeopleRegistrationState" value={newMovementState.cpfPeopleRegistrationState} onChange={handleChange} />
                 <label>Capacete</label>
                 <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
                 <label>Bag</label>

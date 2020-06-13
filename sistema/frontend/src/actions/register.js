@@ -1,14 +1,14 @@
 import axios from 'axios'
-import { ADD_DELIVERYMAN, ADD_LOGISTICOPERATOR } from './types'
+import { ADD_PEOPLE_REGISTRATION, ADD_LOGISTICOPERATOR } from './types'
 import { returnErrors } from './messages'
 
 
-export const addDeliveryman = (deliveryman) => {
+export const addPeopleRegistration = (person) => {
     return dispatch => {
-        axios.post("api/deliveryman/", deliveryman)
+        axios.post("api/people-registration/", person)
             .then(res => {
                 dispatch({
-                    type: ADD_DELIVERYMAN,
+                    type: ADD_PEOPLE_REGISTRATION,
                     payload: res.data
                 })
             })

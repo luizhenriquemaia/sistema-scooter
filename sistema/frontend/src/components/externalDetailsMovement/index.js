@@ -14,7 +14,7 @@ export default function externalDetailsMovement() {
         intialDateMovement: "",
         finalDateMovement: "",
         scooter: "",
-        cpfDeliveryman: "",
+        cpfPeopleRegistration: "",
         LO: "",
         typeRelease: "",
         typeMovement: "",
@@ -44,7 +44,7 @@ export default function externalDetailsMovement() {
                     intialDateMovement: movement.intialDateMovement,
                     finalDateMovement: movement.finalDateMovement,
                     scooter: movement.scooter.chassisNumber,
-                    cpfDeliveryman: movement.deliveryman.cpf,
+                    cpfPeopleRegistration: movement.peopleRegistration.cpf,
                     LO: movement.logisticOperator.description,
                     typeRelease: "devolução",
                     typeMovement: "",
@@ -63,7 +63,7 @@ export default function externalDetailsMovement() {
                     intialDateMovement: movement.intialDateMovement,
                     finalDateMovement: movement.finalDateMovement,
                     scooter: movement.scooter.chassisNumber,
-                    cpfDeliveryman: movement.deliveryman.cpf,
+                    cpfPeopleRegistration: movement.peopleRegistration.cpf,
                     LO: movement.logisticOperator.description,
                     typeRelease: "retirada",
                     typeMovement: "",
@@ -105,9 +105,9 @@ export default function externalDetailsMovement() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        const { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfDeliveryman, LO, typeRelease, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
+        const { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfPeopleRegistration, LO, typeRelease, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
         const typeMovement = "entregas"
-        const updateMovementData = { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfDeliveryman, LO, typeRelease, typeMovement, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
+        const updateMovementData = { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfPeopleRegistration, LO, typeRelease, typeMovement, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } 
         dispatch(updateMovement(idMovement, updateMovementData))        
         history.push("/")
     }
@@ -143,7 +143,7 @@ export default function externalDetailsMovement() {
                 </div>
                 <div className="form-input">
                     <label>CPF do Entregador</label>
-                    <input type="text" name="cpfDeliveryman" value={movementState.cpfDeliveryman} onChange={handleChange} />
+                    <input type="text" name="cpfPeopleRegistration" value={movementState.cpfPeopleRegistration} onChange={handleChange} />
                 </div>
                 <div className="form-input">
                     <label>Retirada</label>

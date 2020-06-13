@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf.urls import include
 from rest_framework import routers
-from .api import UserViewSet, StatusScooterViewSet, LogisticOperatorViewSet, ScooterViewSet, DeliverymanViewSet, MovementViewSet
+from .api import UserViewSet, StatusScooterViewSet, LogisticOperatorViewSet, ScooterViewSet, PeopleRegistrationViewSet, MovementViewSet
 
 
 router = routers.DefaultRouter()
@@ -12,7 +12,7 @@ router.register('api/logistic-operator',
                 LogisticOperatorViewSet, 'logistic-operator')
 router.register('api/scooter', 
                 ScooterViewSet, 'scooter')
-router.register('api/deliveryman', DeliverymanViewSet, 'deliveryman')
+router.register('api/people-registration', PeopleRegistrationViewSet, 'peopleRegistration')
 router.register('api/movement', MovementViewSet, 'movement')
 
 

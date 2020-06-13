@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from rest_framework import serializers
-from .models import StatusScooter, TypeMovement, LogisticOperator, Scooter, Deliveryman, Movement
+from .models import StatusScooter, TypeMovement, TypePeople, LogisticOperator, Scooter, PeopleRegistration, Movement
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -28,6 +28,15 @@ class TypeMovementSerializer(serializers.ModelSerializer):
         return TypeMovement.create(TypeMovement, **validated_data)
 
 
+class TypePeopleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TypePeople
+        fields = ['id', 'description']
+
+    def create(self, validated_data):
+        return TypePeople.create(TypePeople, **validated_data)
+
+
 
 class LogisticOperatorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,24 +57,28 @@ class ScooterSerializer(serializers.ModelSerializer):
         return Scooter.create(Scooter, **validated_data)
 
 
-class DeliverymanSerializer(serializers.ModelSerializer):
+class PeopleRegistrationSerializer(serializers.ModelSerializer):
     logisticOperator = LogisticOperatorSerializer(read_only=True)
     logisticOperator_id = serializers.IntegerField()
+    typePeople = TypePeopleSerializer(read_only=True)
+    typePeople_id = serializers.IntegerField()
+
     class Meta:
-        model = Deliveryman
+        model = PeopleRegistration
         fields = ['id', 'name', 'cpf', 'logisticOperator',
-                  'logisticOperator_id', 'active']
+                  'logisticOperator_id', 'active', 'typePeople',
+                  'typePeople_id']
     
     def create(self, validated_data):
-        return Deliveryman.create(Deliveryman, **validated_data)
+        return PeopleRegistration.create(PeopleRegistration, **validated_data)
             
 
 
 class MovementSerializer(serializers.ModelSerializer):
     scooter = ScooterSerializer(read_only=True)
     scooter_id = serializers.IntegerField()
-    deliveryman = DeliverymanSerializer(read_only=True)
-    deliveryman_id = serializers.IntegerField()
+    peopleRegistration = PeopleRegistrationSerializer(read_only=True)
+    peopleRegistration_id = serializers.IntegerField()
     logisticOperator = LogisticOperatorSerializer(read_only=True)
     logisticOperator_id = serializers.IntegerField()
     typeMovement = TypeMovementSerializer(read_only=True)
@@ -75,7 +88,7 @@ class MovementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movement
-        fields = ['id', 'scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
+        fields = ['id', 'scooter', 'scooter_id', 'peopleRegistration',  'peopleRegistration_id', 'logisticOperator', 'logisticOperator_id',
                   'typeMovement', 'typeMovement_id','typeRelease', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime', 
                   'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 'accessoriesCharger', 'observation', 'destinyScooter']
     
@@ -89,8 +102,8 @@ class MovementSerializer(serializers.ModelSerializer):
 class MovementRetrieveSerializer(serializers.ModelSerializer):
     scooter = ScooterSerializer(read_only=False)
     scooter_id = serializers.IntegerField()
-    deliveryman = DeliverymanSerializer(read_only=False)
-    deliveryman_id = serializers.IntegerField()
+    peopleRegistration = PeopleRegistrationSerializer(read_only=False)
+    peopleRegistration_id = serializers.IntegerField()
     logisticOperator = LogisticOperatorSerializer(read_only=False)
     logisticOperator_id = serializers.IntegerField()
     typeMovement = TypeMovementSerializer(read_only=False)
@@ -101,7 +114,7 @@ class MovementRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movement
-        fields = ['id', 'scooter', 'scooter_id', 'deliveryman',  'deliveryman_id', 'logisticOperator', 'logisticOperator_id',
+        fields = ['id', 'scooter', 'scooter_id', 'peopleRegistration',  'peopleRegistration_id', 'logisticOperator', 'logisticOperator_id',
                   'typeMovement', 'typeMovement_id', 'typeRelease', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime',
                   'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 'accessoriesCharger', 'observation', 'destinyScooter', 'owner']
     

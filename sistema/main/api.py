@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
-from .models import StatusScooter, TypeMovement, LogisticOperator, Scooter, Deliveryman, Movement
-from .serializers import UserSerializer, StatusScooterSerializer, LogisticOperatorSerializer, ScooterSerializer, DeliverymanSerializer, MovementSerializer, MovementRetrieveSerializer
+from .models import StatusScooter, TypeMovement, TypePeople, LogisticOperator, Scooter, PeopleRegistration, Movement
+from .serializers import UserSerializer, StatusScooterSerializer, LogisticOperatorSerializer, ScooterSerializer, PeopleRegistrationSerializer, MovementSerializer, MovementRetrieveSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -88,12 +88,12 @@ class ScooterViewSet(viewsets.ViewSet):
         
 
 
-class DeliverymanViewSet(viewsets.ViewSet):
+class PeopleRegistrationViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        queryset = Deliveryman.objects.all()
-        serializer = DeliverymanSerializer(queryset, many=True)
+        queryset = PeopleRegistration.objects.all()
+        serializer = PeopleRegistrationSerializer(queryset, many=True)
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
@@ -101,23 +101,26 @@ class DeliverymanViewSet(viewsets.ViewSet):
 
     def create(self, request):
         try:
-            Deliveryman.objects.get(cpf=request.data['cpfDeliverymanToAPI'])
+            PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistrationToAPI'])
             return Response("CPF já cadastrado", status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist:
-            request.data['name'] = request.data['deliverymanName']
-            request.data['cpf'] = request.data['cpfDeliverymanToAPI']
-            request.data['active'] = request.data['deliverymanActive']
+            request.data['name'] = request.data['peopleRegistrationName']
+            request.data['cpf'] = request.data['cpfPeopleRegistrationToAPI']
+            request.data['active'] = request.data['peopleRegistrationActive']
             try:
                 LogisticOperator.objects.get(
-                    description=request.data['logisticOperatorDeliveryman'])
+                    description=request.data['logisticOperatorPeopleRegistration'])
             except ObjectDoesNotExist:
                 return Response("OL não cadastrada", status=status.HTTP_400_BAD_REQUEST)
             request.data['logisticOperator_id'] = LogisticOperator.objects.get(
-                description=request.data['logisticOperatorDeliveryman']).id
-            serializer = DeliverymanSerializer(data=request.data)
+                description=request.data['logisticOperatorPeopleRegistration']).id
+            if request.data['typePeopleToAPI'] != "entregador" and request.data['typePeopleToAPI'] != "manutencao":
+                return Response("Tipo de pessoa incorreto", status=status.HTTP_400_BAD_REQUEST)
+            request.data['typePeople_id'] = TypePeople.objects.get_or_create(description=request.data['typePeopleToAPI'])[0].id
+            serializer = PeopleRegistrationSerializer(data=request.data)
             try:
                 if serializer.is_valid(raise_exception=True):
-                    new_deliveryman = serializer.save()
+                    new_people_registration = serializer.save()
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
             except AttributeError:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -169,18 +172,23 @@ class MovementViewSet(viewsets.ViewSet):
             Scooter.objects.get(chassisNumber=request.data['scooter'])
         except ObjectDoesNotExist:
             return Response("Patinete não existente", status=status.HTTP_400_BAD_REQUEST)
+        try:
+            PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration'])
+        except ObjectDoesNotExist:
+            return Response("Responsável não cadastrado", status=status.HTTP_400_BAD_REQUEST)
         else:
             request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
             if request.data['typeRelease'] != 'devolução':
                 if request.data['typeMovement'] != 'entregas':
-                    return Response("Tipo de movimentação incorreta", status=status.HTTP_400_BAD_REQUEST)
+                    if request.data['typeMovement'] != 'manutencao':
+                        return Response("Tipo de movimentação incorreta", status=status.HTTP_400_BAD_REQUEST)
                 else:
                     request.data['typeMovement_id'] = TypeMovement.objects.get_or_create(description=request.data['typeMovement'])[0].id
                     scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
                     if scooter_db.status.description == "Disponível":
-                        deliverymanMovement = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman'])
-                        request.data['logisticOperator_id'] = deliverymanMovement.logisticOperator_id
-                        request.data['deliveryman_id'] = deliverymanMovement.id
+                        people_registration_movement = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration'])
+                        request.data['logisticOperator_id'] = people_registration_movement.logisticOperator_id
+                        request.data['peopleRegistration_id'] = people_registration_movement.id
                         serializer = MovementSerializer(data=request.data)
                         if serializer.is_valid(raise_exception=True):
                             new_movement = serializer.save(owner=self.request.user)
@@ -198,7 +206,7 @@ class MovementViewSet(viewsets.ViewSet):
             try:
                 request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
                 request.data['logisticOperator_id'] = LogisticOperator.objects.get(description=request.data['LO']).id
-                request.data['deliveryman_id'] = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman']).id
+                request.data['peopleRegistration_id'] = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration']).id
                 if request.data['initialTimeFormatted'] != "":
                     request.data['pickUpTime'] = request.data['initialTimeFormatted']
                 if request.data['finalTimeFormatted'] != "":
@@ -209,7 +217,7 @@ class MovementViewSet(viewsets.ViewSet):
             # if user is not staff he can only changes the destiny and type of release
             request.data['scooter_id'] = movement.scooter_id
             request.data['logisticOperator_id'] = movement.logisticOperator_id
-            request.data['deliveryman_id'] = movement.deliveryman_id
+            request.data['peopleRegistration_id'] = movement.peopleRegistration_id
             request.data['accessoriesHelmet'] = movement.accessoriesHelmet
             request.data['accessoriesBag'] = movement.accessoriesBag
             request.data['accessoriesCase'] = movement.accessoriesCase

@@ -13,16 +13,29 @@ class StatusScooter(models.Model):
         new_status.save()
         return new_status
 
+
 class TypeMovement(models.Model):
     description = models.CharField(max_length=200)
     objects = models.Manager()
 
     def create(self, **validated_data):
-        new_type_movement = StatusScooter(
+        new_type_movement = TypeMovement(
             description=validated_data['description']
         )
         new_type_movement.save()
         return new_type_movement
+
+
+class TypePeople(models.Model):
+    description = models.CharField(max_length=200)
+    objects = models.Manager()
+
+    def create(self, **validated_data):
+        new_type_people = TypePeople(
+            description=validated_data['description']
+        )
+        new_type_people.save()
+        return new_type_people
 
 
 class LogisticOperator(models.Model):
@@ -57,32 +70,32 @@ class Scooter(models.Model):
             return new_scooter
 
 
-class Deliveryman(models.Model):
+class PeopleRegistration(models.Model):
     name = models.CharField(max_length=400)
     cpf = models.CharField(max_length=11, default=0)
+    typePeople = models.ForeignKey(TypePeople, on_delete=models.CASCADE, null=True)
     active = models.BooleanField(default=True)
     logisticOperator = models.ForeignKey(
         LogisticOperator, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def create(self, **validated_data):
-        if Deliveryman.objects.filter(cpf=validated_data['cpf']):
-            return "this deliveryman already exists"
-        else:
-            new_deliveryman = Deliveryman(
+        if not PeopleRegistration.objects.filter(cpf=validated_data['cpf']):
+            new_peopleRegistration = PeopleRegistration(
                 name=validated_data['name'],
                 cpf=validated_data['cpf'],
+                typePeople=TypePeople.objects.get(id=validated_data['typePeople_id']),
                 logisticOperator=LogisticOperator.objects.get(
                     id=validated_data['logisticOperator_id']),
                 active=validated_data['active']
             )
-            new_deliveryman.save()
-            return new_deliveryman
+            new_peopleRegistration.save()
+            return new_peopleRegistration
 
 
 class Movement(models.Model):
     scooter = models.ForeignKey(Scooter, on_delete=models.CASCADE, null=True)
-    deliveryman = models.ForeignKey(Deliveryman, on_delete=models.CASCADE, null=True)
+    peopleRegistration = models.ForeignKey(PeopleRegistration, on_delete=models.CASCADE, null=True)
     logisticOperator = models.ForeignKey(
         LogisticOperator, on_delete=models.CASCADE, null=True)
     typeMovement = models.ForeignKey(TypeMovement, on_delete=models.CASCADE, null=True)
@@ -105,8 +118,8 @@ class Movement(models.Model):
             "id": id,
             "scooter": Scooter.objects.get(id=movement.scooter_id).__dict__,
             "scooter_id": Scooter.objects.get(id=movement.scooter_id).id,
-            "deliveryman": Deliveryman.objects.get(id=movement.deliveryman_id).__dict__,
-            "deliveryman_id": Deliveryman.objects.get(id=movement.deliveryman_id).id,
+            "peopleRegistration": PeopleRegistration.objects.get(id=movement.peopleRegistration_id).__dict__,
+            "peopleRegistration_id": PeopleRegistration.objects.get(id=movement.peopleRegistration_id).id,
             "logisticOperator": LogisticOperator.objects.get(id=movement.logisticOperator_id).__dict__,
             "logisticOperator_id": LogisticOperator.objects.get(id=movement.logisticOperator_id).id,
             "typeMovement": TypeMovement.objects.get(id=movement.typeMovement_id).__dict__,
@@ -128,7 +141,7 @@ class Movement(models.Model):
         scooter_db = Scooter.objects.get(id=validated_data['scooter_id'])
         new_movement = Movement(
             scooter=scooter_db,
-            deliveryman=Deliveryman.objects.get(id=validated_data['deliveryman_id']),
+            peopleRegistration=PeopleRegistration.objects.get(id=validated_data['peopleRegistration_id']),
             logisticOperator=LogisticOperator.objects.get(id=validated_data['logisticOperator_id']),
             typeMovement=TypeMovement.objects.get(id=validated_data['typeMovement_id']),
             intialDateMovement=date.today(),
@@ -149,8 +162,8 @@ class Movement(models.Model):
     def update(self, movement, **validated_data):
         scooter_db = Scooter.objects.get(id=validated_data['scooter_id'])
         movement.scooter = scooter_db
-        movement.deliveryman = Deliveryman.objects.get(
-            id=validated_data['deliveryman_id'])
+        movement.peopleRegistration = PeopleRegistration.objects.get(
+            id=validated_data['peopleRegistration_id'])
         movement.accessoriesHelmet = validated_data['accessoriesHelmet']
         movement.accessoriesBag = validated_data['accessoriesBag']
         movement.accessoriesCase = validated_data['accessoriesCase']
