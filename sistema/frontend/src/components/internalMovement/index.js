@@ -71,6 +71,7 @@ export default function externalMovement() {
     const movements = useSelector(state => state.movements.movement)
     const scooters = useSelector(state => state.scooters.scooter)
     const isDetails = useSelector(state => state.movements.isDetails)
+    const isExternalMovement = useSelector(state => state.movements.isExternalMovement)
 
 
     const formattingTime = (dateMovement, timeMovement) => {
@@ -83,7 +84,7 @@ export default function externalMovement() {
 
     useEffect(() => {
         if (movements.length !== 0 && movements !== undefined) {
-            if (isDetails === false) {
+            if (isDetails === false && isExternalMovement === false) {
                 movements.map(movement => {
                     movement.timePickUpFormatted = formattingTime(movement.intialDateMovement, movement.pickUpTime)
                     if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.intialDateMovement, movement.returnTime)

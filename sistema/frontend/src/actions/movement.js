@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from './types'
+import { GET_INTERNAL_MOVEMENTS, GET_EXTERNAL_MOVEMENTS, GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from './types'
 import { returnErrors } from './messages'
 
 
@@ -8,7 +8,7 @@ export const getMovements = (typeMovement) => {
         axios.get(`/api/movement/?typeMovement=${typeMovement}`)
             .then(res => {
                 dispatch({
-                    type: GET_MOVEMENTS,
+                    type: (typeMovement === "entregas") ? GET_EXTERNAL_MOVEMENTS : GET_INTERNAL_MOVEMENTS,
                     payload: res.data
                 })
             })
