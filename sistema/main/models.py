@@ -109,6 +109,8 @@ class Movement(models.Model):
             "deliveryman_id": Deliveryman.objects.get(id=movement.deliveryman_id).id,
             "logisticOperator": LogisticOperator.objects.get(id=movement.logisticOperator_id).__dict__,
             "logisticOperator_id": LogisticOperator.objects.get(id=movement.logisticOperator_id).id,
+            "typeMovement": TypeMovement.objects.get(id=movement.typeMovement_id).__dict__,
+            "typeMovement_id": TypeMovement.objects.get(id=movement.typeMovement_id).id,
             "destinyScooter": movement.destinyScooter,
             "intialDateMovement": movement.intialDateMovement,
             "finalDateMovement": movement.finalDateMovement,

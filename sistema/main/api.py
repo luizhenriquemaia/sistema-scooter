@@ -154,6 +154,7 @@ class MovementViewSet(viewsets.ViewSet):
         serializer = MovementRetrieveSerializer(data=movement)
         if serializer.is_valid(raise_exception=True):
             return Response(serializer.data, status=status.HTTP_200_OK)
+        print(f"\n\n\n{serializer.errors}\n\n\n")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request):
@@ -192,11 +193,17 @@ class MovementViewSet(viewsets.ViewSet):
                 request.data['logisticOperator_id'] = LogisticOperator.objects.get(description=request.data['LO']).id
                 request.data['deliveryman_id'] = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman']).id
             except ObjectDoesNotExist:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                return Response("valor(es) não existente(s) na base de dados", status=status.HTTP_400_BAD_REQUEST)
         else:
+            # if user is not staff he can only changes the destiny and type of release
             request.data['scooter_id'] = movement.scooter_id
             request.data['logisticOperator_id'] = movement.logisticOperator_id
             request.data['deliveryman_id'] = movement.deliveryman_id
+            request.data['accessoriesHelmet'] = movement.accessoriesHelmet
+            request.data['accessoriesBag'] = movement.accessoriesBag
+            request.data['accessoriesCase'] = movement.accessoriesCase
+            request.data['accessoriesCharger'] = movement.accessoriesCharger
+        request.data['typeMovement_id'] = movement.typeMovement_id
         serializer = MovementSerializer(movement, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
