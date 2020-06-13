@@ -199,8 +199,10 @@ class MovementViewSet(viewsets.ViewSet):
                 request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
                 request.data['logisticOperator_id'] = LogisticOperator.objects.get(description=request.data['LO']).id
                 request.data['deliveryman_id'] = Deliveryman.objects.get(cpf=request.data['cpfDeliveryman']).id
-                request.data['pickUpTime'] = request.data['initialTimeFormatted']
-                request.data['returnTime'] = request.data['finalTimeFormatted']
+                if request.data['initialTimeFormatted'] != "":
+                    request.data['pickUpTime'] = request.data['initialTimeFormatted']
+                if request.data['finalTimeFormatted'] != "":
+                    request.data['returnTime'] = request.data['finalTimeFormatted']
             except ObjectDoesNotExist:
                 return Response("valor(es) não existente(s) na base de dados", status=status.HTTP_400_BAD_REQUEST)
         else:

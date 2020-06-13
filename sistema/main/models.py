@@ -177,7 +177,7 @@ class Movement(models.Model):
                     typeMovement = type_movement_db,
                     intialDateMovement=date.today(),
                     pickUpTime=datetime.now().time(),
-                    owner=validated_data['owner']
+                    owner=movement.owner
                 )
                 new_internal_movement.save()
             if validated_data['destinyScooter'] == "base":
