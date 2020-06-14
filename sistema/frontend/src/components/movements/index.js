@@ -53,6 +53,7 @@ export default function Movements() {
         filterInitialDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
         filterFinalDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
         filterShowReturnedScooters: true,
+        filterTypesMovements: "",
         filterShowJustOneOL: "",
         filterByNamePeopleRegistration: "",
         filterByChassis: ""
@@ -161,6 +162,11 @@ export default function Movements() {
             if (filtersMovements.filterShowReturnedScooters) {
                 setMovementState(movements)
             }
+            if (filtersMovements.filterTypesMovements) {
+                if (filtersMovements.filterTypesMovements !== "") {
+                    setMovementState(movements.filter(movement => movement.typeMovement.description === filtersMovements.filterTypesMovements))
+                }
+            }
             if (filtersMovements.filterShowJustOneOL) {
                 if (filtersMovements.filterShowJustOneOL !== "") {
                     setMovementState(movements.filter(movement => movement.logisticOperator.description === filtersMovements.filterShowJustOneOL))
@@ -222,6 +228,8 @@ export default function Movements() {
                 <div>
                     <label>Mostrar Patinetes Devolvidos</label>
                     <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
+                    <label>Mostrar Apenas Movimentações do Tipo</label>
+                    <input type="text" name="filterTypesMovements" value={filtersMovements.filterTypesMovements || ''} onChange={handleFiltersChange} />
                     <label>Mostrar Apenas a OL</label>
                     <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
                     <label>Mostrar Apenas o Entregador</label>
