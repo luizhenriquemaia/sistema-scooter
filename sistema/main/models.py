@@ -147,9 +147,14 @@ class Movement(models.Model):
 
     def create(self, **validated_data):
         scooter_db = Scooter.objects.get(id=validated_data['scooter_id'])
+        # case of movement without peopleRegistration
+        try:
+            movement.peopleRegistration = PeopleRegistration.objects.get(
+                id=validated_data['peopleRegistration_id'])
+        except KeyError:
+            pass
         new_movement = Movement(
             scooter=scooter_db,
-            peopleRegistration=PeopleRegistration.objects.get(id=validated_data['peopleRegistration_id']),
             logisticOperator=LogisticOperator.objects.get(id=validated_data['logisticOperator_id']),
             typeMovement=TypeMovement.objects.get(id=validated_data['typeMovement_id']),
             intialDateMovement=date.today(),

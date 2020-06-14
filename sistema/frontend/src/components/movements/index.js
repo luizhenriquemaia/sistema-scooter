@@ -62,6 +62,7 @@ export default function Movements() {
     const movements = useSelector(state => state.movements.movement)
     const scooters = useSelector(state => state.scooters.scooter)
     const isDetails = useSelector(state => state.movements.isDetails)
+    const isAdd = useSelector(state => state.movements.isAdd)
 
 
     const formattingTime = (dateMovement, timeMovement) => {
@@ -74,7 +75,7 @@ export default function Movements() {
 
     useEffect(() => {
         if (movements.length !== 0 && movements !== undefined) {
-            if (isDetails === false) {
+            if (isDetails === false && isAdd === false) {
                 movements.map(movement => {
                     movement.timePickUpFormatted = formattingTime(movement.intialDateMovement, movement.pickUpTime)
                     if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.intialDateMovement, movement.returnTime)
