@@ -130,11 +130,11 @@ export default function Register() {
 
     return (
         <main className="content">
-            <section className="register-section">
-                <div className="titleBox">
+            <section className="section-box register-section">
+                <div className="title-box">
                     <h1 className="title-page">Cadastros</h1>
                 </div>
-                <section className="register-content">
+                <section className="content-box">
                     <div className="register-type">
                         <label>Tipo de cadastro</label>
                         <select name="register-type" onChange={handleChange}>
@@ -144,11 +144,11 @@ export default function Register() {
                         </select>
                     </div>
                     <fieldset className={stateValueSelect ? `register-data-box ${stateValueSelect}` : "register-data-box"} >
-                        <div className="register-data logistic-operator">
+                        <div className="register-box logistic-operator">
                             <label>Operador Logístico</label>
                             <input type="text" name="logisticOperatorDescription" value={RegisterState.logisticOperatorDescription || ''} onChange={handleChange} />
                         </div>
-                        <div className="register-data delivery-man">
+                        <div className="register-box delivery-man">
                             <label>CPF Entregador</label>
                             <input type="text" name="cpfPeopleRegistration" value={RegisterState.cpfPeopleRegistration || ''} onChange={handleChange} />
                             <label>Nome Entregador</label>
@@ -161,7 +161,7 @@ export default function Register() {
                                 ))}
                             </select>
                         </div>
-                        <div className="register-data scooter">
+                        <div className="register-box scooter">
                             <label>Chassi Patinete</label>
                             <input type="text" name="chassisScooter" value={RegisterState.chassisScooter || ''} onChange={handleChange} />
                             <label>Status Patinete</label>

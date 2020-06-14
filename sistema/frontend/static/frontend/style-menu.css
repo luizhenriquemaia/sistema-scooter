@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -87,8 +88,7 @@
     background-color: #f6f6f6;
 }
  
-/* Closed Menu */
-
+/* Closed Menu ---------------------------------------*/
 .menuBlock.closedMenu {
     width: 82px;
     overflow: hidden;
@@ -109,7 +109,6 @@
 }
 
 /* Closed Mobile Menu -----------------------------*/
-
 @media screen and (max-width: 600px) {
     .menuBlock.closedMenu {
         max-height: 65px;
@@ -121,8 +120,16 @@
     }
 }
 
-/* Register Section  -------------------------------*/
-section.register-section {
+/* General desktop -----------------------------------------*/
+main.content {
+    background: #d3d3d3;
+    min-height: 100vh;
+    padding: 20px 40px 20px 140px;
+    display: flex;
+    background-size: cover;
+}
+
+section.section-box {
     border: 1px solid darkgrey;
     border-radius: 14px;
     box-shadow: -4px 0px 6px grey;
@@ -134,18 +141,76 @@ section.register-section {
     transition: 0.4s 0.8s;
 }
 
-.register-section .title-page {
+.title-page {
     text-align: center;
     font-size: 28px;
     padding: 3% 0px;
 }
 
-.register-section .register-content {
+.content-box {
     padding: 0 6%;
     height: 100%;
     font-size: 21px;
 }
 
+.register-box {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.register-box label {
+    margin-bottom: 5px;
+}
+
+.register-box input {
+    border-radius: 4px;
+    font-size: 18px;
+    font-family: monospace;
+    padding: 4px 10px;
+    margin-bottom: 20px;
+    border-color: #d3d3d3;
+}
+
+.register-box input:focus {
+    outline-offset: 1px;
+    outline-color: unset;
+}
+
+.buttonBox {
+    display: flex;
+    justify-content: flex-end;
+    padding: 13px 17px;
+    margin-top: 25px;
+}
+
+.submit-button {
+    padding: 5px 30px;
+    width: 135px;
+    border: 1px solid darkgray;
+    border-radius: 6px;
+    box-shadow: 1px 1px 2px darkslategray;
+    cursor: pointer;
+    margin-left: 20px;
+    font-size: 17px;
+}
+
+.submit-button.confirm {
+    border-color: green;
+}
+
+.submit-button.clean {
+    border-color: red;
+}
+
+/* General mobile  ---------------------------------------*/
+@media(max-width: 600px) {
+    main.content {
+        padding: 20px 10px 20px 10px;
+    }
+}
+
+/* Register Section  -------------------------------*/
 .register-section .register-type {
     margin-bottom: 20px;
     padding: 10px 15px 10px 0;
@@ -168,86 +233,33 @@ section.register-section {
     min-inline-size: auto;
 }
 
-.register-section .register-data {
-    display: flex;
-    flex-direction: column;
-    height: auto;
+.register-section .register-box {
     max-height: 0;
     overflow: hidden;
     padding: 0px;
     transition: max-height ease-out 0.3s, padding ease-out 0.3s;
 }
 
-.logistic-operator .register-data.logistic-operator,
-.delivery-man .register-data.delivery-man,
-.scooter .register-data.scooter {
+.logistic-operator .register-box.logistic-operator,
+.delivery-man .register-box.delivery-man,
+.scooter .register-box.scooter {
     padding: 3% 5%;
     transition-delay: 0.4s; 
 }
 
-.logistic-operator .register-data.logistic-operator {
+.logistic-operator .register-box.logistic-operator {
     max-height: 160px;
 }
 
-.delivery-man .register-data.delivery-man {
+.delivery-man .register-box.delivery-man {
     max-height: 360px;
 }
 
-.scooter .register-data.scooter{
+.scooter .register-box.scooter{
     max-height: 180px;
  }
 
-.register-section .register-data label {
-    margin-bottom: 5px;
-}
-
-.register-section .register-data input {
-    border-radius: 4px;
-    font-size: 18px;
-    font-family: monospace;
-    padding: 4px 10px;
-    margin-bottom: 20px;
-    border-color: #d3d3d3;
-}
-
-.register-section .register-data input:focus {
-    outline-offset: 1px;
-    outline-color: unset;
-}
-
-.register-section .register-data .check-box {
-    width: 23px;
-    height: 21px;
-}
-
-.register-section .buttonBox {
-    display: flex;
-    justify-content: flex-end;
-    padding: 13px 17px;
-    margin-top: 25px;
-}
-
-.register-section .submit-button {
-    padding: 5px 30px;
-    width: 135px;
-    border: 1px solid darkgray;
-    border-radius: 6px;
-    box-shadow: 1px 1px 2px darkslategray;
-    cursor: pointer;
-    margin-left: 20px;
-    font-size: 17px;
-}
-
-.register-section .submit-button.confirm {
-    border-color: green;
-}
-
-.register-section .submit-button.clean {
-    border-color: red;
-}
-
 /* Register Section Mobile ------------------------- */
-
 @media(max-width: 600px) {
     
     .register-section .register-type {
@@ -258,30 +270,14 @@ section.register-section {
         align-items: center;
     }
 
-    .logistic-operator .register-data.logistic-operator,
-    .delivery-man .register-data.delivery-man,
-    .scooter .register-data.scooter {
+    .logistic-operator .register-box.logistic-operator,
+    .delivery-man .register-box.delivery-man,
+    .scooter .register-box.scooter {
         padding: 7% 5%;
     }
 }
 
 
+/* Add Movement ------------------------- */
 
-
-/* General desktop -----------------------------------------*/
-
-main.content {
-    background: #d3d3d3;
-    min-height: 100vh;
-    padding: 20px 40px 20px 140px;
-    display: flex;
-    background-size: cover;
-}
-
-/* General mobile  */
-
-@media(max-width: 600px) {
-    main.content {
-        padding: 20px 10px 20px 10px;
-    }
-}
+section.movement-section {}

@@ -51,6 +51,20 @@ export default function addMovementComponent() {
 
     }
 
+    const handleClean = e => {
+        setRegisterState({
+            ...RegisterState,
+            scooter: "",
+            cpfPeopleRegistrationState: "",
+            logisticOperator: "",
+            accessoriesHelmet: false,
+            accessoriesBag: false,
+            accessoriesCase: false,
+            accessoriesCharger: false,
+            observation: ""
+        })
+    }
+
     const handleCheck = e => {
         const { name, checked } = e.target
         setNewMovementState({
@@ -87,35 +101,46 @@ export default function addMovementComponent() {
     }
 
     return (
-        <div className="content">
-            <h1 className="title-page">Adicionar Movimentação</h1>
-            <label>Tipo de Movimentação</label>
-            <select name="typeOfMovement" onChange={handleChange} >
-                <option value="Interna">Interna</option>
-                <option value="Externa">Externa</option>
-            </select>
-            <label>Scooter</label>
-            <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
-            <label>CPF Entregador</label>
-            <input type="text" name="cpfPeopleRegistrationState" value={newMovementState.cpfPeopleRegistrationState} onChange={handleChange} />
-            <label>OL</label>
-            <select name="logisticOperator" onChange={handleChange}>
-                <option value="">-----</option>
-                {logisticOperatorFromAPI.map(logisitcOperator => (
-                    <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
-                ))}
-            </select>
-            <label>Capacete</label>
-            <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
-            <label>Bag</label>
-            <input type="checkbox" name="accessoriesBag" checked={newMovementState.accessoriesBag} onChange={handleCheck} />
-            <label>Case</label>
-            <input type="checkbox" name="accessoriesCase" checked={newMovementState.accessoriesCase} onChange={handleCheck} />
-            <label>Carregador</label>
-            <input type="checkbox" name="accessoriesCharger" checked={newMovementState.accessoriesCharger} onChange={handleCheck} />
-            <label>Observação</label>
-            <textarea name="observation" value={newMovementState.observation} onChange={handleChange}></textarea>
-            <button className="submit-button" onClick={handleClickAdd}>Adicionar</button>
-        </div>
+        <main className="content">
+            <section className="section-box movement-section">
+                <div className="title-box">
+                    <h1 className="title-page">Adicionar Movimentação</h1>
+                </div>
+                <section className="content-box">
+                    <fieldset className="moevemt-data-box">
+                        <label>Tipo de Movimentação</label>
+                        <select name="typeOfMovement" onChange={handleChange} >
+                            <option value="Interna">Interna</option>
+                            <option value="Externa">Externa</option>
+                        </select>
+                        <label>Scooter</label>
+                        <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
+                        <label>CPF Entregador</label>
+                        <input type="text" name="cpfPeopleRegistrationState" value={newMovementState.cpfPeopleRegistrationState} onChange={handleChange} />
+                        <label>OL</label>
+                        <select name="logisticOperator" onChange={handleChange}>
+                            <option value="">-----</option>
+                            {logisticOperatorFromAPI.map(logisitcOperator => (
+                                <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
+                            ))}
+                        </select>
+                        <label>Capacete</label>
+                        <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
+                        <label>Bag</label>
+                        <input type="checkbox" name="accessoriesBag" checked={newMovementState.accessoriesBag} onChange={handleCheck} />
+                        <label>Case</label>
+                        <input type="checkbox" name="accessoriesCase" checked={newMovementState.accessoriesCase} onChange={handleCheck} />
+                        <label>Carregador</label>
+                        <input type="checkbox" name="accessoriesCharger" checked={newMovementState.accessoriesCharger} onChange={handleCheck} />
+                        <label>Observação</label>
+                        <textarea name="observation" value={newMovementState.observation} onChange={handleChange}></textarea>
+                    </fieldset>
+                    <div className="buttonBox">
+                        <button className="submit-button clean" onClick={handleClean}>Limpar</button>
+                        <button className="submit-button confirm" onClick={handleClickAdd}>Registrar</button>
+                    </div>
+                </section>
+            </section>
+        </main>
     )
 }
