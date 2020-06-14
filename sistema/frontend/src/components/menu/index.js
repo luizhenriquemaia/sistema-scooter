@@ -24,7 +24,7 @@ export default function Menu() {
                             <p>cadastrar</p>
                         </div>
                     </Link>
-                    <Link to="./moviment">
+                    <Link to="./add-movement">
                         <div className="navBox">
                             <img src="../../../static/imgs/adicionar_1.png" />
                             <p>nova movimentação</p>

@@ -1,10 +1,11 @@
-import { GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from '../actions/types.js'
+import { GET_MOVEMENTS, GET_MOVEMENT, GET_TYPES_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from '../actions/types.js'
 
 
 
 const initialState = {
     movement: [],
     isDetails: false,
+    typesMovement: []
 }
 
 export default function (state = initialState, action) {
@@ -19,6 +20,12 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 movement: action.payload,
+                isDetails: true
+            }
+        case GET_TYPES_MOVEMENT:
+            return {
+                ...state,
+                typesMovement: action.payload,
                 isDetails: true
             }
         case DELETE_MOVEMENT:

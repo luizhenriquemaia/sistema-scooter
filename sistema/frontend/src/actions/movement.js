@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from './types'
+import { GET_MOVEMENTS, GET_MOVEMENT, GET_TYPES_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from './types'
 import { returnErrors } from './messages'
 
 
@@ -37,6 +37,20 @@ export function getMovement(id) {
             .then(res => {
                 dispatch({
                     type: GET_MOVEMENT,
+                    payload: res.data
+                })
+            })
+            .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
+    }
+}
+
+
+export function getTypesMovement() {
+    return dispatch => {
+        axios.get(`/api/type-movement/`)
+            .then(res => {
+                dispatch({
+                    type: GET_TYPES_MOVEMENT,
                     payload: res.data
                 })
             })

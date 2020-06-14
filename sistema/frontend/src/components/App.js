@@ -3,10 +3,8 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 import Alerts from './alerts'
 import Menu from './menu'
 import movements from './movements'
+import addMovement from './addMovement'
 import detailsMovement from './detailsMovement'
-import externalMovement from './externalMovement'
-import internalMovement from './internalMovement'
-import externalDetailsMovement from './externalDetailsMovement'
 import Register from './register'
 import { Provider } from 'react-redux'
 import store from '../store'
@@ -32,9 +30,8 @@ export default function App() {
                             <div className="container">
                                 <Switch>
                                     <Route exact path="/" component={movements} />
+                                    <Route exact path="/add-movement" component={addMovement} />
                                     <Route exact path="/details-movement/:idMovement" component={detailsMovement} />
-                                    <Route exact path="/external-details-movement/:idMovement" component={externalDetailsMovement} />
-                                    <Route exact path="/internal-movement/" component={internalMovement} />
                                     <Route exact path="/register" component={Register} />
                                 </Switch>
                             </div>
