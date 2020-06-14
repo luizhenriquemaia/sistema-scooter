@@ -168,7 +168,6 @@ class Movement(models.Model):
         return new_movement
     
     def update(self, movement, **validated_data):
-        print(f"\n\n\n{validated_data}\n\n\n")
         scooter_db = Scooter.objects.get(id=validated_data['scooter_id'])
         movement.scooter = scooter_db
         # case of movement without peopleRegistration
@@ -192,7 +191,8 @@ class Movement(models.Model):
             else:
                 movement.returnTime = validated_data['returnTime']
                 movement.finalDateMovement = validated_data['finalDateMovement']
-            if movement.typeMovement == "Externo":
+            type_movement_db = TypeMovement.objects.get(id=movement.typeMovement.id)
+            if type_movement_db.description == "Externa":
                 if validated_data['destinyScooter'] == "Manutenção":
                     scooter_db.status = StatusScooter.objects.get_or_create(
                         description="Manutenção")[0]
@@ -209,7 +209,7 @@ class Movement(models.Model):
                         owner=movement.owner
                     )
                     new_internal_movement.save()
-                elif validated_data['destinyScooter'] == "Base":
+                if validated_data['destinyScooter'] == "Base":
                     scooter_db.status = StatusScooter.objects.get_or_create(
                         description="Disponível")[0]
                     scooter_db.save()

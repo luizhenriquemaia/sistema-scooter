@@ -62,8 +62,10 @@ export default function addMovementComponent() {
     const handleClickAdd = e => {
         const { scooter, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfPeopleRegistration = cpfPeopleRegistrationState.replace(/\D/g, '')
-        if (cpfPeopleRegistration.length !== 11) {
-            alert.error("cpf inválido")
+        if (logisticOperatorFromAPI === "Externa") {
+            if (cpfPeopleRegistration.length !== 11) {
+                alert.error("cpf inválido")
+            }
         }
         else if (scooter === "" || logisticOperator === "") {
             alert.error("preencha todos os campos obrigatórios")
