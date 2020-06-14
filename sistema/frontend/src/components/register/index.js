@@ -25,7 +25,7 @@ export default function Register() {
         id: "",
         description: ""
     }])
-    const [stateValueSelect, setStateValueSelect] = useState("delivery-man")
+    const [stateValueSelect, setStateValueSelect] = useState("logistic-operator")
 
     useEffect(() => {
         dispatch(getStatusScooters())
@@ -138,8 +138,8 @@ export default function Register() {
                     <div className="register-type">
                         <label>Tipo de cadastro</label>
                         <select name="register-type" onChange={handleChange}>
-                            <option value="delivery-man">Entregador</option>
                             <option value="logistic-operator">Operador Oligstico</option>
+                            <option value="delivery-man">Entregador</option>
                             <option value="scooter">Patinete</option>
                         </select>
                     </div>

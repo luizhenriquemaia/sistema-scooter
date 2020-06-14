@@ -218,7 +218,7 @@ export default function Movements() {
 
     if (shouldGetMovements === false) {
         return (
-            <div className="content">
+            <main className="content">
                 <h1 className="title-page">Movimentações Patenetes</h1>
                 <div>
                     <label>Data</label>
@@ -297,12 +297,12 @@ export default function Movements() {
                         ))}
                     </tbody>
                 </table>
-            </div>
+            </main>
         )
     }
     else {
         return (
-            <div className="content">
+            <main className="content">
                 <h1 className="title-page">Movimentações Patenetes</h1>
                 <div>
                     <label>Data</label>
@@ -340,7 +340,7 @@ export default function Movements() {
                     <tbody>
                     </tbody>
                 </table>
-            </div>
+            </main>
         )
     }
 }

@@ -16,6 +16,7 @@ export default function Menu() {
                     <div className="userBox">
                         <img src='../../../static/imgs/mulher_1.png'/>
                         <p>Admin</p>
+                        <img className="exit-img" src='../../../static/imgs/sair.png'/>
                     </div>
                     <hr />
                     <Link to="/register">
@@ -30,14 +31,6 @@ export default function Menu() {
                             <p>nova movimentação</p>
                         </div>
                     </Link>
-                        <div className="navSubBox">  {/* exemplo de submenu caso seja necessáiro futuramente */}
-                            <Link to="./internal-movement">
-                                <div className="navBox">
-                                    <img src="../../../static/imgs/carimbo_1.png" />
-                                    <p>movimentação interna</p>
-                                </div>
-                            </Link>
-                        </div>
                     <Link to="/">    
                         <div className="navBox">
                             <img src="../../../static/imgs/lista-de-controle_1.png" />

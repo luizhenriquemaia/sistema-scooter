@@ -71,10 +71,18 @@
     width: 50px;
 }
 
+.userBox img.exit-img {
+    width: 35px;
+}
+
 .userBox p, .navBox p {
     text-transform: capitalize;
     color: #f6f6f6;
     padding-left: 12px;
+}
+
+.userBox p {
+    padding: 0 106px 0 12px;
 }
 
 .navSubBox::-webkit-scrollbar {
