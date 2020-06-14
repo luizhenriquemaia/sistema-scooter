@@ -52,6 +52,7 @@ export default function Movements() {
     const [filtersMovements, setFiltersMovements] = useState({
         filterInitialDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
         filterFinalDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
+        filterShowFinalDate: false,
         filterShowReturnedScooters: true,
         filterTypesMovements: "",
         filterShowJustOneOL: "",
@@ -226,6 +227,8 @@ export default function Movements() {
                     <button onClick={handleSetFilters}>Aplicar Filtros</button>
                 </div>
                 <div>
+                    <label>Mostrar Data Final</label>
+                    <input type="checkbox" name="filterShowFinalDate" checked={filtersMovements.filterShowFinalDate} onChange={handleCheckFilter} />
                     <label>Mostrar Patinetes Devolvidos</label>
                     <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
                     <label>Mostrar Apenas Movimentações do Tipo</label>
@@ -255,7 +258,8 @@ export default function Movements() {
                 <table className="table-movements">
                     <thead>
                         <tr>
-                            <th>Data</th>
+                            <th>Data Inicial</th>
+                            {filtersMovements.filterShowFinalDate ? <th>Data final</th> : <th></th>}
                             <th>Chassi</th>
                             <th>Entregador</th>
                             <th>OL</th>
@@ -273,6 +277,11 @@ export default function Movements() {
                         {MovementState.map(movement => (
                             <tr key={movement.id}>
                                 <td onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
+                                {
+                                    filtersMovements.filterShowFinalDate ? 
+                                    <td onClick={() => handleGoToDetails(movement.id)}>{movement.finalDateMovement}</td> :
+                                    <td></td>
+                                }
                                 <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
                                 <td>{movement.peopleRegistration ? movement.peopleRegistration.name : ""}</td>
                                 <td>{movement.logisticOperator ? movement.logisticOperator.description : ""}</td>
