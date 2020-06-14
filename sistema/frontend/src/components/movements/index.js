@@ -285,7 +285,7 @@ export default function Movements() {
                                 <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
                                 <td>{movement.peopleRegistration ? movement.peopleRegistration.name : ""}</td>
                                 <td>{movement.logisticOperator ? movement.logisticOperator.description : ""}</td>
-                                <td>{movement.typeMovement.description}</td>
+                                <td>{movement.typeMovement ? movement.typeMovement.description : ""}</td>
                                 <td>{movement.timePickUpFormatted}</td>
                                 <td>{movement.timeReturnFormatted}</td>
                                 <td><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
