@@ -15,19 +15,22 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 movement: action.payload,
-                isDetails: false
+                isDetails: false,
+                isAdd: false
             }
         case GET_MOVEMENT:
             return {
                 ...state,
                 movement: action.payload,
-                isDetails: true
+                isDetails: true,
+                isAdd: false
             }
         case GET_TYPES_MOVEMENT:
             return {
                 ...state,
                 typesMovement: action.payload,
-                isDetails: false
+                isDetails: false,
+                isAdd: false
             }
         case DELETE_MOVEMENT:
             return {
