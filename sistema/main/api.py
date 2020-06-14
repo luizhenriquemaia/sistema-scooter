@@ -113,7 +113,7 @@ class PeopleRegistrationViewSet(viewsets.ViewSet):
                 return Response("OL não cadastrada", status=status.HTTP_400_BAD_REQUEST)
             request.data['logisticOperator_id'] = LogisticOperator.objects.get(
                 id=request.data['logisticOperatorPeopleRegistration']).id
-            if request.data['typePeopleToAPI'] != "entregador" and request.data['typePeopleToAPI'] != "manutencao":
+            if request.data['typePeopleToAPI'] != "entregador" and request.data['typePeopleToAPI'] != "Manuteção":
                 return Response("Tipo de pessoa incorreto", status=status.HTTP_400_BAD_REQUEST)
             request.data['typePeople_id'] = TypePeople.objects.get_or_create(description=request.data['typePeopleToAPI'])[0].id
             serializer = PeopleRegistrationSerializer(data=request.data)
@@ -132,21 +132,19 @@ class MovementViewSet(viewsets.ViewSet):
     def list(self, request):
         query_from_url_initial_date = request.GET.get("initialDate")
         query_from_url_final_date = request.GET.get("finalDate")
-        query_from_url_type_movement = request.GET.get("typeMovement")
-        typeMovement = TypeMovement.objects.get(description=query_from_url_type_movement).id
         if request.user.is_staff or request.user.is_superuser:
             if query_from_url_initial_date and query_from_url_final_date:
                 queryset_list = Movement.objects.filter(intialDateMovement__range=(
-                    query_from_url_initial_date, query_from_url_final_date), typeMovement=typeMovement)
+                    query_from_url_initial_date, query_from_url_final_date))
             else:
-                queryset_list = Movement.objects.filter(intialDateMovement=datetime.today(), typeMovement=typeMovement)
+                queryset_list = Movement.objects.filter(intialDateMovement=datetime.today())
         else:
             if query_from_url_initial_date and query_from_url_final_date:
                 queryset_list = Movement.objects.filter(intialDateMovement__range=(
-                    query_from_url_initial_date, query_from_url_final_date), owner=request.user, typeMovement=typeMovement)
+                    query_from_url_initial_date, query_from_url_final_date), owner=request.user)
             else:
                 queryset_list = Movement.objects.filter(
-                    intialDateMovement=datetime.today(), owner=request.user, typeMovement=typeMovement)
+                    intialDateMovement=datetime.today(), owner=request.user)
         serializer = MovementSerializer(queryset_list, many=True)
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -179,7 +177,7 @@ class MovementViewSet(viewsets.ViewSet):
             request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
             if request.data['typeRelease'] != 'devolução':
                 if request.data['typeMovement'] != 'entregas':
-                    if request.data['typeMovement'] != 'manutencao':
+                    if request.data['typeMovement'] != 'Manuteção':
                         return Response("Tipo de movimentação incorreta", status=status.HTTP_400_BAD_REQUEST)
                 request.data['typeMovement_id'] = TypeMovement.objects.get_or_create(description=request.data['typeMovement'])[0].id
                 scooter_db = Scooter.objects.get(id=request.data['scooter_id'])

@@ -1,14 +1,14 @@
 import axios from 'axios'
-import { GET_INTERNAL_MOVEMENTS, GET_EXTERNAL_MOVEMENTS, GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from './types'
+import { GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from './types'
 import { returnErrors } from './messages'
 
 
-export const getMovements = (typeMovement) => {
+export const getMovements = () => {
     return dispatch => {
-        axios.get(`/api/movement/?typeMovement=${typeMovement}`)
+        axios.get(`/api/movement/`)
             .then(res => {
                 dispatch({
-                    type: (typeMovement === "entregas") ? GET_EXTERNAL_MOVEMENTS : GET_INTERNAL_MOVEMENTS,
+                    type: GET_MOVEMENTS,
                     payload: res.data
                 })
             })
@@ -17,9 +17,9 @@ export const getMovements = (typeMovement) => {
 }
 
 
-export const getMovementsWithFilters = (filters, typeMovement) => {
+export const getMovementsWithFilters = (filters) => {
     return dispatch => {
-        axios.get(`/api/movement/?initialDate=${filters.filterInitialDate}&finalDate=${filters.filterFinalDate}&typeMovement=${typeMovement}`)
+        axios.get(`/api/movement/?initialDate=${filters.filterInitialDate}&finalDate=${filters.filterFinalDate}`)
             .then(res => {
                 dispatch({
                     type: GET_MOVEMENTS,
