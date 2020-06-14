@@ -296,7 +296,7 @@ export default function Movements() {
                                         <td><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
                                         <td><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
                                         <td><input type="checkbox" checked={movement.accessoriesCharger} disabled /></td>
-                                       <td onClick={() => h andleDeleteMovement(movement.id)}>Delete</td>
+                                       <td onClick={() => handleDeleteMovement(movement.id)}>Delete</td>
                                     </tr>
                                 ))}
                             </tbody>
