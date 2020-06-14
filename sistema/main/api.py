@@ -201,8 +201,9 @@ class MovementViewSet(viewsets.ViewSet):
         if request.user.is_staff:
             try:
                 request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
-                request.data['logisticOperator_id'] = LogisticOperator.objects.get(description=request.data['LO']).id
-                request.data['peopleRegistration_id'] = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration']).id
+                request.data['logisticOperator_id'] = LogisticOperator.objects.get(id=request.data['LO']).id
+                if request.data['cpfPeopleRegistration']:
+                    request.data['peopleRegistration_id'] = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration']).id
                 if request.data['initialTimeFormatted'] != "":
                     request.data['pickUpTime'] = request.data['initialTimeFormatted']
                 if request.data['finalTimeFormatted'] != "":
