@@ -203,6 +203,12 @@ class MovementViewSet(viewsets.ViewSet):
                 people_registration_movement = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistrationState'])
                 request.data['logisticOperator_id'] = people_registration_movement.logisticOperator_id
                 request.data['peopleRegistration_id'] = people_registration_movement.id
+            # internal movements does not need accessories
+            elif request.data['typeOfMovement'] == "Interna":
+                request.data['accessoriesHelmet'] = False
+                request.data['accessoriesBag'] = False
+                request.data['accessoriesCase'] = False
+                request.data['accessoriesCharger'] = False
             serializer = MovementSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 new_movement = serializer.save(owner=self.request.user)

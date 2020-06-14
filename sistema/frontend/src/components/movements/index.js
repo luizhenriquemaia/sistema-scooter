@@ -52,7 +52,9 @@ export default function Movements() {
     const [filtersMovements, setFiltersMovements] = useState({
         filterInitialDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
         filterFinalDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
+        filterShowFinalDate: false,
         filterShowReturnedScooters: true,
+        filterTypesMovements: "",
         filterShowJustOneOL: "",
         filterByNamePeopleRegistration: "",
         filterByChassis: ""
@@ -62,6 +64,7 @@ export default function Movements() {
     const movements = useSelector(state => state.movements.movement)
     const scooters = useSelector(state => state.scooters.scooter)
     const isDetails = useSelector(state => state.movements.isDetails)
+    const isAdd = useSelector(state => state.movements.isAdd)
 
 
     const formattingTime = (dateMovement, timeMovement) => {
@@ -74,7 +77,7 @@ export default function Movements() {
 
     useEffect(() => {
         if (movements.length !== 0 && movements !== undefined) {
-            if (isDetails === false) {
+            if (isDetails === false && isAdd === false) {
                 movements.map(movement => {
                     movement.timePickUpFormatted = formattingTime(movement.intialDateMovement, movement.pickUpTime)
                     if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.intialDateMovement, movement.returnTime)
@@ -160,6 +163,11 @@ export default function Movements() {
             if (filtersMovements.filterShowReturnedScooters) {
                 setMovementState(movements)
             }
+            if (filtersMovements.filterTypesMovements) {
+                if (filtersMovements.filterTypesMovements !== "") {
+                    setMovementState(movements.filter(movement => movement.typeMovement.description === filtersMovements.filterTypesMovements))
+                }
+            }
             if (filtersMovements.filterShowJustOneOL) {
                 if (filtersMovements.filterShowJustOneOL !== "") {
                     setMovementState(movements.filter(movement => movement.logisticOperator.description === filtersMovements.filterShowJustOneOL))
@@ -167,7 +175,7 @@ export default function Movements() {
             }
             if (filtersMovements.filterByNamePeopleRegistration) {
                 if (filtersMovements.filterByNamePeopleRegistration !== "") {
-                    setMovementState(movements.filter(movement => movement.peopleRegistration.name === filtersMovements.filterByNamePeopleRegistration))
+                    setMovementState(movements.filter(movement => movement.peopleRegistration ? movement.peopleRegistration.name === filtersMovements.filterByNamePeopleRegistration : movement.peopleRegistration === filtersMovements.filterByNamePeopleRegistration))
                 }
             }
             if (filtersMovements.filterByChassis) {
@@ -200,7 +208,7 @@ export default function Movements() {
         if (filterInitialDate && filterFinalDate) {
             if (filterInitialDate <= filterFinalDate) {
                 const filtersMovements = { filterInitialDate, filterFinalDate }
-                dispatch(getMovementsWithFilters(filtersMovements, "entregas"))
+                dispatch(getMovementsWithFilters(filtersMovements))
             }
             else {
                 alert.error("initial date must be before final date")
@@ -219,8 +227,12 @@ export default function Movements() {
                     <button onClick={handleSetFilters}>Aplicar Filtros</button>
                 </div>
                 <div>
+                    <label>Mostrar Data Final</label>
+                    <input type="checkbox" name="filterShowFinalDate" checked={filtersMovements.filterShowFinalDate} onChange={handleCheckFilter} />
                     <label>Mostrar Patinetes Devolvidos</label>
                     <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
+                    <label>Mostrar Apenas Movimentações do Tipo</label>
+                    <input type="text" name="filterTypesMovements" value={filtersMovements.filterTypesMovements || ''} onChange={handleFiltersChange} />
                     <label>Mostrar Apenas a OL</label>
                     <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
                     <label>Mostrar Apenas o Entregador</label>
@@ -246,7 +258,8 @@ export default function Movements() {
                 <table className="table-movements">
                     <thead>
                         <tr>
-                            <th>Data</th>
+                            <th>Data Inicial</th>
+                            {filtersMovements.filterShowFinalDate ? <th>Data final</th> : <th></th>}
                             <th>Chassi</th>
                             <th>Entregador</th>
                             <th>OL</th>
@@ -264,6 +277,11 @@ export default function Movements() {
                         {MovementState.map(movement => (
                             <tr key={movement.id}>
                                 <td onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
+                                {
+                                    filtersMovements.filterShowFinalDate ? 
+                                    <td onClick={() => handleGoToDetails(movement.id)}>{movement.finalDateMovement}</td> :
+                                    <td></td>
+                                }
                                 <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
                                 <td>{movement.peopleRegistration ? movement.peopleRegistration.name : ""}</td>
                                 <td>{movement.logisticOperator ? movement.logisticOperator.description : ""}</td>

@@ -103,6 +103,7 @@ export default function detailsMovement() {
         setIdMovement(idMovementParams)
     }, [idMovementParams])
 
+
     const handleChange = e => {
         const { name, value } = e.target
         setMovementState({
@@ -126,7 +127,6 @@ export default function detailsMovement() {
         dispatch(updateMovement(idMovement, updateMovementData))
         history.push("/")
     }
-
 
     return (
         <div className="content">

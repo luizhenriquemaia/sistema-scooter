@@ -147,9 +147,14 @@ class Movement(models.Model):
 
     def create(self, **validated_data):
         scooter_db = Scooter.objects.get(id=validated_data['scooter_id'])
+        # case of movement without peopleRegistration
+        try:
+            movement.peopleRegistration = PeopleRegistration.objects.get(
+                id=validated_data['peopleRegistration_id'])
+        except KeyError:
+            pass
         new_movement = Movement(
             scooter=scooter_db,
-            peopleRegistration=PeopleRegistration.objects.get(id=validated_data['peopleRegistration_id']),
             logisticOperator=LogisticOperator.objects.get(id=validated_data['logisticOperator_id']),
             typeMovement=TypeMovement.objects.get(id=validated_data['typeMovement_id']),
             intialDateMovement=date.today(),
@@ -163,12 +168,19 @@ class Movement(models.Model):
         )
         new_movement.save()
         # update status of scooter
-        scooter_db.status = StatusScooter.objects.get_or_create(description="Em uso")[0]
-        scooter_db.save()
+        type_movement_db = TypeMovement.objects.get(
+            id=new_movement.typeMovement.id)
+        if type_movement_db.description == "Externa":
+            scooter_db.status = StatusScooter.objects.get_or_create(
+                description="Em uso")[0]
+            scooter_db.save()
+        elif type_movement_db.description == "Interna":
+            scooter_db.status = StatusScooter.objects.get_or_create(
+                description="Manutenção")[0]
+            scooter_db.save()
         return new_movement
     
     def update(self, movement, **validated_data):
-        print(f"\n\n\n{validated_data}\n\n\n")
         scooter_db = Scooter.objects.get(id=validated_data['scooter_id'])
         movement.scooter = scooter_db
         # case of movement without peopleRegistration
@@ -192,27 +204,27 @@ class Movement(models.Model):
             else:
                 movement.returnTime = validated_data['returnTime']
                 movement.finalDateMovement = validated_data['finalDateMovement']
-            if movement.typeMovement == "Externo":
-                if validated_data['destinyScooter'] == "Manutenção":
-                    scooter_db.status = StatusScooter.objects.get_or_create(
-                        description="Manutenção")[0]
-                    scooter_db.save()
-                    # create a internal movement to send scooter to repair
-                    type_movement_db = TypeMovement.objects.get_or_create(
-                        description="Interno")[0]
-                    new_internal_movement = Movement(
-                        scooter = scooter_db,
-                        logisticOperator = movement.logisticOperator,
-                        typeMovement = type_movement_db,
-                        intialDateMovement=date.today(),
-                        pickUpTime=datetime.now().time(),
-                        owner=movement.owner
-                    )
-                    new_internal_movement.save()
-                elif validated_data['destinyScooter'] == "Base":
-                    scooter_db.status = StatusScooter.objects.get_or_create(
-                        description="Disponível")[0]
-                    scooter_db.save()
+            type_movement_db = TypeMovement.objects.get(id=movement.typeMovement.id)
+            if type_movement_db.description == "Externa" and validated_data['destinyScooter'] == "Manutenção":
+                scooter_db.status = StatusScooter.objects.get_or_create(
+                    description="Manutenção")[0]
+                scooter_db.save()
+                # create a internal movement to send scooter to repair
+                type_movement_db = TypeMovement.objects.get_or_create(
+                    description="Interno")[0]
+                new_internal_movement = Movement(
+                    scooter = scooter_db,
+                    logisticOperator = movement.logisticOperator,
+                    typeMovement = type_movement_db,
+                    intialDateMovement=date.today(),
+                    pickUpTime=datetime.now().time(),
+                    owner=movement.owner
+                )
+                new_internal_movement.save()
+            if validated_data['destinyScooter'] == "Base":
+                scooter_db.status = StatusScooter.objects.get_or_create(
+                    description="Disponível")[0]
+                scooter_db.save()
             movement.destinyScooter = validated_data['destinyScooter']
         movement.save()
         return movement

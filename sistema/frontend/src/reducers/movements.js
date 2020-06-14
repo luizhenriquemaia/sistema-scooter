@@ -5,6 +5,7 @@ import { GET_MOVEMENTS, GET_MOVEMENT, GET_TYPES_MOVEMENT, DELETE_MOVEMENT, ADD_M
 const initialState = {
     movement: [],
     isDetails: false,
+    isAdd: false,
     typesMovement: []
 }
 
@@ -14,19 +15,22 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 movement: action.payload,
-                isDetails: false
+                isDetails: false,
+                isAdd: false
             }
         case GET_MOVEMENT:
             return {
                 ...state,
                 movement: action.payload,
-                isDetails: true
+                isDetails: true,
+                isAdd: false
             }
         case GET_TYPES_MOVEMENT:
             return {
                 ...state,
                 typesMovement: action.payload,
-                isDetails: true
+                isDetails: false,
+                isAdd: false
             }
         case DELETE_MOVEMENT:
             return {
@@ -36,7 +40,8 @@ export default function (state = initialState, action) {
         case ADD_MOVEMENT:
             return {
                 ...state,
-                movement: [...state.movement, action.payload]
+                movement: [...state.movement, action.payload],
+                isAdd: true
             }
         case UPDATE_MOVEMENT:
             return {

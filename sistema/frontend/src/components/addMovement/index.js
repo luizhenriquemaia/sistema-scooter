@@ -28,13 +28,13 @@ export default function addMovementComponent() {
         dispatch(getLogisticOperator())
     }, [])
 
-    const logisticOperator = useSelector(state => state.logisticOperator.logisticOperator)
+    const logisticOperatorReducer = useSelector(state => state.logisticOperator.logisticOperator)
 
    useEffect(() => {
-        if (logisticOperator !== undefined && logisticOperator !== "") {
-            setLogisticOperatorFromAPI(logisticOperator)
+        if (logisticOperatorReducer !== undefined && logisticOperatorReducer !== "") {
+            setLogisticOperatorFromAPI(logisticOperatorReducer)
         }
-    }, [logisticOperator])
+    }, [logisticOperatorReducer])
 
 
     const handleChange = e => {
@@ -74,23 +74,24 @@ export default function addMovementComponent() {
     }
 
     const handleClickAdd = e => {
-        const { scooter, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
+        const { scooter, cpfPeopleRegistrationState, logisticOperator, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfPeopleRegistration = cpfPeopleRegistrationState.replace(/\D/g, '')
-        if (cpfPeopleRegistration.length !== 11) {
-            alert.error("cpf inválido")
+        if (logisticOperatorFromAPI === "Externa") {
+            if (cpfPeopleRegistration.length !== 11) {
+                alert.error("cpf inválido")
+            }
         }
         else if (scooter === "" || logisticOperator === "") {
             alert.error("preencha todos os campos obrigatórios")
         }
         else {
-            var logisticOperator_id = logisticOperatorFromAPI
+            var logisticOperator_id = logisticOperator
             var typeOfMovement = typeOfMovementSelect
             var newMovementToAPI = { typeOfMovement, logisticOperator_id, scooter, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
             dispatch(postMovement(newMovementToAPI))
             setNewMovementState({
                 scooter: "",
                 cpfPeopleRegistrationState: "",
-                logisticOperator: "",
                 accessoriesHelmet: false,
                 accessoriesBag: false,
                 accessoriesCase: false,
