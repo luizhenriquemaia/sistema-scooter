@@ -130,7 +130,7 @@ export default function Register() {
 
     return (
         <main className="content">
-            <section className="section-box register-section">
+            <section className="section-main-box register-section">
                 <div className="title-box">
                     <h1 className="title-page">Cadastros</h1>
                 </div>
@@ -138,7 +138,7 @@ export default function Register() {
                     <div className="register-type">
                         <label>Tipo de cadastro</label>
                         <select name="register-type" onChange={handleChange}>
-                            <option value="logistic-operator">Operador Oligstico</option>
+                            <option value="logistic-operator">Operador Logístico</option>
                             <option value="delivery-man">Entregador</option>
                             <option value="scooter">Patinete</option>
                         </select>

@@ -219,127 +219,139 @@ export default function Movements() {
     if (shouldGetMovements === false) {
         return (
             <main className="content">
-                <h1 className="title-page">Movimentações Patenetes</h1>
-                <div>
-                    <label>Data</label>
-                    <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
-                    <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
-                    <button onClick={handleSetFilters}>Aplicar Filtros</button>
-                </div>
-                <div>
-                    <label>Mostrar Data Final</label>
-                    <input type="checkbox" name="filterShowFinalDate" checked={filtersMovements.filterShowFinalDate} onChange={handleCheckFilter} />
-                    <label>Mostrar Patinetes Devolvidos</label>
-                    <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
-                    <label>Mostrar Apenas Movimentações do Tipo</label>
-                    <input type="text" name="filterTypesMovements" value={filtersMovements.filterTypesMovements || ''} onChange={handleFiltersChange} />
-                    <label>Mostrar Apenas a OL</label>
-                    <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
-                    <label>Mostrar Apenas o Entregador</label>
-                    <input type="text" name="filterByNamePeopleRegistration" value={filtersMovements.filterByNamePeopleRegistration || ''} onChange={handleFiltersChange} />
-                    <label>Mostrar Apenas o Patinete</label>
-                    <input type="text" name="filterByChassis" value={filtersMovements.filterByChassis || ''} onChange={handleFiltersChange} />
-                </div>
-                <div>
-                    <label>Patinetes Totais</label>
-                    <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
-                    <label>Patinetes Disponíveis</label>
-                    <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
-                    <label>Patinetes Sendo Utilizados</label>
-                    <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
-                    <label>Patinetes Operantes</label>
-                    <input type="text" value={NumbersOfScootersState.numberOfScootersOperants} disabled  />
-                    <label>Patinetes em Manutenção</label>
-                    <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
-                    <label>Patinetes em Backup</label>
-                    <input type="text" value={NumbersOfScootersState.numberOfScootersInBackup} disabled />
-                </div>
+                <section className="section-main-box movement-section">
+                    <div className="title-box">
+                        <h1 className="title-page">Movimentações Patenetes</h1>
+                    </div>
+                    <section className="content-box">
+                        <div>
+                            <label>Data</label>
+                            <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
+                            <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
+                            <button onClick={handleSetFilters}>Aplicar Filtros</button>
+                        </div>
+                        <div>
+                            <label>Mostrar Data Final</label>
+                            <input type="checkbox" name="filterShowFinalDate" checked={filtersMovements.filterShowFinalDate} onChange={handleCheckFilter} />
+                            <label>Mostrar Patinetes Devolvidos</label>
+                            <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
+                            <label>Mostrar Apenas Movimentações do Tipo</label>
+                            <input type="text" name="filterTypesMovements" value={filtersMovements.filterTypesMovements || ''} onChange={handleFiltersChange} />
+                            <label>Mostrar Apenas a OL</label>
+                            <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
+                            <label>Mostrar Apenas o Entregador</label>
+                            <input type="text" name="filterByNamePeopleRegistration" value={filtersMovements.filterByNamePeopleRegistration || ''} onChange={handleFiltersChange} />
+                            <label>Mostrar Apenas o Patinete</label>
+                            <input type="text" name="filterByChassis" value={filtersMovements.filterByChassis || ''} onChange={handleFiltersChange} />
+                        </div>
+                        <div>
+                            <label>Patinetes Totais</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                            <label>Patinetes Disponíveis</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                            <label>Patinetes Sendo Utilizados</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                            <label>Patinetes Operantes</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersOperants} disabled  />
+                            <label>Patinetes em Manutenção</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
+                            <label>Patinetes em Backup</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersInBackup} disabled />
+                        </div>
 
-                <table className="table-movements">
-                    <thead>
-                        <tr>
-                            <th>Data Inicial</th>
-                            {filtersMovements.filterShowFinalDate ? <th>Data final</th> : <th></th>}
-                            <th>Chassi</th>
-                            <th>Entregador</th>
-                            <th>OL</th>
-                            <th>Tipo</th>
-                            <th>Hora Retirada</th>
-                            <th>Hora Devolução</th>
-                            <th>Capacete</th>
-                            <th>Bag</th>
-                            <th>Case</th>
-                            <th>Carregador</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {MovementState.map(movement => (
-                            <tr key={movement.id}>
-                                <td onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
-                                {
-                                    filtersMovements.filterShowFinalDate ? 
-                                    <td onClick={() => handleGoToDetails(movement.id)}>{movement.finalDateMovement}</td> :
-                                    <td></td>
-                                }
-                                <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
-                                <td>{movement.peopleRegistration ? movement.peopleRegistration.name : ""}</td>
-                                <td>{movement.logisticOperator ? movement.logisticOperator.description : ""}</td>
-                                <td>{movement.typeMovement.description}</td>
-                                <td>{movement.timePickUpFormatted}</td>
-                                <td>{movement.timeReturnFormatted}</td>
-                                <td><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
-                                <td><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
-                                <td><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
-                                <td><input type="checkbox" checked={movement.accessoriesCharger} disabled /></td>
-                                <td onClick={() => handleDeleteMovement(movement.id)}>Delete</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        <table className="table-movements">
+                            <thead>
+                                <tr>
+                                    <th>Data Inicial</th>
+                                    {filtersMovements.filterShowFinalDate ? <th>Data final</th> : <th></th>}
+                                    <th>Chassi</th>
+                                    <th>Entregador</th>
+                                    <th>OL</th>
+                                    <th>Tipo</th>
+                                    <th>Hora Retirada</th>
+                                    <th>Hora Devolução</th>
+                                    <th>Capacete</th>
+                                    <th>Bag</th>
+                                    <th>Case</th>
+                                    <th>Carregador</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {MovementState.map(movement => (
+                                    <tr key={movement.id}>
+                                        <td onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
+                                        {
+                                            filtersMovements.filterShowFinalDate ? 
+                                            <td onClick={() => handleGoToDetails(movement.id)}>{movement.finalDateMovement}</td> :
+                                            <td></td>
+                                        }
+                                        <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
+                                        <td>{movement.peopleRegistration ? movement.peopleRegistration.name : ""}</td>
+                                        <td>{movement.logisticOperator ? movement.logisticOperator.description : ""}</td>
+                                        <td>{movement.typeMovement.description}</td>
+                                        <td>{movement.timePickUpFormatted}</td>
+                                        <td>{movement.timeReturnFormatted}</td>
+                                        <td><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
+                                        <td><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
+                                        <td><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
+                                        <td><input type="checkbox" checked={movement.accessoriesCharger} disabled /></td>
+                                        <td onClick={() => handleDeleteMovement(movement.id)}>Delete</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </section>
+                </section>
             </main>
         )
     }
     else {
         return (
             <main className="content">
-                <h1 className="title-page">Movimentações Patenetes</h1>
-                <div>
-                    <label>Data</label>
-                    <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
-                    <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
-                    <button onClick={handleSetFilters}>Aplicar Filtros</button>
-                </div>
-                <div>
-                    <label>Patinetes Totais</label>
-                    <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
-                    <label>Patinetes Disponíveis</label>
-                    <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
-                    <label>Patinetes Sendo Utilizados</label>
-                    <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
-                    <label>Patinetes em Manutenção</label>
-                    <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
-                </div>
+                <section className="section-main-box movement-section">
+                    <div className="title-box">
+                        <h1 className="title-page">Movimentações Patenetes</h1>
+                    </div>
+                    <section className="content-box">
+                        <div>
+                            <label>Data</label>
+                            <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
+                            <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
+                            <button onClick={handleSetFilters}>Aplicar Filtros</button>
+                        </div>
+                        <div>
+                            <label>Patinetes Totais</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                            <label>Patinetes Disponíveis</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                            <label>Patinetes Sendo Utilizados</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                            <label>Patinetes em Manutenção</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
+                        </div>
 
-                <table className="table-movements">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Chassi</th>
-                            <th>Entregador</th>
-                            <th>OL</th>
-                            <th>Hora Retirada</th>
-                            <th>Hora Devolução</th>
-                            <th>Capacete</th>
-                            <th>Bag</th>
-                            <th>Case</th>
-                            <th>Carregador</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                        <table className="table-movements">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Chassi</th>
+                                    <th>Entregador</th>
+                                    <th>OL</th>
+                                    <th>Hora Retirada</th>
+                                    <th>Hora Devolução</th>
+                                    <th>Capacete</th>
+                                    <th>Bag</th>
+                                    <th>Case</th>
+                                    <th>Carregador</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </section>
+                </section>
             </main>
         )
     }

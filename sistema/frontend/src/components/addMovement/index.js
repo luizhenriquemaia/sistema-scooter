@@ -103,7 +103,7 @@ export default function addMovementComponent() {
 
     return (
         <main className="content">
-            <section className="section-box movement-section">
+            <section className="section-main-box movement-section">
                 <div className="title-box">
                     <h1 className="title-page">Adicionar Movimentação</h1>
                 </div>
