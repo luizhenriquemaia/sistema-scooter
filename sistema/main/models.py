@@ -94,7 +94,7 @@ class PeopleRegistration(models.Model):
 
 class Movement(models.Model):
     scooter = models.ForeignKey(Scooter, on_delete=models.CASCADE, null=True)
-    peopleRegistration = models.ForeignKey(PeopleRegistration, on_delete=models.CASCADE, null=True)
+    peopleRegistration = models.ForeignKey(PeopleRegistration, on_delete=models.CASCADE, null=True, blank=True)
     logisticOperator = models.ForeignKey(
         LogisticOperator, on_delete=models.CASCADE, null=True)
     typeMovement = models.ForeignKey(TypeMovement, on_delete=models.CASCADE, null=True)
@@ -182,10 +182,15 @@ class Movement(models.Model):
         return new_movement
     
     def update(self, movement, **validated_data):
+        print(f"\n\n\n{validated_data}\n\n\n")
         scooter_db = Scooter.objects.get(id=validated_data['scooter_id'])
         movement.scooter = scooter_db
-        movement.peopleRegistration = PeopleRegistration.objects.get(
-            id=validated_data['peopleRegistration_id'])
+        # case of movement without peopleRegistration
+        try:
+            movement.peopleRegistration = PeopleRegistration.objects.get(
+                id=validated_data['peopleRegistration_id'])
+        except KeyError:
+            pass
         movement.logisticOperator = LogisticOperator.objects.get(id=validated_data['logisticOperator_id'])
         movement.accessoriesHelmet = validated_data['accessoriesHelmet']
         movement.accessoriesBag = validated_data['accessoriesBag']
@@ -201,26 +206,27 @@ class Movement(models.Model):
             else:
                 movement.returnTime = validated_data['returnTime']
                 movement.finalDateMovement = validated_data['finalDateMovement']
-            if validated_data['destinyScooter'] == "Manutenção":
-                scooter_db.status = StatusScooter.objects.get_or_create(
-                    description="Manutenção")[0]
-                scooter_db.save()
-                # create a internal movement to "Manutenção"
-                type_movement_db = TypeMovement.objects.get_or_create(
-                    description="Manutenção")[0]
-                new_internal_movement = Movement(
-                    scooter = scooter_db,
-                    logisticOperator = movement.logisticOperator,
-                    typeMovement = type_movement_db,
-                    intialDateMovement=date.today(),
-                    pickUpTime=datetime.now().time(),
-                    owner=movement.owner
-                )
-                new_internal_movement.save()
-            elif validated_data['destinyScooter'] == "Base":
-                scooter_db.status = StatusScooter.objects.get_or_create(
-                    description="Disponível")[0]
-                scooter_db.save()
+            if movement.typeMovement == "Entregas":
+                if validated_data['destinyScooter'] == "Manutenção":
+                    scooter_db.status = StatusScooter.objects.get_or_create(
+                        description="Manutenção")[0]
+                    scooter_db.save()
+                    # create a internal movement to "Manutenção"
+                    type_movement_db = TypeMovement.objects.get_or_create(
+                        description="Manutenção")[0]
+                    new_internal_movement = Movement(
+                        scooter = scooter_db,
+                        logisticOperator = movement.logisticOperator,
+                        typeMovement = type_movement_db,
+                        intialDateMovement=date.today(),
+                        pickUpTime=datetime.now().time(),
+                        owner=movement.owner
+                    )
+                    new_internal_movement.save()
+                elif validated_data['destinyScooter'] == "Base":
+                    scooter_db.status = StatusScooter.objects.get_or_create(
+                        description="Disponível")[0]
+                    scooter_db.save()
             movement.destinyScooter = validated_data['destinyScooter']
         movement.save()
         return movement
