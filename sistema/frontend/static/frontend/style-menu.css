@@ -174,7 +174,8 @@ section.register-section {
     height: auto;
     max-height: 0;
     overflow: hidden;
-    transition:  max-height ease-out 0.3s, padding linear 0.1s;
+    padding: 0px;
+    transition: max-height ease-out 0.3s, padding ease-out 0.3s;
 }
 
 .logistic-operator .register-data.logistic-operator,
@@ -262,6 +263,7 @@ section.register-section {
     .scooter .register-data.scooter {
         padding: 7% 5%;
     }
+}
 
 
 
