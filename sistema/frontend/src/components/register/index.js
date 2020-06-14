@@ -13,7 +13,6 @@ export default function Register() {
         logisticOperatorDescription: "",
         peopleRegistrationName: "",
         cpfPeopleRegistration: "",
-        typePeople: "",
         logisticOperatorPeopleRegistration: "",
         chassisScooter: "",
         statusScooter: ""
@@ -68,7 +67,6 @@ export default function Register() {
             logisticOperatorDescription: "",
             peopleRegistrationName: "",
             cpfPeopleRegistration: "",
-            typePeople: "",
             logisticOperatorPeopleRegistration: "",
             chassisScooter: "",
             statusScooter: ""
@@ -86,13 +84,11 @@ export default function Register() {
                 alert.error("preencha todos os campos")
             }
             else {
-                var typePeopleToAPI = "entregador"
-                var newRegisterToAPI = { peopleRegistrationName, typePeopleToAPI, cpfPeopleRegistrationToAPI, logisticOperatorPeopleRegistration }
+                var newRegisterToAPI = { peopleRegistrationName, cpfPeopleRegistrationToAPI, logisticOperatorPeopleRegistration }
                 dispatch(addPeopleRegistration(newRegisterToAPI))
                 setRegisterState({
                     peopleRegistrationName: "",
                     cpfPeopleRegistration: "",
-                    typePeople: ""
                 })
             }
         }

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
-from .models import StatusScooter, TypeMovement, TypePeople, LogisticOperator, Scooter, PeopleRegistration, Movement
+from .models import StatusScooter, TypeMovement, LogisticOperator, Scooter, PeopleRegistration, Movement
 from .serializers import UserSerializer, StatusScooterSerializer, TypeMovementSerializer, LogisticOperatorSerializer, ScooterSerializer, PeopleRegistrationSerializer, MovementSerializer, MovementRetrieveSerializer
 
 
@@ -132,9 +132,6 @@ class PeopleRegistrationViewSet(viewsets.ViewSet):
                 return Response("OL não cadastrada", status=status.HTTP_400_BAD_REQUEST)
             request.data['logisticOperator_id'] = LogisticOperator.objects.get(
                 id=request.data['logisticOperatorPeopleRegistration']).id
-            if request.data['typePeopleToAPI'] != "entregador" and request.data['typePeopleToAPI'] != "Manuteção":
-                return Response("Tipo de pessoa incorreto", status=status.HTTP_400_BAD_REQUEST)
-            request.data['typePeople_id'] = TypePeople.objects.get_or_create(description=request.data['typePeopleToAPI'])[0].id
             serializer = PeopleRegistrationSerializer(data=request.data)
             try:
                 if serializer.is_valid(raise_exception=True):
@@ -184,36 +181,36 @@ class MovementViewSet(viewsets.ViewSet):
             
 
     def create(self, request):
+        if request.data['typeOfMovement'] != 'Externa' and request.data['typeOfMovement'] != 'Interna':
+            return Response("Tipo de movimentação incorreta", status=status.HTTP_400_BAD_REQUEST)
         try: 
             Scooter.objects.get(chassisNumber=request.data['scooter'])
         except ObjectDoesNotExist:
             return Response("Patinete não existente", status=status.HTTP_400_BAD_REQUEST)
-        try:
-            PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration'])
-        except ObjectDoesNotExist:
-            return Response("Responsável não cadastrado", status=status.HTTP_400_BAD_REQUEST)
+        if request.data['typeOfMovement'] == "Externa":
+            try:
+                PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistrationState'])
+            except ObjectDoesNotExist:
+                return Response("Responsável não cadastrado", status=status.HTTP_400_BAD_REQUEST)
+        request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
+        request.data['typeMovement_id'] = TypeMovement.objects.get_or_create(
+            description=request.data['typeOfMovement'])[0].id
+        scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
+        if scooter_db.status.description != "Disponível":
+            return Response("Patinete não disponível", status=status.HTTP_400_BAD_REQUEST)
         else:
-            request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
-            if request.data['typeRelease'] != 'devolução':
-                if request.data['typeMovement'] != 'entregas':
-                    if request.data['typeMovement'] != 'Manuteção':
-                        return Response("Tipo de movimentação incorreta", status=status.HTTP_400_BAD_REQUEST)
-                request.data['typeMovement_id'] = TypeMovement.objects.get_or_create(description=request.data['typeMovement'])[0].id
-                scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
-                if scooter_db.status.description == "Disponível":
-                    people_registration_movement = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration'])
-                    request.data['logisticOperator_id'] = people_registration_movement.logisticOperator_id
-                    request.data['peopleRegistration_id'] = people_registration_movement.id
-                    serializer = MovementSerializer(data=request.data)
-                    if serializer.is_valid(raise_exception=True):
-                        new_movement = serializer.save(owner=self.request.user)
-                        return Response(serializer.data, status=status.HTTP_201_CREATED)
-                    else:
-                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    return Response("Patinete não disponível", status=status.HTTP_400_BAD_REQUEST)
+            if request.data['typeOfMovement'] == "Externa":
+                people_registration_movement = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistrationState'])
+                request.data['logisticOperator_id'] = people_registration_movement.logisticOperator_id
+                request.data['peopleRegistration_id'] = people_registration_movement.id
+            serializer = MovementSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                new_movement = serializer.save(owner=self.request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
-                return Response("Tipo de lançamento incorreto", status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    
+
     
     def update(self, request, pk):
         movement = Movement.objects.get(id=pk)

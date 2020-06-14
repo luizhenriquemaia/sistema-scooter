@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from rest_framework import serializers
-from .models import StatusScooter, TypeMovement, TypePeople, LogisticOperator, Scooter, PeopleRegistration, Movement
+from .models import StatusScooter, TypeMovement, LogisticOperator, Scooter, PeopleRegistration, Movement
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -28,16 +28,6 @@ class TypeMovementSerializer(serializers.ModelSerializer):
         return TypeMovement.create(TypeMovement, **validated_data)
 
 
-class TypePeopleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TypePeople
-        fields = ['id', 'description']
-
-    def create(self, validated_data):
-        return TypePeople.create(TypePeople, **validated_data)
-
-
-
 class LogisticOperatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = LogisticOperator
@@ -60,14 +50,11 @@ class ScooterSerializer(serializers.ModelSerializer):
 class PeopleRegistrationSerializer(serializers.ModelSerializer):
     logisticOperator = LogisticOperatorSerializer(read_only=True)
     logisticOperator_id = serializers.IntegerField()
-    typePeople = TypePeopleSerializer(read_only=True)
-    typePeople_id = serializers.IntegerField()
 
     class Meta:
         model = PeopleRegistration
         fields = ['id', 'name', 'cpf', 'logisticOperator',
-                  'logisticOperator_id', 'typePeople',
-                  'typePeople_id']
+                  'logisticOperator_id']
     
     def create(self, validated_data):
         return PeopleRegistration.create(PeopleRegistration, **validated_data)

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
-import { getTypesMovement } from '../../actions/movement'
+import { postMovement } from '../../actions/movement'
 import { getLogisticOperator } from '../../actions/logisticOperator'
 
 
-
-export default function addMovement() {
+export default function addMovementComponent() {
     const dispatch = useDispatch()
     const alert = useAlert()
     const [newMovementState, setNewMovementState] = useState({
@@ -23,18 +22,13 @@ export default function addMovement() {
         id: "",
         description: ""
     }])
-    const [typeOfMovementSelect, setTypeOfMovementSelect] = useState([{
-        id: "",
-        description: ""
-    }])
+    const [typeOfMovementSelect, setTypeOfMovementSelect] = useState("Interna")
 
     useEffect(() => {
         dispatch(getLogisticOperator())
-        dispatch(getTypesMovement())
     }, [])
 
     const logisticOperator = useSelector(state => state.logisticOperator.logisticOperator)
-    const typesMovement = useSelector(state => state.movements.typesMovement)
 
    useEffect(() => {
         if (logisticOperator !== undefined && logisticOperator !== "") {
@@ -42,11 +36,6 @@ export default function addMovement() {
         }
     }, [logisticOperator])
 
-    useEffect(() => {
-        if (typesMovement !== undefined && typesMovement !== "") {
-            setTypeOfMovementSelect(typesMovement)
-        }
-    }, [typesMovement])
 
     const handleChange = e => {
         const { name, value } = e.target
@@ -76,23 +65,34 @@ export default function addMovement() {
         if (cpfPeopleRegistration.length !== 11) {
             alert.error("cpf inválido")
         }
-        else {
-            const typeRelease = "retirada"
-            const typeMovement = "entregas"
-            const newMovementToAPI = { scooter, cpfPeopleRegistration, typeMovement, typeRelease, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
-            dispatch(addMovement(newMovementToAPI))
+        else if (scooter === "" || logisticOperator === "") {
+            alert.error("preencha todos os campos obrigatórios")
         }
-        setNewMovementState({ scooter: "", cpfPeopleRegistrationState: "", accessoriesHelmet: false, accessoriesBag: false, accessoriesCase: false, accessoriesCharger: false, observation: "" })
+        else {
+            var logisticOperator_id = logisticOperatorFromAPI
+            var typeOfMovement = typeOfMovementSelect
+            var newMovementToAPI = { typeOfMovement, logisticOperator_id, scooter, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+            dispatch(postMovement(newMovementToAPI))
+            setNewMovementState({
+                scooter: "",
+                cpfPeopleRegistrationState: "",
+                logisticOperator: "",
+                accessoriesHelmet: false,
+                accessoriesBag: false,
+                accessoriesCase: false,
+                accessoriesCharger: false,
+                observation: ""
+            })
+        }
     }
 
     return (
         <div className="content">
             <h1 className="title-page">Adicionar Movimentação</h1>
             <label>Tipo de Movimentação</label>
-            <select name="typeOfMovement" onChange={setTypeOfMovementSelect} >
-                {typeOfMovementSelect.map(typeMovement => (
-                    <option value={typeMovement.id} key={typeMovement.id}>{typeMovement.description}</option>
-                ))}
+            <select name="typeOfMovement" onChange={handleChange} >
+                <option value="Interna">Interna</option>
+                <option value="Externa">Externa</option>
             </select>
             <label>Scooter</label>
             <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />

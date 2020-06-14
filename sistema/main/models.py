@@ -27,18 +27,6 @@ class TypeMovement(models.Model):
         return new_type_movement
 
 
-class TypePeople(models.Model):
-    description = models.CharField(max_length=200)
-    objects = models.Manager()
-
-    def create(self, **validated_data):
-        new_type_people = TypePeople(
-            description=validated_data['description']
-        )
-        new_type_people.save()
-        return new_type_people
-
-
 class LogisticOperator(models.Model):
     description = models.CharField(max_length=200)
     objects = models.Manager()
@@ -74,7 +62,6 @@ class Scooter(models.Model):
 class PeopleRegistration(models.Model):
     name = models.CharField(max_length=400)
     cpf = models.CharField(max_length=11, default=0)
-    typePeople = models.ForeignKey(TypePeople, on_delete=models.CASCADE, null=True)
     logisticOperator = models.ForeignKey(
         LogisticOperator, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
@@ -84,7 +71,6 @@ class PeopleRegistration(models.Model):
             new_peopleRegistration = PeopleRegistration(
                 name=validated_data['name'],
                 cpf=validated_data['cpf'],
-                typePeople=TypePeople.objects.get(id=validated_data['typePeople_id']),
                 logisticOperator=LogisticOperator.objects.get(
                     id=validated_data['logisticOperator_id'])
             )
@@ -199,21 +185,21 @@ class Movement(models.Model):
         movement.observation = validated_data['observation']
         movement.intialDateMovement = validated_data['intialDateMovement']
         movement.pickUpTime = validated_data['pickUpTime']
-        if validated_data['typeRelease'] == 'devolução':
+        if validated_data['typeRelease'] == 'Devolução':
             if not movement.returnTime:
                 movement.returnTime = datetime.now().time()
                 movement.finalDateMovement = date.today()
             else:
                 movement.returnTime = validated_data['returnTime']
                 movement.finalDateMovement = validated_data['finalDateMovement']
-            if movement.typeMovement == "Entregas":
+            if movement.typeMovement == "Externo":
                 if validated_data['destinyScooter'] == "Manutenção":
                     scooter_db.status = StatusScooter.objects.get_or_create(
                         description="Manutenção")[0]
                     scooter_db.save()
-                    # create a internal movement to "Manutenção"
+                    # create a internal movement to send scooter to repair
                     type_movement_db = TypeMovement.objects.get_or_create(
-                        description="Manutenção")[0]
+                        description="Interno")[0]
                     new_internal_movement = Movement(
                         scooter = scooter_db,
                         logisticOperator = movement.logisticOperator,

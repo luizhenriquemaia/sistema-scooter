@@ -51,7 +51,7 @@ export default function detailsMovement() {
                     scooter: movement.scooter.chassisNumber,
                     cpfPeopleRegistration: movement.peopleRegistration ? movement.peopleRegistration.cpf : "",
                     LO: movement.logisticOperator ? movement.logisticOperator_id : "",
-                    typeRelease: "devolução",
+                    typeRelease: "Devolução",
                     typeMovement: "",
                     accessoriesHelmet: movement.accessoriesHelmet,
                     accessoriesBag: movement.accessoriesBag,
@@ -70,7 +70,7 @@ export default function detailsMovement() {
                     scooter: movement.scooter.chassisNumber,
                     cpfPeopleRegistration: movement.peopleRegistration ? movement.peopleRegistration.cpf : "",
                     LO: movement.logisticOperator ? movement.logisticOperator_id : "",
-                    typeRelease: "retirada",
+                    typeRelease: "Retirada",
                     typeMovement: "",
                     accessoriesHelmet: movement.accessoriesHelmet,
                     accessoriesBag: movement.accessoriesBag,
@@ -167,9 +167,9 @@ export default function detailsMovement() {
                 </div>
                 <div className="form-input">
                     <label>Retirada</label>
-                    <input type="radio" name="typeRelease" value="retirada" checked={movementState.typeRelease == "retirada"} onChange={handleChange} />
+                    <input type="radio" name="typeRelease" value="Retirada" checked={movementState.typeRelease == "Retirada"} onChange={handleChange} />
                     <label>Devolução</label>
-                    <input type="radio" name="typeRelease" value="devolução" checked={movementState.typeRelease == "devolução"} onChange={handleChange} />
+                    <input type="radio" name="typeRelease" value="Devolução" checked={movementState.typeRelease == "Devolução"} onChange={handleChange} />
                 </div>
                 <div className="form-input">
                     <label>Destino</label>

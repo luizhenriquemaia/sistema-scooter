@@ -59,7 +59,7 @@ export function getTypesMovement() {
 }
 
 
-export const addMovement = (movement) => {
+export const postMovement = (movement) => {
     return dispatch => {
         axios.post("api/movement/", movement)
             .then(res => {
