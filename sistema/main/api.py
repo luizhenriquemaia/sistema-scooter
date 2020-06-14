@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from .models import StatusScooter, TypeMovement, TypePeople, LogisticOperator, Scooter, PeopleRegistration, Movement
-from .serializers import UserSerializer, StatusScooterSerializer, LogisticOperatorSerializer, ScooterSerializer, PeopleRegistrationSerializer, MovementSerializer, MovementRetrieveSerializer
+from .serializers import UserSerializer, StatusScooterSerializer, TypeMovementSerializer, LogisticOperatorSerializer, ScooterSerializer, PeopleRegistrationSerializer, MovementSerializer, MovementRetrieveSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -26,6 +26,25 @@ class StatusScooterViewSet(viewsets.ViewSet):
     
     def create(self, request):
         serializer = StatusScooterSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            new_status_scooter = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TypeMovementViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request):
+        queryset = TypeMovement.objects.all()
+        serializer = TypeMovementSerializer(queryset, many=True)
+        if len(serializer.data) > 0:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
+    def create(self, request):
+        serializer = TypeMovementSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             new_status_scooter = serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
