@@ -168,7 +168,7 @@ export default function Movements() {
             }
             if (filtersMovements.filterByNamePeopleRegistration) {
                 if (filtersMovements.filterByNamePeopleRegistration !== "") {
-                    setMovementState(movements.filter(movement => movement.peopleRegistration.name === filtersMovements.filterByNamePeopleRegistration))
+                    setMovementState(movements.filter(movement => movement.peopleRegistration ? movement.peopleRegistration.name === filtersMovements.filterByNamePeopleRegistration : movement.peopleRegistration === filtersMovements.filterByNamePeopleRegistration))
                 }
             }
             if (filtersMovements.filterByChassis) {
@@ -201,7 +201,7 @@ export default function Movements() {
         if (filterInitialDate && filterFinalDate) {
             if (filterInitialDate <= filterFinalDate) {
                 const filtersMovements = { filterInitialDate, filterFinalDate }
-                dispatch(getMovementsWithFilters(filtersMovements, "entregas"))
+                dispatch(getMovementsWithFilters(filtersMovements))
             }
             else {
                 alert.error("initial date must be before final date")
