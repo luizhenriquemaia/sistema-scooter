@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, date
 
 
@@ -112,27 +113,50 @@ class Movement(models.Model):
 
     def retrieve(self, id):
         movement = Movement.objects.get(id=id)
-        movement_dict = {
-            "id": id,
-            "scooter": Scooter.objects.get(id=movement.scooter_id).__dict__,
-            "scooter_id": Scooter.objects.get(id=movement.scooter_id).id,
-            "peopleRegistration": PeopleRegistration.objects.get(id=movement.peopleRegistration_id).__dict__,
-            "peopleRegistration_id": PeopleRegistration.objects.get(id=movement.peopleRegistration_id).id,
-            "logisticOperator": LogisticOperator.objects.get(id=movement.logisticOperator_id).__dict__,
-            "logisticOperator_id": LogisticOperator.objects.get(id=movement.logisticOperator_id).id,
-            "typeMovement": TypeMovement.objects.get(id=movement.typeMovement_id).__dict__,
-            "typeMovement_id": TypeMovement.objects.get(id=movement.typeMovement_id).id,
-            "destinyScooter": movement.destinyScooter,
-            "intialDateMovement": movement.intialDateMovement,
-            "finalDateMovement": movement.finalDateMovement,
-            "pickUpTime": movement.pickUpTime,
-            "returnTime": movement.returnTime,
-            "accessoriesHelmet": movement.accessoriesHelmet,
-            "accessoriesBag": movement.accessoriesBag,
-            "accessoriesCase": movement.accessoriesCase,
-            "accessoriesCharger": movement.accessoriesCharger,
-            "observation": movement.observation,
-        }
+        # internal movements don't have peopleRegistration
+        try: 
+            PeopleRegistration.objects.get(id=movement.peopleRegistration_id)
+            movement_dict = {
+                "id": id,
+                "scooter": Scooter.objects.get(id=movement.scooter_id).__dict__,
+                "scooter_id": Scooter.objects.get(id=movement.scooter_id).id,
+                "peopleRegistration": PeopleRegistration.objects.get(id=movement.peopleRegistration_id).__dict__,
+                "peopleRegistration_id": PeopleRegistration.objects.get(id=movement.peopleRegistration_id).id,
+                "logisticOperator": LogisticOperator.objects.get(id=movement.logisticOperator_id).__dict__,
+                "logisticOperator_id": LogisticOperator.objects.get(id=movement.logisticOperator_id).id,
+                "typeMovement": TypeMovement.objects.get(id=movement.typeMovement_id).__dict__,
+                "typeMovement_id": TypeMovement.objects.get(id=movement.typeMovement_id).id,
+                "destinyScooter": movement.destinyScooter,
+                "intialDateMovement": movement.intialDateMovement,
+                "finalDateMovement": movement.finalDateMovement,
+                "pickUpTime": movement.pickUpTime,
+                "returnTime": movement.returnTime,
+                "accessoriesHelmet": movement.accessoriesHelmet,
+                "accessoriesBag": movement.accessoriesBag,
+                "accessoriesCase": movement.accessoriesCase,
+                "accessoriesCharger": movement.accessoriesCharger,
+                "observation": movement.observation,
+            }
+        except ObjectDoesNotExist:
+            movement_dict = {
+                "id": id,
+                "scooter": Scooter.objects.get(id=movement.scooter_id).__dict__,
+                "scooter_id": Scooter.objects.get(id=movement.scooter_id).id,
+                "logisticOperator": LogisticOperator.objects.get(id=movement.logisticOperator_id).__dict__,
+                "logisticOperator_id": LogisticOperator.objects.get(id=movement.logisticOperator_id).id,
+                "typeMovement": TypeMovement.objects.get(id=movement.typeMovement_id).__dict__,
+                "typeMovement_id": TypeMovement.objects.get(id=movement.typeMovement_id).id,
+                "destinyScooter": movement.destinyScooter,
+                "intialDateMovement": movement.intialDateMovement,
+                "finalDateMovement": movement.finalDateMovement,
+                "pickUpTime": movement.pickUpTime,
+                "returnTime": movement.returnTime,
+                "accessoriesHelmet": movement.accessoriesHelmet,
+                "accessoriesBag": movement.accessoriesBag,
+                "accessoriesCase": movement.accessoriesCase,
+                "accessoriesCharger": movement.accessoriesCharger,
+                "observation": movement.observation,
+            }
         return movement_dict
 
     def create(self, **validated_data):
@@ -162,6 +186,7 @@ class Movement(models.Model):
         movement.scooter = scooter_db
         movement.peopleRegistration = PeopleRegistration.objects.get(
             id=validated_data['peopleRegistration_id'])
+        movement.logisticOperator = LogisticOperator.objects.get(id=validated_data['logisticOperator_id'])
         movement.accessoriesHelmet = validated_data['accessoriesHelmet']
         movement.accessoriesBag = validated_data['accessoriesBag']
         movement.accessoriesCase = validated_data['accessoriesCase']
@@ -176,22 +201,23 @@ class Movement(models.Model):
             else:
                 movement.returnTime = validated_data['returnTime']
                 movement.finalDateMovement = validated_data['finalDateMovement']
-            if validated_data['destinyScooter'] == "manutencao":
+            if validated_data['destinyScooter'] == "Manutenção":
                 scooter_db.status = StatusScooter.objects.get_or_create(
-                    description="manutencao")[0]
+                    description="Manutenção")[0]
                 scooter_db.save()
-                # create a internal movement to "manutencao"
+                # create a internal movement to "Manutenção"
                 type_movement_db = TypeMovement.objects.get_or_create(
-                    description="manutencao")[0]
+                    description="Manutenção")[0]
                 new_internal_movement = Movement(
                     scooter = scooter_db,
+                    logisticOperator = movement.logisticOperator,
                     typeMovement = type_movement_db,
                     intialDateMovement=date.today(),
                     pickUpTime=datetime.now().time(),
                     owner=movement.owner
                 )
                 new_internal_movement.save()
-            if validated_data['destinyScooter'] == "base":
+            elif validated_data['destinyScooter'] == "Base":
                 scooter_db.status = StatusScooter.objects.get_or_create(
                     description="Disponível")[0]
                 scooter_db.save()

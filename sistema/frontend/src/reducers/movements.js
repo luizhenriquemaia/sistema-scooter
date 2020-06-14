@@ -1,32 +1,14 @@
-import { GET_INTERNAL_MOVEMENTS, GET_EXTERNAL_MOVEMENTS, GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from '../actions/types.js'
+import { GET_MOVEMENTS, GET_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from '../actions/types.js'
 
 
 
 const initialState = {
     movement: [],
     isDetails: false,
-    isInternalMovement: false,
-    isExternalMovement: false
 }
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case GET_EXTERNAL_MOVEMENTS:
-            return {
-                ...state,
-                movement: action.payload,
-                isDetails: false,
-                isInternalMovement: false,
-                isExternalMovement: true
-            }
-        case GET_INTERNAL_MOVEMENTS:
-            return {
-                ...state,
-                movement: action.payload,
-                isDetails: false,
-                isInternalMovement: true,
-                isExternalMovement: false
-            }
         case GET_MOVEMENTS:
             return {
                 ...state,

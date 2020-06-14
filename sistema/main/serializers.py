@@ -102,8 +102,8 @@ class MovementSerializer(serializers.ModelSerializer):
 class MovementRetrieveSerializer(serializers.ModelSerializer):
     scooter = ScooterSerializer(read_only=False)
     scooter_id = serializers.IntegerField()
-    peopleRegistration = PeopleRegistrationSerializer(read_only=False)
-    peopleRegistration_id = serializers.IntegerField()
+    peopleRegistration = PeopleRegistrationSerializer(read_only=False, required=False)
+    peopleRegistration_id = serializers.IntegerField(required=False)
     logisticOperator = LogisticOperatorSerializer(read_only=False)
     logisticOperator_id = serializers.IntegerField()
     typeMovement = TypeMovementSerializer(read_only=False)
