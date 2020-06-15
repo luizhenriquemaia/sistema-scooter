@@ -161,7 +161,7 @@ class MovementViewSet(viewsets.ViewSet):
         else:
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
-    def retrieve(self, request, pk):
+    def retrieve(self, request, pk): 
         if not request.user.is_staff or not request.user.is_superuser:
             try:
                 Movement.objects.get(id=pk, owner=request.user)
