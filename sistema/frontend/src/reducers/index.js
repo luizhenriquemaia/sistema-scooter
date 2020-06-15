@@ -5,6 +5,7 @@ import movements from './movements'
 import peopleRegistration from './peopleRegistration'
 import errors from './errors'
 import messages from './messages'
+import auth from './auth'
 
 
 export default combineReducers({
@@ -12,6 +13,7 @@ export default combineReducers({
     logisticOperator,
     movements,
     peopleRegistration,
-    messages,
     errors,
+    messages,
+    auth,
 })

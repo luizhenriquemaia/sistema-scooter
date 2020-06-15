@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
 import { postMovement } from '../../actions/movement'
 import { getLogisticOperator } from '../../actions/logisticOperator'
+import { getStatusScooters } from '../../actions/scooters'
 
 
 export default function addMovementComponent() {
@@ -22,19 +23,31 @@ export default function addMovementComponent() {
         id: "",
         description: ""
     }])
+    const [statusScooterFromAPI, setStatusScooterFromAPI] = useState([{
+        id: "",
+        description: ""
+    }])
     const [typeOfMovementSelect, setTypeOfMovementSelect] = useState("external")
 
     useEffect(() => {
         dispatch(getLogisticOperator())
+        dispatch(getStatusScooters())
     }, [])
 
-    const logisticOperatorReducer = useSelector(state => state.logisticOperator.logisticOperator)
+    const logisticOperatorReducer = useSelector(state => state.logisticOperator ? state.logisticOperator.logisticOperator : state.logisticOperator)
+    const statusScooterReducer = useSelector(state => state.scooters ? state.scooters.statusScooter : state.scooters)
 
    useEffect(() => {
         if (logisticOperatorReducer !== undefined && logisticOperatorReducer !== "") {
             setLogisticOperatorFromAPI(logisticOperatorReducer)
         }
     }, [logisticOperatorReducer])
+
+    useEffect(() => {
+        if (statusScooterReducer !== undefined && statusScooterReducer !== "") {
+            setStatusScooterFromAPI(statusScooterReducer)
+        }
+    }, [statusScooterReducer])
 
 
     const handleChange = e => {
@@ -123,9 +136,9 @@ export default function addMovementComponent() {
                             <label>Status
                                 <select name="logisticOperator" onChange={handleChange}>
                                     <option value="">-----</option>
-                                    {logisticOperatorFromAPI.map(logisitcOperator => (
-                                        <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
-                                    ))}  {/* ------ aqui */}
+                                    {statusScooterFromAPI.map(statusScooter => (
+                                        <option value={statusScooter.id} key={statusScooter.id}>{statusScooter.description}</option>
+                                    ))}
                                 </select>
                             </label>
                         </div>

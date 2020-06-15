@@ -32,15 +32,14 @@ export default function Register() {
         dispatch(getLogisticOperator())
     }, [])
 
-    const statusScooter = useSelector(state => state.scooters.statusScooter)
+    const logisticOperator = useSelector(state => state.logisticOperator ? state.logisticOperator.logisticOperator : state.logisticOperator)
+    const statusScooter = useSelector(state => state.scooters ? state.scooters.statusScooter : state.scooters)
 
     useEffect(() => {
         if (statusScooter !== undefined && statusScooter !== "") {
             setStatusScooterFromAPI(statusScooter)
         }
     }, [statusScooter])
-
-    const logisticOperator = useSelector(state => state.logisticOperator.logisticOperator)
 
     useEffect(() => {
         if (logisticOperator !== undefined && logisticOperator !== "") {
