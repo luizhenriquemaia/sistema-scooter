@@ -306,6 +306,7 @@ section.add-movement-section .field-box {
     border-bottom: 2px solid #505050;
     flex-direction: row;
     flex-wrap: wrap;
+    transition: max-height 0.8s 0.2s, padding 0.9s;
 }
 
 section.add-movement-section .data-box :last-child.field-box {
@@ -330,7 +331,7 @@ section.add-movement-section .data-box :last-child.field-box {
 
 .add-movement-section .content-box select {
     width: 200px;
-    margin-left: 20px   ;
+    margin-left: 20px ;
 }
 
 
@@ -338,12 +339,6 @@ section.add-movement-section .data-box :last-child.field-box {
 .internal .field-box.accessories {
     max-height: 0px;
     padding: 0;
-    transition: max-height ease-in 0.8s 0.2s, padding ease-in 0.6s 0.2s;
-}
-
-.external .field-box.delivery-man,
-.external .field-box.accessories {
-    transition: max-height ease-out 0.8s 0.4s, padding ease-out 0.6s 0.4s;
 }
 
 /* Add Movement Section Mobile------------------------- */
