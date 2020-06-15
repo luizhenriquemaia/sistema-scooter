@@ -4,13 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from .models import StatusScooter, TypeMovement, LogisticOperator, Scooter, PeopleRegistration, Movement
-from .serializers import UserSerializer, StatusScooterSerializer, TypeMovementSerializer, LogisticOperatorSerializer, ScooterSerializer, PeopleRegistrationSerializer, MovementSerializer, MovementRetrieveSerializer
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+from .serializers import StatusScooterSerializer, TypeMovementSerializer, LogisticOperatorSerializer, ScooterSerializer, PeopleRegistrationSerializer, MovementSerializer, MovementRetrieveSerializer
 
 
 class StatusScooterViewSet(viewsets.ViewSet):
@@ -167,7 +161,7 @@ class MovementViewSet(viewsets.ViewSet):
         else:
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
-    def retrieve(self, request, pk):
+    def retrieve(self, request, pk): 
         if not request.user.is_staff or not request.user.is_superuser:
             try:
                 Movement.objects.get(id=pk, owner=request.user)

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { useAlert } from 'react-alert'
-import { getMovements, getMovementsWithFilters, addMovement, deleteMovement } from '../../actions/movement'
+import { getMovements, getMovementsWithFilters, deleteMovement } from '../../actions/movement'
 import { getScooters } from '../../actions/scooters'
 
 
@@ -102,7 +102,6 @@ export default function Movements() {
         }
     }, [movements])
 
-
     useEffect(() => {
         if (scooters.length !== 0 && scooters !== undefined) {
             let numberOfScooters = 0
@@ -140,7 +139,7 @@ export default function Movements() {
 
     useEffect(() => {
         if (shouldGetMovements === true) {
-            dispatch(getMovements("entregas"))
+            dispatch(getMovements())
             dispatch(getScooters())
         }
     }, [shouldGetMovements])

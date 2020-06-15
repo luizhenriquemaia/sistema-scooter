@@ -1,11 +1,10 @@
 from django.urls import path
 from django.conf.urls import include
 from rest_framework import routers
-from .api import UserViewSet, StatusScooterViewSet, TypeMovementViewSet, LogisticOperatorViewSet, ScooterViewSet, PeopleRegistrationViewSet, MovementViewSet
+from .api import StatusScooterViewSet, TypeMovementViewSet, LogisticOperatorViewSet, ScooterViewSet, PeopleRegistrationViewSet, MovementViewSet
 
 
 router = routers.DefaultRouter()
-router.register('api/user', UserViewSet, 'user'),
 router.register('api/status-scooter', 
                 StatusScooterViewSet, 'status-scooter')
 router.register('api/type-movement',
@@ -20,7 +19,7 @@ router.register('api/movement', MovementViewSet, 'movement')
 
 
 urlpatterns = [
-    path('api/auth', include('rest_framework.urls'))
+    #path('api/auth', include('rest_framework.urls')),
 ]
 
 urlpatterns += router.urls

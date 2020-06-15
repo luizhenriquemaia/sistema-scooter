@@ -19,15 +19,40 @@ export default function Alerts() {
 
     useEffect(() => {
         if (messageState) {
-            if (errorStatus >= 500) {
-                alert.error("Erro interno do servidor")
+            if (messageState.detail) {
+                // if (errorStatus >= 500) {
+                //     alert.error("Erro interno do servidor")
+                // }
+                // if (errorStatus >= 400 && errorStatus < 500) {
+                //     alert.error(messageState.detail)
+                // }
+                // if (errorStatus >= 200 && errorStatus < 400) {
+                //     alert.success(messageState.detail)
+                // }
             }
-            if (errorStatus >= 400 && errorStatus < 500 ) {
-                alert.error(messageState)
+            else if (messageState.non_field_errors) {
+                if (errorStatus >= 500) {
+                    alert.error("Erro interno do servidor")
+                }
+                if (errorStatus >= 400 && errorStatus < 500) {
+                    alert.error(messageState.non_field_errors)
+                }
+                if (errorStatus >= 200 && errorStatus < 400) {
+                    alert.success(messageState.non_field_errors)
+                }
             }
-            if (errorStatus >= 200 && errorStatus < 400) {
-                alert.success(messageState)
+            else {
+                if (errorStatus >= 500) {
+                    alert.error("Erro interno do servidor")
+                }
+                if (errorStatus >= 400 && errorStatus < 500) {
+                    alert.error(messageState)
+                }
+                if (errorStatus >= 200 && errorStatus < 400) {
+                    alert.success(messageState)
+                }
             }
+            
         }
     }, [messageState])
 
