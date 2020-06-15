@@ -22,7 +22,7 @@ export default function addMovementComponent() {
         id: "",
         description: ""
     }])
-    const [typeOfMovementSelect, setTypeOfMovementSelect] = useState("Interna")
+    const [typeOfMovementSelect, setTypeOfMovementSelect] = useState("external")
 
     useEffect(() => {
         dispatch(getLogisticOperator())
@@ -103,44 +103,70 @@ export default function addMovementComponent() {
 
     return (
         <main className="content">
-            <section className="section-main-box movement-section">
+            <section className="section-main-box add-movement-section">
                 <div className="title-box">
                     <h1 className="title-page">Adicionar Movimentação</h1>
                 </div>
                 <section className="content-box">
-                    <fieldset className="moevemt-data-box">
+                    <div className="register-type">
                         <label>Tipo de Movimentação</label>
                         <select name="typeOfMovement" onChange={handleChange} >
-                            <option value="Interna">Interna</option>
-                            <option value="Externa">Externa</option>
+                            <option value="external">Externa</option>
+                            <option value="internal">Interna</option>
                         </select>
-                        <label>Scooter</label>
-                        <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
-                        <label>CPF Entregador</label>
-                        <input type="text" name="cpfPeopleRegistrationState" value={newMovementState.cpfPeopleRegistrationState} onChange={handleChange} />
-                        <label>OL</label>
-                        <select name="logisticOperator" onChange={handleChange}>
-                            <option value="">-----</option>
-                            {logisticOperatorFromAPI.map(logisitcOperator => (
-                                <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
-                            ))}
-                        </select>
-                        <label>Capacete</label>
-                        <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
-                        <label>Bag</label>
-                        <input type="checkbox" name="accessoriesBag" checked={newMovementState.accessoriesBag} onChange={handleCheck} />
-                        <label>Case</label>
-                        <input type="checkbox" name="accessoriesCase" checked={newMovementState.accessoriesCase} onChange={handleCheck} />
-                        <label>Carregador</label>
-                        <input type="checkbox" name="accessoriesCharger" checked={newMovementState.accessoriesCharger} onChange={handleCheck} />
-                        <label>Observação</label>
-                        <textarea name="observation" value={newMovementState.observation} onChange={handleChange}></textarea>
-                    </fieldset>
-                    <div className="buttonBox">
-                        <button className="submit-button clean" onClick={handleClean}>Limpar</button>
-                        <button className="submit-button confirm" onClick={handleClickAdd}>Registrar</button>
                     </div>
+                    <fieldset className={typeOfMovementSelect ? `data-box ${typeOfMovementSelect}` : "data-box"} >
+                        <div className="field-box">
+                            <label>Scooter
+                                <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
+                            </label>
+                            <label>Status
+                                <select name="logisticOperator" onChange={handleChange}>
+                                    <option value="">-----</option>
+                                    {logisticOperatorFromAPI.map(logisitcOperator => (
+                                        <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
+                                    ))}  {/* ------ aqui */}
+                                </select>
+                            </label>
+                        </div>
+                        <div className="field-box delivery-man">
+                            <label>CPF Entregador
+                                <input type="text" name="cpfPeopleRegistrationState" value={newMovementState.cpfPeopleRegistrationState} onChange={handleChange} />
+                            </label>
+                            <label>OL
+                                <select name="logisticOperator" onChange={handleChange}>
+                                    <option value="">-----</option>
+                                    {logisticOperatorFromAPI.map(logisitcOperator => (
+                                        <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
+                                    ))}
+                                </select>
+                            </label>
+                        </div>
+                        <div className="field-box accessories">
+                            <label>Capacete
+                                <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
+                            </label>
+                            <label>Bag
+                                <input type="checkbox" name="accessoriesBag" checked={newMovementState.accessoriesBag} onChange={handleCheck} />
+                            </label>
+                            <label>Case
+                                <input type="checkbox" name="accessoriesCase" checked={newMovementState.accessoriesCase} onChange={handleCheck} />
+                            </label>
+                            <label>Carregador
+                                <input type="checkbox" name="accessoriesCharger" checked={newMovementState.accessoriesCharger} onChange={handleCheck} />
+                            </label>
+                        </div>
+                        <div className="field-box">
+                            <label>Observação
+                                <textarea name="observation" value={newMovementState.observation} onChange={handleChange}></textarea>
+                            </label>
+                        </div>
+                    </fieldset>
                 </section>
+                <div className="buttonBox">
+                    <button className="submit-button clean" onClick={handleClean}>Limpar</button>
+                    <button className="submit-button confirm" onClick={handleClickAdd}>Registrar</button>
+                </div>
             </section>
         </main>
     )

@@ -10,13 +10,12 @@
     background: rgba(0, 0, 0, 0.85);
     width: 286px;
     height: 100vh;
-    max-height: 1500px;
-    position: absolute;
+    position: fixed;
     overflow: hidden;
     transition: 
         width ease-out 0.4s, 
         border-radius 3s, 
-        max-height ease-out 0.5s 0.4s;
+        height ease-out 0.5s 0.4s;
 }
 
 .menuIconBox {
@@ -119,7 +118,7 @@
 /* Closed Mobile Menu -----------------------------*/
 @media screen and (max-width: 600px) {
     .menuBlock.closedMenu {
-        max-height: 65px;
+        height: 65px;
         border-radius: 0px 0px 12px;
     }
 
@@ -132,9 +131,10 @@
 main.content {
     background: #d3d3d3;
     min-height: 100vh;
-    padding: 20px 40px 20px 140px;
+    padding: 20px 40px 20px 120px;
     display: flex;
     background-size: cover;
+    transition: 0.5s;
 }
 
 section.section-main-box {
@@ -161,34 +161,67 @@ section.section-main-box {
     font-size: 21px;
 }
 
-.register-box {
+.content-box select {
+    height: 30px;
+    font-size: 18px;
+    background: #fafafa;
+    border-radius: 3px;
+    padding: 0 10px;
+}
+
+.data-box {
+    border: 2px solid #505050;
+    border-radius: 12px;
+    min-inline-size: auto;
+}
+
+.register-type {
+    margin-bottom: 20px;
+    padding: 10px 15px 10px 0;
+}
+
+.register-type label {
+    margin-right: 15px;
+}
+
+.field-box {
     display: flex;
     flex-direction: column;
     height: auto;
+    max-height: 500px;
+    overflow: hidden;
 }
 
-.register-box label {
+.field-box label {
     margin-bottom: 5px;
+    margin-right: 15px;
 }
 
-.register-box input {
+.field-box input {
     border-radius: 4px;
     font-size: 18px;
     font-family: monospace;
     padding: 4px 10px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+    margin-right: 0;
     border-color: #d3d3d3;
 }
 
-.register-box input:focus {
+.field-box input:focus {
     outline-offset: 1px;
     outline-color: unset;
+}
+
+.field-box input[type='checkbox'] {
+    min-width: 20px;
+    min-height: 20px;
+    margin-right: 40px;
 }
 
 .buttonBox {
     display: flex;
     justify-content: flex-end;
-    padding: 13px 17px;
+    padding: 20px 23px;
     margin-top: 25px;
 }
 
@@ -213,79 +246,124 @@ section.section-main-box {
 
 /* General mobile  ---------------------------------------*/
 @media(max-width: 600px) {
+    .field-box input {
+        margin-right: 25px;
+    }
+
     main.content {
         padding: 20px 10px 20px 10px;
     }
-}
-
-/* Register Section  -------------------------------*/
-.register-section .register-type {
-    margin-bottom: 20px;
-    padding: 10px 15px 10px 0;
-}
-
-.register-section .register-type label {
-    margin-right: 15px;
-}
-
-.register-section select {
-    height: 30px;
-    font-size: 18px;
-    background: #fafafa;
-    border-radius: 3px;
-}
-
-.register-section .register-data-box {
-    border: 2px solid #505050;
-    border-radius: 12px;
-    min-inline-size: auto;
-}
-
-.register-section .register-box {
-    max-height: 0;
-    overflow: hidden;
-    padding: 0px;
-    transition: max-height ease-out 0.3s, padding ease-out 0.3s;
-}
-
-.logistic-operator .register-box.logistic-operator,
-.delivery-man .register-box.delivery-man,
-.scooter .register-box.scooter {
-    padding: 3% 5%;
-    transition-delay: 0.4s; 
-}
-
-.logistic-operator .register-box.logistic-operator {
-    max-height: 160px;
-}
-
-.delivery-man .register-box.delivery-man {
-    max-height: 360px;
-}
-
-.scooter .register-box.scooter{
-    max-height: 180px;
- }
-
-/* Register Section Mobile ------------------------- */
-@media(max-width: 600px) {
-    
-    .register-section .register-type {
+   
+    .register-type {
         margin-bottom: 20px;
         padding: 10px 15px 10px 0;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
+}
 
-    .logistic-operator .register-box.logistic-operator,
-    .delivery-man .register-box.delivery-man,
-    .scooter .register-box.scooter {
+/* Register Section  -------------------------------*/
+.register-section .field-box {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0px;
+    transition: all ease-out 0.3s;
+}
+
+.logistic-operator .field-box.logistic-operator,
+.delivery-man .field-box.delivery-man,
+.scooter .field-box.scooter {
+    padding: 3% 5%;
+    transition-delay: 0.4s; 
+}
+
+.logistic-operator .field-box.logistic-operator {
+    max-height: 160px;
+}
+
+.delivery-man .field-box.delivery-man {
+    max-height: 360px;
+}
+
+.scooter .field-box.scooter{
+    max-height: 225px;
+ }
+
+/* Register Section Mobile ------------------------- */
+@media(max-width: 600px) {
+    .logistic-operator .field-box.logistic-operator,
+    .delivery-man .field-box.delivery-man,
+    .scooter .field-box.scooter {
         padding: 7% 5%;
     }
 }
 
+/* Add Movement Section ------------------------- */
 
-/* Add Movement ------------------------- */
+section.add-movement-section .field-box {
+    padding: 3% 5%;
+    border-bottom: 2px solid #505050;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 
-section.movement-section {}
+section.add-movement-section .data-box :last-child.field-box {
+    border: none;
+}
+
+.add-movement-section .field-box input {
+    width: initial;
+    margin-left: 20px;
+    display: flex;
+    margin-right: 200px;
+}
+
+.add-movement-section .field-box label {
+    display: flex;
+}
+
+.add-movement-section .field-box input[type='checkbox'] {
+    width: min-content;
+    margin-right: 100px;
+}
+
+.add-movement-section .content-box select {
+    width: 200px;
+    margin-left: 20px   ;
+}
+
+
+.internal .field-box.delivery-man,
+.internal .field-box.accessories {
+    max-height: 0px;
+    padding: 0;
+    transition: max-height ease-in 0.8s 0.2s, padding ease-in 0.6s 0.2s;
+}
+
+.external .field-box.delivery-man,
+.external .field-box.accessories {
+    transition: max-height ease-out 0.8s 0.4s, padding ease-out 0.6s 0.4s;
+}
+
+/* Add Movement Section Mobile------------------------- */
+
+@media(max-width: 600px) {
+    section.add-movement-section .field-box {
+        padding: 7% 5%;
+    }
+
+    .add-movement-section .field-box input {
+        margin-right: 20px;
+        max-width: 140px;
+    }
+
+    .add-movement-section .field-box label {
+        margin-right: 0px;
+        max-width: 220px;
+    }
+
+    .add-movement-section .content-box select {
+        width: 200px;
+    }
+}

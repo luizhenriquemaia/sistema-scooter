@@ -143,12 +143,12 @@ export default function Register() {
                             <option value="scooter">Patinete</option>
                         </select>
                     </div>
-                    <fieldset className={stateValueSelect ? `register-data-box ${stateValueSelect}` : "register-data-box"} >
-                        <div className="register-box logistic-operator">
+                    <fieldset className={stateValueSelect ? `data-box ${stateValueSelect}` : "data-box"} >
+                        <div className="field-box logistic-operator">
                             <label>Operador Logístico</label>
                             <input type="text" name="logisticOperatorDescription" value={RegisterState.logisticOperatorDescription || ''} onChange={handleChange} />
                         </div>
-                        <div className="register-box delivery-man">
+                        <div className="field-box delivery-man">
                             <label>CPF Entregador</label>
                             <input type="text" name="cpfPeopleRegistration" value={RegisterState.cpfPeopleRegistration || ''} onChange={handleChange} />
                             <label>Nome Entregador</label>
@@ -161,7 +161,7 @@ export default function Register() {
                                 ))}
                             </select>
                         </div>
-                        <div className="register-box scooter">
+                        <div className="field-box scooter">
                             <label>Chassi Patinete</label>
                             <input type="text" name="chassisScooter" value={RegisterState.chassisScooter || ''} onChange={handleChange} />
                             <label>Status Patinete</label>
