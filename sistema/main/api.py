@@ -191,24 +191,24 @@ class MovementViewSet(viewsets.ViewSet):
             except ObjectDoesNotExist:
                 return Response("Responsável não cadastrado", status=status.HTTP_400_BAD_REQUEST)
         request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
-        request.data['typeMovement_id'] = TypeMovement.objects.get_or_create(
-            description=request.data['typeOfMovement'])[0].id
         scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
         if scooter_db.status.description != "Disponível":
             return Response("Patinete não disponível", status=status.HTTP_400_BAD_REQUEST)
         else:
+            request.data['typeMovement_id'] = TypeMovement.objects.get_or_create(
+                description=request.data['typeOfMovement'])[0].id
             if request.data['typeOfMovement'] == "Externa":
                 people_registration_movement = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistrationState'])
                 request.data['logisticOperator_id'] = people_registration_movement.logisticOperator_id
                 request.data['peopleRegistration_id'] = people_registration_movement.id
-                print(f"\n\n\n{request.data}\n\n\n")
             # internal movements does not need accessories
             elif request.data['typeOfMovement'] == "Interna":
+                print(f"\n\n\n{request.data}\n\n\n")
+                request.data['logisticOperator_id'] = request.data['logisticOperatorMovement']
                 request.data['accessoriesHelmet'] = False
                 request.data['accessoriesBag'] = False
                 request.data['accessoriesCase'] = False
                 request.data['accessoriesCharger'] = False
-                print(f"\n\n\n{request.data}\n\n\n")
             serializer = MovementSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 new_movement = serializer.save(owner=self.request.user)

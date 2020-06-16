@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
 import { postMovement } from '../../actions/movement'
+import { getLogisticOperator } from '../../actions/logisticOperator'
 
 
 export default function addMovementComponent() {
@@ -9,6 +10,7 @@ export default function addMovementComponent() {
     const alert = useAlert()
     const [newMovementState, setNewMovementState] = useState({
         scooter: "",
+        logisticOperatorMovement: "",
         cpfPeopleRegistrationState: "",
         accessoriesHelmet: false,
         accessoriesBag: false,
@@ -16,9 +18,24 @@ export default function addMovementComponent() {
         accessoriesCharger: false,
         observation: ""
     })
+    const [logisticOperatorFromAPI, setLogisticOperatorFromAPI] = useState([{
+        id: "",
+        description: ""
+    }])
+
+    useEffect(() => {
+        dispatch(getLogisticOperator())
+    }, [])
+
+    const logisticOperator = useSelector(state => state.logisticOperator.logisticOperator)
+
+    useEffect(() => {
+        if (logisticOperator !== undefined && logisticOperator !== "") {
+            setLogisticOperatorFromAPI(logisticOperator)
+        }
+    }, [logisticOperator])
     
     const [typeOfMovementSelect, setTypeOfMovementSelect] = useState("external")
-
 
     const handleChange = e => {
         const { name, value } = e.target
@@ -34,8 +51,8 @@ export default function addMovementComponent() {
     }
 
     const handleClean = e => {
-        setRegisterState({
-            ...RegisterState,
+        setNewMovementState({
+            ...newMovementState,
             scooter: "",
             cpfPeopleRegistrationState: "",
             accessoriesHelmet: false,
@@ -55,7 +72,7 @@ export default function addMovementComponent() {
     }
 
     const handleClickAdd = e => {
-        const { scooter, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
+        const { scooter, cpfPeopleRegistrationState, logisticOperatorMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfPeopleRegistration = cpfPeopleRegistrationState.replace(/\D/g, '')
         var typeOfMovement = typeOfMovementSelect
         if (typeOfMovement === "external") {
@@ -69,6 +86,7 @@ export default function addMovementComponent() {
                 var newMovementToAPI = { typeOfMovement, scooter, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
                 dispatch(postMovement(newMovementToAPI))
                 setNewMovementState({
+                    ...newMovementState,
                     scooter: "",
                     cpfPeopleRegistrationState: "",
                     accessoriesHelmet: false,
@@ -84,9 +102,10 @@ export default function addMovementComponent() {
                 alert.error("preencha todos os campos obrigatórios")
             }
             else {
-                var newMovementToAPI = { typeOfMovement, scooter, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+                var newMovementToAPI = { typeOfMovement, scooter, logisticOperatorMovement, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
                 dispatch(postMovement(newMovementToAPI))
                 setNewMovementState({
+                    ...newMovementState,
                     scooter: "",
                     cpfPeopleRegistrationState: "",
                     accessoriesHelmet: false,
@@ -118,6 +137,15 @@ export default function addMovementComponent() {
                             <label>Scooter
                                 <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
                             </label>
+                        </div>
+                        <div className="field-box">
+                            <label>Operador Logístico</label>
+                            <select name="logisticOperatorMovement" onChange={handleChange} value={newMovementState.LO}>
+                                <option value="">-----</option>
+                                {logisticOperatorFromAPI.map(logisitcOperator => (
+                                    <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="field-box delivery-man">
                             <label>CPF Entregador

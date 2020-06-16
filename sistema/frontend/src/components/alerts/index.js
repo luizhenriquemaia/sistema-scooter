@@ -30,6 +30,14 @@ export default function Alerts() {
                 //     alert.success(messageState.detail)
                 // }
             }
+            else if (messageState.logisticOperator_id) {
+                if (errorStatus >= 500) {
+                    alert.error("Erro interno do servidor")
+                }
+                if (errorStatus >= 400 && errorStatus < 500) {
+                    alert.error("Bad Request")
+                }
+            }
             else if (messageState.non_field_errors) {
                 if (errorStatus >= 500) {
                     alert.error("Erro interno do servidor")
