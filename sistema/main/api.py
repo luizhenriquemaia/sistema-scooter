@@ -159,6 +159,7 @@ class MovementViewSet(viewsets.ViewSet):
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
+            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk): 
@@ -166,39 +167,53 @@ class MovementViewSet(viewsets.ViewSet):
             try:
                 Movement.objects.get(id=pk, owner=request.user)
             except ObjectDoesNotExist:
-                return Response("você não é autorizado a realizar esta ação", status=status.HTTP_403_FORBIDDEN)
+                return Response({"serializer": "",
+                                 "message": "Você não é autorizado a realizar esta ação"}, status=status.HTTP_403_FORBIDDEN)
         movement = Movement.retrieve(Movement, id=pk)
         serializer = MovementRetrieveSerializer(data=movement)
         if serializer.is_valid(raise_exception=True):
             return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"serializer": serializer.errors,
+                         "message": "Erro ao retornar movimentação"}, status=status.HTTP_400_BAD_REQUEST)
             
 
     def create(self, request):
+        if request.data['typeOfMovement'] == 'external':
+            request.data['typeOfMovement'] = 'Externa'
+        elif request.data['typeOfMovement'] == 'internal':
+            request.data['typeOfMovement'] = "Interna"
         if request.data['typeOfMovement'] != 'Externa' and request.data['typeOfMovement'] != 'Interna':
-            return Response("Tipo de movimentação incorreta", status=status.HTTP_400_BAD_REQUEST)
+            return Response({"serializer": "",
+                             "message": "Tipo de movimentação incorreta"}, status=status.HTTP_400_BAD_REQUEST)
         try: 
             Scooter.objects.get(chassisNumber=request.data['scooter'])
         except ObjectDoesNotExist:
-            return Response("Patinete não existente", status=status.HTTP_400_BAD_REQUEST)
+            "Patinete não existente"
+            return Response({"serializer": "",
+                            "message": "Patinete não existente"}, status=status.HTTP_400_BAD_REQUEST)
         if request.data['typeOfMovement'] == "Externa":
             try:
                 PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistrationState'])
             except ObjectDoesNotExist:
-                return Response("Responsável não cadastrado", status=status.HTTP_400_BAD_REQUEST)
+                return Response({"serializer": "",
+                                 "message": "Entregador não cadastrado"}, status=status.HTTP_400_BAD_REQUEST)
         request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
-        request.data['typeMovement_id'] = TypeMovement.objects.get_or_create(
-            description=request.data['typeOfMovement'])[0].id
         scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
         if scooter_db.status.description != "Disponível":
-            return Response("Patinete não disponível", status=status.HTTP_400_BAD_REQUEST)
+            
+            return Response({"serializer": "",
+                            "message": "Patinete não disponível"}, status=status.HTTP_400_BAD_REQUEST)
         else:
+            request.data['typeMovement_id'] = TypeMovement.objects.get_or_create(
+                description=request.data['typeOfMovement'])[0].id
             if request.data['typeOfMovement'] == "Externa":
                 people_registration_movement = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistrationState'])
                 request.data['logisticOperator_id'] = people_registration_movement.logisticOperator_id
                 request.data['peopleRegistration_id'] = people_registration_movement.id
             # internal movements does not need accessories
             elif request.data['typeOfMovement'] == "Interna":
+                print(f"\n\n\n{request.data}\n\n\n")
+                request.data['logisticOperator_id'] = request.data['logisticOperatorMovement']
                 request.data['accessoriesHelmet'] = False
                 request.data['accessoriesBag'] = False
                 request.data['accessoriesCase'] = False
@@ -206,9 +221,11 @@ class MovementViewSet(viewsets.ViewSet):
             serializer = MovementSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 new_movement = serializer.save(owner=self.request.user)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response({"serializer": serializer.data,
+                                "message": "movimentação criada"}, status=status.HTTP_201_CREATED)
             else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"serializer": serializer.errors,
+                                 "message": "Erro ao criar movimentação"}, status=status.HTTP_400_BAD_REQUEST)
                     
 
     
@@ -225,7 +242,8 @@ class MovementViewSet(viewsets.ViewSet):
                 if request.data['finalTimeFormatted'] != "":
                     request.data['returnTime'] = request.data['finalTimeFormatted']
             except ObjectDoesNotExist:
-                return Response("valor(es) não existente(s) na base de dados", status=status.HTTP_400_BAD_REQUEST)
+                return Response({"serializer": "",
+                                 "message": "valor(es) não existente(s) na base de dados"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             # if user is not staff he can only changes the destiny and type of release
             request.data['scooter_id'] = movement.scooter_id
@@ -243,14 +261,18 @@ class MovementViewSet(viewsets.ViewSet):
         serializer = MovementSerializer(movement, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"serializer": serializer.data,
+                             "message": "movimentação atualizada com sucesso"}, status=status.HTTP_200_OK)
+        return Response({"serializer": serializer.errors,
+                         "message": "Erro ao atualizar dados"}, status=status.HTTP_400_BAD_REQUEST)
     
     def destroy(self, request, pk):
         permission_classes = [permissions.IsAuthenticated]
         if request.user.is_staff or request.user.is_superuser:
             serializer = MovementSerializer
             Movement.destroy(Movement, id=pk)
-            return Response("movimentação deletada com sucesso", status=status.HTTP_204_NO_CONTENT)
+            return Response({"serializer": "",
+                             "message": "movimentação excluída com sucesso"}, status=status.HTTP_204_NO_CONTENT)
         else:
-            return Response("é necessário ser administrador para excluir um registro", status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"serializer": serializer.errors,
+                             "message": "é necessário ser administrador para excluir um registro"}, status=status.HTTP_401_UNAUTHORIZED)

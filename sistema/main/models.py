@@ -149,23 +149,38 @@ class Movement(models.Model):
         scooter_db = Scooter.objects.get(id=validated_data['scooter_id'])
         # case of movement without peopleRegistration
         try:
-            movement.peopleRegistration = PeopleRegistration.objects.get(
+            people_registration_of_movement = PeopleRegistration.objects.get(
                 id=validated_data['peopleRegistration_id'])
+            new_movement = Movement(
+                scooter=scooter_db,
+                peopleRegistration=people_registration_of_movement,
+                logisticOperator=LogisticOperator.objects.get(
+                    id=validated_data['logisticOperator_id']),
+                typeMovement=TypeMovement.objects.get(
+                    id=validated_data['typeMovement_id']),
+                intialDateMovement=date.today(),
+                pickUpTime=datetime.now().time(),
+                accessoriesHelmet=validated_data['accessoriesHelmet'],
+                accessoriesBag=validated_data['accessoriesBag'],
+                accessoriesCase=validated_data['accessoriesCase'],
+                accessoriesCharger=validated_data['accessoriesCharger'],
+                observation=validated_data['observation'],
+                owner=validated_data['owner']
+            )
         except KeyError:
-            pass
-        new_movement = Movement(
-            scooter=scooter_db,
-            logisticOperator=LogisticOperator.objects.get(id=validated_data['logisticOperator_id']),
-            typeMovement=TypeMovement.objects.get(id=validated_data['typeMovement_id']),
-            intialDateMovement=date.today(),
-            pickUpTime=datetime.now().time(),
-            accessoriesHelmet=validated_data['accessoriesHelmet'],
-            accessoriesBag=validated_data['accessoriesBag'],
-            accessoriesCase=validated_data['accessoriesCase'],
-            accessoriesCharger=validated_data['accessoriesCharger'],
-            observation=validated_data['observation'],
-            owner=validated_data['owner']
-        )
+            new_movement = Movement(
+                scooter=scooter_db,
+                logisticOperator=LogisticOperator.objects.get(id=validated_data['logisticOperator_id']),
+                typeMovement=TypeMovement.objects.get(id=validated_data['typeMovement_id']),
+                intialDateMovement=date.today(),
+                pickUpTime=datetime.now().time(),
+                accessoriesHelmet=validated_data['accessoriesHelmet'],
+                accessoriesBag=validated_data['accessoriesBag'],
+                accessoriesCase=validated_data['accessoriesCase'],
+                accessoriesCharger=validated_data['accessoriesCharger'],
+                observation=validated_data['observation'],
+                owner=validated_data['owner']
+            )
         new_movement.save()
         # update status of scooter
         type_movement_db = TypeMovement.objects.get(
