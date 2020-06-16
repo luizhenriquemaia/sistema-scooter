@@ -224,6 +224,20 @@ export default function Movements() {
                     </div>
                     <section className="content-box">
                         <div>
+                            <label>Patinetes Totais</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                            <label>Patinetes Disponíveis</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                            <label>Patinetes Sendo Utilizados</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                            <label>Patinetes Operantes</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersOperants} disabled  />
+                            <label>Patinetes em Manutenção</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
+                            <label>Patinetes em Backup</label>
+                            <input type="text" value={NumbersOfScootersState.numberOfScootersInBackup} disabled />
+                        </div>
+                        <div>
                             <label>Data</label>
                             <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
                             <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
@@ -243,21 +257,6 @@ export default function Movements() {
                             <label>Mostrar Apenas o Patinete</label>
                             <input type="text" name="filterByChassis" value={filtersMovements.filterByChassis || ''} onChange={handleFiltersChange} />
                         </div>
-                        <div>
-                            <label>Patinetes Totais</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
-                            <label>Patinetes Disponíveis</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
-                            <label>Patinetes Sendo Utilizados</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
-                            <label>Patinetes Operantes</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersOperants} disabled  />
-                            <label>Patinetes em Manutenção</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
-                            <label>Patinetes em Backup</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersInBackup} disabled />
-                        </div>
-
                         <table className="table-movements">
                             <thead>
                                 <tr>
