@@ -175,6 +175,10 @@ class MovementViewSet(viewsets.ViewSet):
             
 
     def create(self, request):
+        if request.data['typeOfMovement'] == 'external':
+            request.data['typeOfMovement'] = 'Externa'
+        elif request.data['typeOfMovement'] == 'internal':
+            request.data['typeOfMovement'] = "Interna"
         if request.data['typeOfMovement'] != 'Externa' and request.data['typeOfMovement'] != 'Interna':
             return Response("Tipo de movimentação incorreta", status=status.HTTP_400_BAD_REQUEST)
         try: 
@@ -197,12 +201,14 @@ class MovementViewSet(viewsets.ViewSet):
                 people_registration_movement = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistrationState'])
                 request.data['logisticOperator_id'] = people_registration_movement.logisticOperator_id
                 request.data['peopleRegistration_id'] = people_registration_movement.id
+                print(f"\n\n\n{request.data}\n\n\n")
             # internal movements does not need accessories
             elif request.data['typeOfMovement'] == "Interna":
                 request.data['accessoriesHelmet'] = False
                 request.data['accessoriesBag'] = False
                 request.data['accessoriesCase'] = False
                 request.data['accessoriesCharger'] = False
+                print(f"\n\n\n{request.data}\n\n\n")
             serializer = MovementSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 new_movement = serializer.save(owner=self.request.user)
