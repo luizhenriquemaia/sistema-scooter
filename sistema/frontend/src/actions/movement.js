@@ -11,8 +11,9 @@ export const getMovements = () => (dispatch, getState) => {
                 type: GET_MOVEMENTS,
                 payload: res.data
             })
+            dispatch(returnSuccess("", res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
 }
 
 
@@ -23,8 +24,9 @@ export const getMovementsWithFilters = (filters) => (dispatch, getState)  => {
                 type: GET_MOVEMENTS,
                 payload: res.data
             })
+            dispatch(returnSuccess("", res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
 }
 
 
@@ -35,8 +37,9 @@ export const getMovement = (id) => (dispatch, getState) => {
                 type: GET_MOVEMENT,
                 payload: res.data
             })
+            dispatch(returnSuccess("", res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status))) 
 }
 
 
@@ -47,8 +50,9 @@ export const getTypesMovement = () => (dispatch, getState) => {
                 type: GET_TYPES_MOVEMENT,
                 payload: res.data
             })
+            dispatch(returnSuccess("", res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status))) 
 }
 
 
@@ -57,11 +61,11 @@ export const postMovement = (movement) => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: ADD_MOVEMENT,
-                payload: res.data.movement
+                payload: res.data.serializer
             })
             dispatch(returnSuccess(res.data.message, res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status))) 
 }
 
 export const updateMovement = (id, movementData) => (dispatch, getState) => {
@@ -69,10 +73,11 @@ export const updateMovement = (id, movementData) => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: UPDATE_MOVEMENT,
-                payload: res.data
+                payload: res.data.serializer
             })
+            dispatch(returnSuccess(res.data.message, res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status))) 
 }
 
 
@@ -83,6 +88,7 @@ export const deleteMovement = (id) => (dispatch, getState) => {
                 type: DELETE_MOVEMENT,
                 payload: id
             })
+            dispatch(returnSuccess(res.data.message, res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status))) 
 }

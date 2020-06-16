@@ -76,21 +76,34 @@ export default function Movements() {
     }
 
     useEffect(() => {
-        if (movements.length !== 0 && movements !== undefined) {
-            if (isDetails === false && isAdd === false) {
-                if (movements.map) {
-                    movements.map(movement => {
-                        movement.timePickUpFormatted = formattingTime(movement.intialDateMovement, movement.pickUpTime)
-                        if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.intialDateMovement, movement.returnTime)
-                    })
-                    setMovementState(movements)
-                    setShouldGetMovements(false)
+        if (movements !== undefined) {
+            if (movements.length !== 0) {
+                if (isDetails === false && isAdd === false) {
+                    if (movements.map) {
+                        movements.map(movement => {
+                            movement.timePickUpFormatted = formattingTime(movement.intialDateMovement, movement.pickUpTime)
+                            if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.intialDateMovement, movement.returnTime)
+                        })
+                        setMovementState(movements)
+                        setShouldGetMovements(false)
+                    }
+                }
+                else {
+                    setShouldGetMovements(true)
                 }
             }
-            else {
+            else if (movements !== '') {
                 setShouldGetMovements(true)
             }
+            else {
+                setMovementState([{
+                    id: 0, dataMovement: "", scooter: { chassisNumber: "" }, logisticOperator: { description: "" },
+                    peopleRegistration: { name: "" }, typeRelease: "", accessoriesHelmet: false, accessoriesBag: false,
+                    accessoriesCase: false, accessoriesCharger: false, observation: "", timePickUpFormatted: "", timeReturnFormatted: ""
+                }])
+            }
         }
+        
         else {
             // api returns "" so if movements is empty is because there is not a movement in database
             if (movements !== '') {
