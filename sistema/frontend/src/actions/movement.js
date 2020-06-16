@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { GET_MOVEMENTS, GET_MOVEMENT, GET_TYPES_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from './types'
-import { returnErrors } from './messages'
+import { returnErrors, returnSuccess } from './messages'
 import { tokenConfig } from './auth'
 
 
@@ -57,8 +57,9 @@ export const postMovement = (movement) => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: ADD_MOVEMENT,
-                payload: res.data
+                payload: res.data.movement
             })
+            dispatch(returnSuccess(res.data.message, res.status))
         })
         .catch(err => dispatch(returnErrors(err.response.data, err.response.status))) 
 }

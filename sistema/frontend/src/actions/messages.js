@@ -1,4 +1,4 @@
-import { CREATE_MESSAGE, GET_ERRORS } from './types'
+import { CREATE_MESSAGE, GET_ERRORS, GET_SUCCESS } from './types'
 
 
 export const createMessage = msg => {
@@ -11,6 +11,13 @@ export const createMessage = msg => {
 export const returnErrors = (msg, status) => {
     return {
         type: GET_ERRORS,
+        payload: { msg, status }
+    }
+}
+
+export const returnSuccess = (msg, status) => {
+    return {
+        type: GET_SUCCESS,
         payload: { msg, status }
     }
 }

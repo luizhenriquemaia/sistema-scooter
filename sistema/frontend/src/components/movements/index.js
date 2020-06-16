@@ -78,12 +78,14 @@ export default function Movements() {
     useEffect(() => {
         if (movements.length !== 0 && movements !== undefined) {
             if (isDetails === false && isAdd === false) {
-                movements.map(movement => {
-                    movement.timePickUpFormatted = formattingTime(movement.intialDateMovement, movement.pickUpTime)
-                    if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.intialDateMovement, movement.returnTime)
-                })
-                setMovementState(movements)
-                setShouldGetMovements(false)
+                if (movements.map) {
+                    movements.map(movement => {
+                        movement.timePickUpFormatted = formattingTime(movement.intialDateMovement, movement.pickUpTime)
+                        if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.intialDateMovement, movement.returnTime)
+                    })
+                    setMovementState(movements)
+                    setShouldGetMovements(false)
+                }
             }
             else {
                 setShouldGetMovements(true)

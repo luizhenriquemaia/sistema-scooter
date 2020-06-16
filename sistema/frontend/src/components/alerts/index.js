@@ -6,8 +6,8 @@ import { useAlert } from 'react-alert'
 
 export default function Alerts() {
     const alert = useAlert()
-    const errorMessage = useSelector(state => state.errors.msg)
-    const errorStatus = useSelector(state => state.errors.status)
+    const errorMessage = useSelector(state => state.info.msg)
+    const errorStatus = useSelector(state => state.info.status)
     const [messageState, setMessageState] = useState("")
 
     
@@ -57,7 +57,9 @@ export default function Alerts() {
                     alert.error(messageState)
                 }
                 if (errorStatus >= 200 && errorStatus < 400) {
-                    alert.success(messageState)
+                    if (messageState) {
+                        alert.success(messageState)
+                    }                    
                 }
             }
             

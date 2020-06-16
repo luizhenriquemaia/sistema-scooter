@@ -212,7 +212,8 @@ class MovementViewSet(viewsets.ViewSet):
             serializer = MovementSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 new_movement = serializer.save(owner=self.request.user)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response({"movement": serializer.data,
+                                "message": "movimentação criada"}, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                     
