@@ -66,7 +66,6 @@ export default function Register() {
             logisticOperatorDescription: "",
             peopleRegistrationName: "",
             cpfPeopleRegistration: "",
-            logisticOperatorPeopleRegistration: "",
             chassisScooter: "",
             statusScooter: ""
         })
@@ -86,6 +85,7 @@ export default function Register() {
                 var newRegisterToAPI = { peopleRegistrationName, cpfPeopleRegistrationToAPI, logisticOperatorPeopleRegistration }
                 dispatch(addPeopleRegistration(newRegisterToAPI))
                 setRegisterState({
+                    ...RegisterState,
                     peopleRegistrationName: "",
                     cpfPeopleRegistration: "",
                 })
@@ -99,7 +99,10 @@ export default function Register() {
                 else {
                     var newRegisterToAPI = { stateValueSelect, logisticOperatorDescription }
                     dispatch(addLogisticOperator(newRegisterToAPI))
-                    setRegisterState({ logisticOperatorDescription: "" })
+                    setRegisterState({ 
+                        ...RegisterState,
+                        logisticOperatorDescription: "" 
+                    })
                 }
             }
         else if (stateValueSelect === "scooter") {
