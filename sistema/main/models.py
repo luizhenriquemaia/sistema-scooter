@@ -43,7 +43,7 @@ class LogisticOperator(models.Model):
  
 
 class Scooter(models.Model):
-    chassisNumber = models.IntegerField()
+    chassisNumber = models.CharField(max_length=200)
     status = models.ForeignKey(StatusScooter, on_delete=models.CASCADE, default=0)
     objects = models.Manager()
 

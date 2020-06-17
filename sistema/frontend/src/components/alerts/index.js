@@ -15,7 +15,6 @@ export default function Alerts() {
 
     
     useEffect(() => {
-        console.log(3)
         if (messageState === "" && shouldResetMessage === false) {
             if (errorMessage) {
                 setMessageState(errorMessage)
@@ -34,7 +33,6 @@ export default function Alerts() {
 
     useEffect(() => {
         if (messageState) {
-            console.log(55)
             if (messageState.detail) {
                 // if (errorStatus >= 500) {
                 //     alert.error("Erro interno do servidor")

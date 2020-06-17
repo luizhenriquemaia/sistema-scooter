@@ -14,16 +14,20 @@ class StatusScooterViewSet(viewsets.ViewSet):
         queryset = StatusScooter.objects.all()
         serializer = StatusScooterSerializer(queryset, many=True)
         if len(serializer.data) > 0:
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
     
     def create(self, request):
         serializer = StatusScooterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             new_status_scooter = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"serializer": serializer.data,
+                             "message": "Status do patinete adicionado com sucesso"}, status=status.HTTP_201_CREATED)
+        return Response({"serializer": serializer.errors,
+                         "message": "Erro ao adicionar status do patinete"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TypeMovementViewSet(viewsets.ViewSet):
@@ -33,16 +37,20 @@ class TypeMovementViewSet(viewsets.ViewSet):
         queryset = TypeMovement.objects.all()
         serializer = TypeMovementSerializer(queryset, many=True)
         if len(serializer.data) > 0:
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request):
         serializer = TypeMovementSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             new_status_scooter = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"serializer": serializer.data,
+                             "message": "Tipo de movimentação criada com sucesso"}, status=status.HTTP_201_CREATED)
+        return Response({"serializer": serializer.errors,
+                         "message": "Erro criar tipo de movimentação"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogisticOperatorViewSet(viewsets.ViewSet):
@@ -52,9 +60,11 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
         queryset = LogisticOperator.objects.all()
         serializer = LogisticOperatorSerializer(queryset, many=True)
         if len(serializer.data) > 0:
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
 
 
     def create(self, request):
@@ -84,14 +94,17 @@ class ScooterViewSet(viewsets.ViewSet):
         queryset = Scooter.objects.all()
         serializer = ScooterSerializer(queryset, many=True)
         if len(serializer.data) > 0:
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
         
     def create(self, request):
         try: 
             Scooter.objects.get(chassisNumber=request.data['chassisScooter'])
-            return Response("patinete já cadastrado", status=status.HTTP_400_BAD_REQUEST)
+            return Response({"serializer": "",
+                             "message": "patinete já cadastrado"}, status=status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist:
             request.data['status_id'] = request.data['statusScooter']
             request.data['chassisNumber'] = request.data['chassisScooter']
@@ -99,10 +112,13 @@ class ScooterViewSet(viewsets.ViewSet):
             try:
                 if serializer.is_valid(raise_exception=True):
                     new_scooter = serializer.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                    return Response({"serializer": serializer.data,
+                                     "message": "Patinete adicionado com sucesso"}, status=status.HTTP_201_CREATED)
             except AttributeError:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"serializer": serializer.errors,
+                                 "message": "Erro ao adicionar patinete"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"serializer": serializer.errors,
+                             "message": "Erro ao adicionar patinete"}, status=status.HTTP_400_BAD_REQUEST)
         
 
 
@@ -169,9 +185,11 @@ class MovementViewSet(viewsets.ViewSet):
                     intialDateMovement=datetime.today(), owner=request.user)
         serializer = MovementSerializer(queryset_list, many=True)
         if len(serializer.data) > 0:
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk): 
         if not request.user.is_staff or not request.user.is_superuser:
@@ -223,7 +241,6 @@ class MovementViewSet(viewsets.ViewSet):
                 request.data['peopleRegistration_id'] = people_registration_movement.id
             # internal movements does not need accessories
             elif request.data['typeOfMovement'] == "Interna":
-                print(f"\n\n\n{request.data}\n\n\n")
                 request.data['logisticOperator_id'] = request.data['logisticOperatorMovement']
                 request.data['accessoriesHelmet'] = False
                 request.data['accessoriesBag'] = False
