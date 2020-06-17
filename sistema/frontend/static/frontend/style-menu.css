@@ -5,6 +5,7 @@
     box-sizing: border-box;
 }
 
+
 /* Opend Menu -------------------------------*/
 .menuBlock {
     background: rgba(0, 0, 0, 0.85);
@@ -193,7 +194,7 @@ section.section-main-box {
 }
 
 .field-box label {
-    margin-bottom: 5px;
+    margin: 10px 0px;
     margin-right: 15px;
 }
 
@@ -216,6 +217,12 @@ section.section-main-box {
     min-width: 20px;
     min-height: 20px;
     margin-right: 40px;
+}
+
+.field-box textarea {
+    margin: 15px;
+    width: 100%;
+    height: 80px;
 }
 
 .buttonBox {
@@ -261,6 +268,19 @@ section.section-main-box {
         flex-direction: column;
         align-items: center;
     }
+
+    .submit-button {
+        margin: 0;
+    }
+
+    .buttonBox {
+        justify-content: center;
+        margin-top: 5px;
+    }
+    
+    .submit-button.confirm {
+        margin-left: 30px;
+    }
 }
 
 /* Register Section  -------------------------------*/
@@ -300,8 +320,7 @@ section.section-main-box {
 }
 
 /* Add Movement Section ------------------------- */
-
-section.add-movement-section .field-box {
+.add-movement-section .field-box {
     padding: 3% 5%;
     border-bottom: 2px solid #505050;
     flex-direction: row;
@@ -313,27 +332,39 @@ section.add-movement-section .data-box :last-child.field-box {
     border: none;
 }
 
+.add-movement-section .field-box.accessories {
+    justify-content: space-between;
+}
+
 .add-movement-section .field-box input {
     width: initial;
     margin-left: 20px;
     display: flex;
-    margin-right: 200px;
 }
 
 .add-movement-section .field-box label {
     display: flex;
+    margin-right: 215px;
 }
 
-.add-movement-section .field-box input[type='checkbox'] {
+.add-movement-section .data-box :last-child.field-box label {
+    width: auto;
+    margin: 0;
+    display: contents;
+}
+
+.add-movement-section .field-box.accessories label{
+    margin-right: 0;
+}
+
+.add-movement-section .field-box.acessories input {
     width: min-content;
-    margin-right: 100px;
 }
 
 .add-movement-section .content-box select {
     width: 200px;
     margin-left: 20px ;
 }
-
 
 .internal .field-box.delivery-man,
 .internal .field-box.accessories {
@@ -350,15 +381,55 @@ section.add-movement-section .data-box :last-child.field-box {
 
     .add-movement-section .field-box input {
         margin-right: 20px;
-        max-width: 140px;
     }
 
     .add-movement-section .field-box label {
-        margin-right: 0px;
+        margin-right: 40px;
         max-width: 220px;
     }
 
     .add-movement-section .content-box select {
         width: 200px;
     }
+}
+
+
+/* login ------------------------------- */
+
+.content.login {
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.section-main-box.login-section {
+    width: 300px;
+}
+
+.login-section .content-box{
+    padding: 0
+}
+
+.login-section .data-box {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.login-section .data-box label {
+    margin: 10px;   
+}
+
+.login-section .data-box input {
+    height: 24px;
+    padding: 2px 5px;
+    margin-bottom: 10px;
+    border: 1px solid;
+}
+
+.login-section .data-box  button{
+    height: 40px;
+    font-size: 18px;
+    background-color: beige;
 }

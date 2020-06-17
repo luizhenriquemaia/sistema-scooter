@@ -33,16 +33,19 @@ export default function Login() {
         return <Redirect to="/" />
     } else {
         return (
-            <div className="content">
-                <form onSubmit={handleOnSubmit}>
-                    <label>Nome</label>
-                    <input type="text" name="username" value={loginState.username} onChange={handleOnChange} />
-                    <label>Senha</label>
-                    <input type="password" name="password" value={loginState.password} onChange={handleOnChange} />
-                    <button type="submit">Login</button>
-                </form>
-
-            </div>
+            <main className="content login">
+                <section className="section-main-box login-section">
+                    <div className="content-box">
+                        <form className="data-box" onSubmit={handleOnSubmit}>
+                            <label>Nome</label>
+                            <input type="text" name="username" value={loginState.username} onChange={handleOnChange} />
+                            <label>Senha</label>
+                            <input type="password" name="password" value={loginState.password} onChange={handleOnChange} />
+                            <button type="submit">Login</button>
+                        </form>
+                    </div>
+                </section>
+            </main>
         )
 
     }
