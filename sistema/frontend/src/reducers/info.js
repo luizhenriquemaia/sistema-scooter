@@ -1,4 +1,4 @@
-import { GET_ERRORS, GET_SUCCESS } from '../actions/types'
+import { GET_ERRORS, GET_SUCCESS, RESET_MESSAGE } from '../actions/types'
 
 
 const initialState = {
@@ -17,6 +17,10 @@ export default function (state = initialState, action) {
             return {
                 msg: action.payload.msg,
                 status: action.payload.status
+            }
+        case RESET_MESSAGE:
+            return {
+                info: initialState
             }
         default:
             return state
