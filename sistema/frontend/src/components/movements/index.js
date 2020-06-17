@@ -76,8 +76,10 @@ export default function Movements() {
     }
 
     useEffect(() => {
+        console.log(movements)
         if (movements !== undefined) {
             if (movements.length !== 0) {
+
                 if (isDetails === false && isAdd === false) {
                     if (movements.map) {
                         movements.map(movement => {
@@ -92,10 +94,13 @@ export default function Movements() {
                     setShouldGetMovements(true)
                 }
             }
-            else if (movements !== '') {
-                setShouldGetMovements(true)
-            }
             else {
+                if (movements !== '') {
+                    setShouldGetMovements(true)
+                }
+                else {
+                    setShouldGetMovements(false)
+                }
                 setMovementState([{
                     id: 0, dataMovement: "", scooter: { chassisNumber: "" }, logisticOperator: { description: "" },
                     peopleRegistration: { name: "" }, typeRelease: "", accessoriesHelmet: false, accessoriesBag: false,
@@ -108,6 +113,9 @@ export default function Movements() {
             // api returns "" so if movements is empty is because there is not a movement in database
             if (movements !== '') {
                 setShouldGetMovements(true)
+            }
+            else {
+                setShouldGetMovements(false)
             }
             setMovementState([{
                 id: 0, dataMovement: "", scooter: { chassisNumber: "" }, logisticOperator: { description: "" },

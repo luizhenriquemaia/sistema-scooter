@@ -1,6 +1,4 @@
 __pycache__
 db.sqlite3
-
-node_modules
-sistema/db.sqlite3
 sistema/frontend/static/frontend/main.js
+node_modules
