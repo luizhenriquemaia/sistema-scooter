@@ -239,18 +239,30 @@ export default function Movements() {
                     </div>
                     <section className="content-box">
                         <div>
-                            <label>Patinetes Totais</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
-                            <label>Patinetes Disponíveis</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
-                            <label>Patinetes Sendo Utilizados</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
-                            <label>Patinetes Operantes</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersOperants} disabled  />
-                            <label>Patinetes em Manutenção</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
-                            <label>Patinetes em Backup</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersInBackup} disabled />
+                            <div className="field-box">
+                                <label>Patinetes Totais</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                            </div>
+                            <div className="field-box">
+                                <label>Patinetes Disponíveis</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                            </div>
+                            <div className="field-box">
+                                <label>Patinetes Sendo Utilizados</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                            </div>
+                            <div className="field-box">    
+                                <label>Patinetes Operantes</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersOperants} disabled  />
+                            </div>
+                            <div className="field-box">
+                                <label>Patinetes em Manutenção</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
+                            </div>
+                            <div className="field-box">
+                                <label>Patinetes em Backup</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersInBackup} disabled />
+                            </div>
                         </div>
                         <div>
                             <label>Data</label>
@@ -259,18 +271,30 @@ export default function Movements() {
                             <button onClick={handleSetFilters}>Aplicar Filtros</button>
                         </div>
                         <div>
-                            <label>Mostrar Data Final</label>
-                            <input type="checkbox" name="filterShowFinalDate" checked={filtersMovements.filterShowFinalDate} onChange={handleCheckFilter} />
-                            <label>Mostrar Patinetes Devolvidos</label>
-                            <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
-                            <label>Mostrar Apenas Movimentações do Tipo</label>
-                            <input type="text" name="filterTypesMovements" value={filtersMovements.filterTypesMovements || ''} onChange={handleFiltersChange} />
-                            <label>Mostrar Apenas a OL</label>
-                            <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
-                            <label>Mostrar Apenas o Entregador</label>
-                            <input type="text" name="filterByNamePeopleRegistration" value={filtersMovements.filterByNamePeopleRegistration || ''} onChange={handleFiltersChange} />
-                            <label>Mostrar Apenas o Patinete</label>
-                            <input type="text" name="filterByChassis" value={filtersMovements.filterByChassis || ''} onChange={handleFiltersChange} />
+                            <div className="field-box">
+                                <label>Mostrar Data Final</label>
+                                <input type="checkbox" name="filterShowFinalDate" checked={filtersMovements.filterShowFinalDate} onChange={handleCheckFilter} />
+                            </div>
+                            <div className="field-box">
+                                <label>Mostrar Patinetes Devolvidos</label>
+                                <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
+                            </div>
+                            <div className="field-box">    
+                                <label>Mostrar Apenas Movimentações do Tipo</label>
+                                <input type="text" name="filterTypesMovements" value={filtersMovements.filterTypesMovements || ''} onChange={handleFiltersChange} />
+                            </div>
+                            <div className="field-box">
+                                <label>Mostrar Apenas a OL</label>
+                                <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
+                            </div>
+                            <div className="field-box">
+                                <label>Mostrar Apenas o Entregador</label>
+                                <input type="text" name="filterByNamePeopleRegistration" value={filtersMovements.filterByNamePeopleRegistration || ''} onChange={handleFiltersChange} />
+                            </div>
+                            <div className="field-box">
+                                <label>Mostrar Apenas o Patinete</label>
+                                <input type="text" name="filterByChassis" value={filtersMovements.filterByChassis || ''} onChange={handleFiltersChange} />
+                            </div>
                         </div>
                         <table className="table-movements">
                             <thead>
@@ -334,14 +358,22 @@ export default function Movements() {
                             <button onClick={handleSetFilters}>Aplicar Filtros</button>
                         </div>
                         <div>
-                            <label>Patinetes Totais</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
-                            <label>Patinetes Disponíveis</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
-                            <label>Patinetes Sendo Utilizados</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
-                            <label>Patinetes em Manutenção</label>
-                            <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
+                            <div className="field-box">
+                                <label>Patinetes Totais</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                            </div>
+                            <div className="field-box">
+                                <label>Patinetes Disponíveis</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                            </div>
+                            <div className="field-box">
+                                <label>Patinetes Sendo Utilizados</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                            </div>
+                            <div className="field-box">
+                                <label>Patinetes em Manutenção</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
+                            </div>
                         </div>
 
                         <table className="table-movements">
