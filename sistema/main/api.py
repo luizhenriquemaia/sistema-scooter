@@ -55,7 +55,7 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-            
+
 
     def create(self, request):
         try:
@@ -86,7 +86,7 @@ class ScooterViewSet(viewsets.ViewSet):
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response("nenhum patinete encontrado", status=status.HTTP_204_NO_CONTENT)
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
         
     def create(self, request):
         try: 
@@ -113,14 +113,17 @@ class PeopleRegistrationViewSet(viewsets.ViewSet):
         queryset = PeopleRegistration.objects.all()
         serializer = PeopleRegistrationSerializer(queryset, many=True)
         if len(serializer.data) > 0:
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_200_OK)
         else:
-            return Response("", status=status.HTTP_204_NO_CONTENT)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request):
         try:
             PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistrationToAPI'])
-            return Response("CPF já cadastrado", status.HTTP_400_BAD_REQUEST)
+            return Response({"serializer": "",
+                             "message": "CPF já cadastrado"}, status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist:
             request.data['name'] = request.data['peopleRegistrationName']
             request.data['cpf'] = request.data['cpfPeopleRegistrationToAPI']
@@ -128,17 +131,21 @@ class PeopleRegistrationViewSet(viewsets.ViewSet):
                 LogisticOperator.objects.get(
                     id=request.data['logisticOperatorPeopleRegistration'])
             except ObjectDoesNotExist:
-                return Response("OL não cadastrada", status=status.HTTP_400_BAD_REQUEST)
+                return Response({"serializer": "",
+                                 "message": "OL não cadastrada"}, status=status.HTTP_400_BAD_REQUEST)
             request.data['logisticOperator_id'] = LogisticOperator.objects.get(
                 id=request.data['logisticOperatorPeopleRegistration']).id
             serializer = PeopleRegistrationSerializer(data=request.data)
             try:
                 if serializer.is_valid(raise_exception=True):
                     new_people_registration = serializer.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                    return Response({"serializer": serializer.data,
+                                     "message": "Entregador adicionado com sucesso"}, status=status.HTTP_201_CREATED)
             except AttributeError:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"serializer": serializer.errors,
+                                 "message": "Erro ao adicionar entregador"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"serializer": serializer.errors,
+                             "message": "Erro ao adicionar entregador"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MovementViewSet(viewsets.ViewSet):
