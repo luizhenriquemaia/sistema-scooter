@@ -251,8 +251,10 @@ section.section-main-box {
 
 /* General mobile  ---------------------------------------*/
 @media(max-width: 600px) {
-    .field-box input {
-        margin-right: 25px;
+    .field-box {
+        justify-content: center;
+        padding: 7% 5%;
+        text-align: center;
     }
 
     main.content {
@@ -336,8 +338,9 @@ section.add-movement-section .data-box :last-child.field-box {
 
 .add-movement-section .field-box input {
     width: initial;
-    margin-left: 20px;
     display: flex;
+    margin-left: 20px;
+    margin-right: 25px;
 }
 
 .add-movement-section .field-box label {
@@ -373,17 +376,14 @@ section.add-movement-section .data-box :last-child.field-box {
 /* Add Movement Section Mobile------------------------- */
 
 @media(max-width: 600px) {
-    section.add-movement-section .field-box {
-        padding: 7% 5%;
-    }
-
     .add-movement-section .field-box input {
-        margin-right: 20px;
+        margin-right: 0px;
+        overflow: hidden;
     }
 
     .add-movement-section .field-box label {
-        margin-right: 40px;
-        max-width: 220px;
+        margin-right: 0;
+        flex-direction: column;
     }
 
     .add-movement-section .content-box select {
@@ -432,7 +432,6 @@ section.add-movement-section .data-box :last-child.field-box {
     margin-bottom: 10px;
     border: 1px solid;
 }
-
 .login-section .data-box  button {
     height: 40px;
     font-size: 18px;
