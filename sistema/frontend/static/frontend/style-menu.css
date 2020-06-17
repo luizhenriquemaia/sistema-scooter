@@ -423,7 +423,7 @@ section.add-movement-section .data-box :last-child.field-box {
 }
 
 .login-section .data-box label {
-    margin: 10px;   
+    margin: 10px 0 0;   
 }
 
 .login-section .data-box input {
@@ -433,8 +433,9 @@ section.add-movement-section .data-box :last-child.field-box {
     border: 1px solid;
 }
 
-.login-section .data-box  button{
+.login-section .data-box  button {
     height: 40px;
     font-size: 18px;
     background-color: beige;
+    cursor: pointer;
 }
