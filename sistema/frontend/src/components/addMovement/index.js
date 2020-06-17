@@ -137,15 +137,14 @@ export default function addMovementComponent() {
                             <label>Scooter
                                 <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
                             </label>
-                        </div>
-                        <div className="field-box">
-                            <label>Operador Logístico</label>
-                            <select name="logisticOperatorMovement" onChange={handleChange} value={newMovementState.LO}>
-                                <option value="">-----</option>
-                                {logisticOperatorFromAPI.map(logisitcOperator => (
-                                    <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
-                                ))}
-                            </select>
+                            <label>Operador Logístico
+                                <select name="logisticOperatorMovement" onChange={handleChange} value={newMovementState.LO}>
+                                    <option value="">-----</option>
+                                    {logisticOperatorFromAPI.map(logisitcOperator => (
+                                        <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
+                                    ))}
+                                </select>
+                            </label>
                         </div>
                         <div className="field-box delivery-man">
                             <label>CPF Entregador
