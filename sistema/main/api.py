@@ -54,22 +54,27 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response("Nenhum operador logístico encontrado", status=status.HTTP_204_NO_CONTENT)
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+            
 
     def create(self, request):
         try:
             LogisticOperator.objects.get(description=request.data['logisticOperatorDescription'])
-            return Response("OL já cadastrada", status=status.HTTP_400_BAD_REQUEST) 
+            return Response({"serializer": serializer.errors,
+                             "message": "OL já cadastrada"}, status=status.HTTP_400_BAD_REQUEST) 
         except ObjectDoesNotExist:
             request.data['description'] = request.data['logisticOperatorDescription']
             serializer = LogisticOperatorSerializer(data=request.data)
             try:
                 if serializer.is_valid(raise_exception=True):
                     new_logistic_operator = serializer.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                    return Response({"serializer": serializer.data,
+                                     "message": "OL criada com sucesso"}, status=status.HTTP_201_CREATED)
             except AttributeError:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"serializer": serializer.errors,
+                                 "message": "Erro ao cadastrar a OL"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"serializer": serializer.errors,
+                             "message": "Erro ao cadastrar a OL"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ScooterViewSet(viewsets.ViewSet):
@@ -110,7 +115,7 @@ class PeopleRegistrationViewSet(viewsets.ViewSet):
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response("nenhum entregador encontrado", status=status.HTTP_204_NO_CONTENT)
+            return Response("", status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request):
         try:
@@ -159,7 +164,6 @@ class MovementViewSet(viewsets.ViewSet):
         if len(serializer.data) > 0:
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk): 
