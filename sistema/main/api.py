@@ -60,7 +60,7 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
     def create(self, request):
         try:
             LogisticOperator.objects.get(description=request.data['logisticOperatorDescription'])
-            return Response({"serializer": serializer.errors,
+            return Response({"serializer": "",
                              "message": "OL já cadastrada"}, status=status.HTTP_400_BAD_REQUEST) 
         except ObjectDoesNotExist:
             request.data['description'] = request.data['logisticOperatorDescription']
