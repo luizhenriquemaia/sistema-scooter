@@ -245,7 +245,7 @@ export default function Movements() {
                         <h1 className="title-page">Movimentações Patenetes</h1>
                     </div>
                     <section className="content-box">
-                        <div>
+                        <div className="important-data">
                             <div className="field-box">
                                 <label>Patinetes Totais</label>
                                 <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
@@ -277,7 +277,7 @@ export default function Movements() {
                             <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
                             <button onClick={handleSetFilters}>Aplicar Filtros</button>
                         </div>
-                        <div>
+                        <div className="filters">
                             <div className="field-box">
                                 <label>Mostrar Data Final</label>
                                 <input type="checkbox" name="filterShowFinalDate" checked={filtersMovements.filterShowFinalDate} onChange={handleCheckFilter} />

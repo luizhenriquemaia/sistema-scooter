@@ -137,6 +137,8 @@ export default function addMovementComponent() {
                             <label>Scooter
                                 <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
                             </label>
+                        </div>
+                        <div className="field-box logistic-operator">
                             <label>Operador Logístico
                                 <select name="logisticOperatorMovement" onChange={handleChange} value={newMovementState.LO}>
                                     <option value="">-----</option>

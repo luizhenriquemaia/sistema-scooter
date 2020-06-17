@@ -221,6 +221,8 @@ section.section-main-box {
     margin: 15px;
     width: 100%;
     height: 80px;
+    padding: 10px 20px;
+    font-size: 18px;
 }
 
 .buttonBox {
@@ -325,7 +327,7 @@ section.section-main-box {
     border-bottom: 2px solid #505050;
     flex-direction: row;
     flex-wrap: wrap;
-    transition: max-height ease-out 0.5s, padding ease 1s;
+    transition: max-height ease-out 0.5s, padding ease 1.2s;
 }
 
 section.add-movement-section .data-box :last-child.field-box {
@@ -373,11 +375,17 @@ section.add-movement-section .data-box :last-child.field-box {
     padding: 0;
 }
 
+.external .field-box.logistic-operator {
+    max-height: 0px;
+    padding: 0;
+}
+
 /* Add Movement Section Mobile------------------------- */
 
 @media(max-width: 600px) {
     .add-movement-section .field-box input {
         margin-right: 0px;
+        margin-left: 0px;
         overflow: hidden;
     }
 
@@ -393,7 +401,13 @@ section.add-movement-section .data-box :last-child.field-box {
 
 
 /* Movement (hoot link) --------------------------------- */
+.add-movement-section .important-data {
+    display: flex;
+}
 
+.add-movement-section .filters {
+    display: flex;
+}
 
 
 
