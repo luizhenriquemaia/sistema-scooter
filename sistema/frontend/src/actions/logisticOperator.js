@@ -9,13 +9,11 @@ export const getLogisticOperator = () => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: GET_LOGISTICS_OPERATORS,
-                payload: res.data
+                payload: res.data.serializer
             })
             dispatch(returnSuccess("", res.status))
         })
-        .catch(err => 
-            dispatch(returnErrors(err.response.data.message, err.response.status
-            )))
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
 }
 
 export const addLogisticOperator = (LO) => (dispatch, getState) => {

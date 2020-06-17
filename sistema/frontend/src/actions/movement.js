@@ -9,7 +9,7 @@ export const getMovements = () => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: GET_MOVEMENTS,
-                payload: res.data
+                payload: res.data.serializer
             })
             dispatch(returnSuccess("", res.status))
         })
@@ -22,7 +22,7 @@ export const getMovementsWithFilters = (filters) => (dispatch, getState)  => {
         .then(res => {
             dispatch({
                 type: GET_MOVEMENTS,
-                payload: res.data
+                payload: res.data.serializer
             })
             dispatch(returnSuccess("", res.status))
         })
@@ -35,7 +35,7 @@ export const getMovement = (id) => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: GET_MOVEMENT,
-                payload: res.data
+                payload: res.data.serializer
             })
             dispatch(returnSuccess("", res.status))
         })
@@ -48,7 +48,7 @@ export const getTypesMovement = () => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: GET_TYPES_MOVEMENT,
-                payload: res.data
+                payload: res.data.serializer
             })
             dispatch(returnSuccess("", res.status))
         })
