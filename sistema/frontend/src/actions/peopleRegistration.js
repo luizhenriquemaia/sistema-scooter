@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ADD_PEOPLE_REGISTRATION } from './types'
-import { returnErrors } from './messages'
+import { returnErrors, returnSuccess } from './messages'
 import { tokenConfig } from './auth'
 
 
@@ -9,8 +9,9 @@ export const addPeopleRegistration = (person) => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: ADD_PEOPLE_REGISTRATION,
-                payload: res.data
+                payload: res.data.serializer
             })
+            dispatch(returnSuccess(res.data.message, res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
 }

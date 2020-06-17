@@ -76,7 +76,6 @@ export default function Movements() {
     }
 
     useEffect(() => {
-        console.log(movements)
         if (movements !== undefined) {
             if (movements.length !== 0) {
 
