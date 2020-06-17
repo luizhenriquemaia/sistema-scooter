@@ -11,6 +11,8 @@ export default function Movements() {
     const history = useHistory()
     const alert = useAlert()
     const today = new Date()
+    const [userWantsToDeleteMovement, setUserWantsToDeleteMovement] = useState(false)
+    const [idMovementUserWantsToDelete, setIdMovementUserWantsToDelete] = useState(-1)
     const [MovementState, setMovementState] = useState([{
         id: 0,
         intialDateMovement: "",
@@ -170,8 +172,22 @@ export default function Movements() {
     const handleGoToDetails = (idMovement) => history.push(`details-movement/${idMovement}`)
 
     const handleDeleteMovement = (idMovement) => {
-        alert.info("a movimentação será excluida")
-        dispatch(deleteMovement(idMovement))
+        setIdMovementUserWantsToDelete(idMovement)
+    }
+
+    const handleConfirmDelete = () => {
+        if (idMovementUserWantsToDelete >= 0) {
+            setUserWantsToDeleteMovement(true)
+            alert.info("a movimentação será excluida")
+            dispatch(deleteMovement(idMovementUserWantsToDelete))
+        }
+        
+    }
+
+    const handleCancelDelete = () => {
+        setUserWantsToDeleteMovement(false)
+        setIdMovementUserWantsToDelete(-1)
+        alert.info("ação cancelada")
     }
 
 
@@ -240,6 +256,11 @@ export default function Movements() {
     if (shouldGetMovements === false) {
         return (
             <main className="content">
+            <div className="dialog-box">
+                <h3>Você tem certeza que deseja excluir essa movimentação?</h3>
+                <button onClick={handleConfirmDelete}>Excluir</button>
+                <button onClick={handleCancelDelete}> Cancelar</button>
+            </div>
                 <section className="section-main-box movement-section">
                     <div className="title-box">
                         <h1 className="title-page">Movimentações Patenetes</h1>
