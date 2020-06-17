@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { returnErrors } from './messages'
+import { returnErrors, returnSuccess } from './messages'
 import { GET_LOGISTICS_OPERATORS, ADD_LOGISTIC_OPERATOR } from './types'
 import { tokenConfig } from './auth'
 
@@ -11,8 +11,9 @@ export const getLogisticOperator = () => (dispatch, getState) => {
                 type: GET_LOGISTICS_OPERATORS,
                 payload: res.data
             })
+            dispatch(returnSuccess("", res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
 }
 
 export const addLogisticOperator = (LO) => (dispatch, getState) => {
@@ -20,8 +21,9 @@ export const addLogisticOperator = (LO) => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: ADD_LOGISTIC_OPERATOR,
-                payload: res.data
+                payload: res.data.serializer
             })
+            dispatch(returnSuccess(res.data.message, res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
 }
