@@ -89,7 +89,7 @@ class MovementRetrieveSerializer(serializers.ModelSerializer):
     logisticOperator_id = serializers.IntegerField()
     typeMovement = TypeMovementSerializer(read_only=False)
     typeMovement_id = serializers.IntegerField()
-    typeRelease = serializers.CharField(required=False)
+    typeRelease = serializers.CharField(required=False) 
     destinyScooter = serializers.CharField(required=False, allow_blank=True)
     owner = serializers.ReadOnlyField(source='owner.username')
 

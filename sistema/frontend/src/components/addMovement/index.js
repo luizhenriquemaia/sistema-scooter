@@ -22,6 +22,7 @@ export default function addMovementComponent() {
         id: "",
         description: ""
     }])
+    const [destinyScooterInternalMovement, setDestinyScooterInternalMovement] = useState("maintenance")
 
     useEffect(() => {
         dispatch(getLogisticOperator())
@@ -41,6 +42,9 @@ export default function addMovementComponent() {
         const { name, value } = e.target
         if (name === "typeOfMovement") {
             setTypeOfMovementSelect(value)
+        }
+        else if (name === "destinyScooterInternalMovement") {
+            setDestinyScooterInternalMovement(value)
         }
         else {
             setNewMovementState({
@@ -102,7 +106,8 @@ export default function addMovementComponent() {
                 alert.error("preencha todos os campos obrigatórios")
             }
             else {
-                var newMovementToAPI = { typeOfMovement, scooter, logisticOperatorMovement, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+                var destinyScooterToAPI = destinyScooterInternalMovement
+                var newMovementToAPI = { typeOfMovement, destinyScooterToAPI, scooter, logisticOperatorMovement, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
                 dispatch(postMovement(newMovementToAPI))
                 setNewMovementState({
                     ...newMovementState,
@@ -145,6 +150,12 @@ export default function addMovementComponent() {
                                     {logisticOperatorFromAPI.map(logisitcOperator => (
                                         <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
                                     ))}
+                                </select>
+                            </label>
+                            <label>Destino do Patinete
+                                <select name="destinyScooterInternalMovement" onChange={handleChange} value={destinyScooterInternalMovement}>
+                                    <option value="maintenance">Manutenção</option>
+                                    <option value="backup">Backup</option>
                                 </select>
                             </label>
                         </div>

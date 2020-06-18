@@ -190,9 +190,10 @@ class Movement(models.Model):
                 description="Em uso")[0]
             scooter_db.save()
         elif type_movement_db.description == "Interna":
-            scooter_db.status = StatusScooter.objects.get_or_create(
-                description="Manutenção")[0]
-            scooter_db.save()
+            if validated_data['destinyScooter'] == "Manutenção" or validated_data['destinyScooter'] == "Backup":
+                scooter_db.status = StatusScooter.objects.get_or_create(
+                    description=validated_data['destinyScooter'])[0]
+                scooter_db.save()
         return new_movement
     
     def update(self, movement, **validated_data):
