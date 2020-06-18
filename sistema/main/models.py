@@ -221,41 +221,41 @@ class Movement(models.Model):
                 movement.returnTime = validated_data['returnTime']
                 movement.finalDateMovement = validated_data['finalDateMovement']
             type_movement_db = TypeMovement.objects.get(id=movement.typeMovement.id)
-            if type_movement_db.description == "Externa":
-                if validated_data['destinyScooter'] == "Manutenção":
-                    scooter_db.status = StatusScooter.objects.get_or_create(
-                        description="Manutenção")[0]
-                    scooter_db.save()
-                    # create a internal movement to send scooter to repair
-                    type_movement_db = TypeMovement.objects.get_or_create(
-                        description="Interno")[0]
-                    new_internal_movement = Movement(
-                        scooter = scooter_db,
-                        logisticOperator = movement.logisticOperator,
-                        typeMovement = type_movement_db,
-                        intialDateMovement=date.today(),
-                        pickUpTime=datetime.now().time(),
-                        owner=movement.owner
-                    )
-                if validated_data['destinyScooter'] == "Backup":
-                    scooter_db.status = StatusScooter.objects.get_or_create(
-                        description="Backup")[0]
-                    scooter_db.save()
-                    # create a internal movement to send scooter to backup
-                    type_movement_db = TypeMovement.objects.get_or_create(
-                        description="Interno")[0]
-                    new_internal_movement = Movement(
-                        scooter = scooter_db,
-                        logisticOperator = movement.logisticOperator,
-                        typeMovement = type_movement_db,
-                        intialDateMovement=date.today(),
-                        finalDateMovement = date.today(),
-                        pickUpTime=datetime.now().time(),
-                        returnTime = datetime.now().time(),
-                        owner=movement.owner
-                    )
+            if validated_data['destinyScooter'] == "Manutenção":
+                scooter_db.status = StatusScooter.objects.get_or_create(
+                    description="Manutenção")[0]
+                scooter_db.save()
+                # create a internal movement to send scooter to repair
+                type_movement_db = TypeMovement.objects.get_or_create(
+                    description="Interno")[0]
+                new_internal_movement = Movement(
+                    scooter = scooter_db,
+                    logisticOperator = movement.logisticOperator,
+                    typeMovement = type_movement_db,
+                    intialDateMovement=date.today(),
+                    pickUpTime=datetime.now().time(),
+                    owner=movement.owner
+                )
                 new_internal_movement.save()
-            if validated_data['destinyScooter'] == "Base":
+            elif validated_data['destinyScooter'] == "Backup":
+                scooter_db.status = StatusScooter.objects.get_or_create(
+                    description="Backup")[0]
+                scooter_db.save()
+                # create a internal movement to send scooter to backup
+                type_movement_db = TypeMovement.objects.get_or_create(
+                    description="Interno")[0]
+                new_internal_movement = Movement(
+                    scooter = scooter_db,
+                    logisticOperator = movement.logisticOperator,
+                    typeMovement = type_movement_db,
+                    intialDateMovement=date.today(),
+                    finalDateMovement = date.today(),
+                    pickUpTime=datetime.now().time(),
+                    returnTime = datetime.now().time(),
+                    owner=movement.owner
+                )
+                new_internal_movement.save()
+            elif validated_data['destinyScooter'] == "Base":
                 scooter_db.status = StatusScooter.objects.get_or_create(
                     description="Disponível")[0]
                 scooter_db.save()
