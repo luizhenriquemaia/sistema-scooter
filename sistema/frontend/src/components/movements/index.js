@@ -263,27 +263,27 @@ export default function Movements() {
                     <section className="content-box">
                         <div className="important-data">
                             <div className="field-box">
-                                <label>Patinetes Totais</label>
+                                <label>Total</label>
                                 <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
                             </div>
                             <div className="field-box">
-                                <label>Patinetes Disponíveis</label>
+                                <label>Disponíveis</label>
                                 <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
                             </div>
                             <div className="field-box">
-                                <label>Patinetes Sendo Utilizados</label>
+                                <label>Em Uso</label>
                                 <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
                             </div>
                             <div className="field-box">    
-                                <label>Patinetes Operantes</label>
+                                <label>Operantes</label>
                                 <input type="text" value={NumbersOfScootersState.numberOfScootersOperants} disabled  />
                             </div>
                             <div className="field-box">
-                                <label>Patinetes em Manutenção</label>
+                                <label>Manutenção</label>
                                 <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
                             </div>
                             <div className="field-box">
-                                <label>Patinetes em Backup</label>
+                                <label>Backup</label>
                                 <input type="text" value={NumbersOfScootersState.numberOfScootersInBackup} disabled />
                             </div>
                         </div>
@@ -297,11 +297,11 @@ export default function Movements() {
                         </div>
                         <div className="filters">
                             <div className="field-box">
-                                <label>Mostrar Data Final</label>
+                                <label>Incluir Data Final</label>
                                 <input type="checkbox" name="filterShowFinalDate" checked={filtersMovements.filterShowFinalDate} onChange={handleCheckFilter} />
                             </div>
                             <div className="field-box">
-                                <label>Mostrar Patinetes Devolvidos</label>
+                                <label>Patinetes Devolvidos</label>
                                 <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
                             </div>
                             <div className="field-box">    
@@ -325,14 +325,14 @@ export default function Movements() {
                         <table className="table-movements">
                             <thead>
                                 <tr>
-                                    <th>Data Inicial</th>
-                                    {filtersMovements.filterShowFinalDate ? <th>Data final</th> : <th></th>}
+                                    <th>Data Retirada</th>
+                                    {filtersMovements.filterShowFinalDate ? <th>Data Devolução</th> : <th className="hidden"></th>}
+                                    <th>Hora Retirada</th>
+                                    <th>Hora Devolução</th>
+                                    <th>Movimentação</th>
                                     <th>Chassi</th>
                                     <th>Entregador</th>
                                     <th>OL</th>
-                                    <th>Tipo</th>
-                                    <th>Hora Retirada</th>
-                                    <th>Hora Devolução</th>
                                     <th>Capacete</th>
                                     <th>Bag</th>
                                     <th>Case</th>
@@ -347,19 +347,19 @@ export default function Movements() {
                                         {
                                             filtersMovements.filterShowFinalDate ? 
                                             <td onClick={() => handleGoToDetails(movement.id)}>{movement.finalDateMovement}</td> :
-                                            <td></td>
+                                            <td className="hidden"></td>
                                         }
+                                        <td>{movement.timePickUpFormatted}</td>
+                                        <td>{movement.timeReturnFormatted}</td>
+                                        <td>{movement.typeMovement ? movement.typeMovement.description : ""}</td>
                                         <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
                                         <td>{movement.peopleRegistration ? movement.peopleRegistration.name : ""}</td>
                                         <td>{movement.logisticOperator ? movement.logisticOperator.description : ""}</td>
-                                        <td>{movement.typeMovement ? movement.typeMovement.description : ""}</td>
-                                        <td>{movement.timePickUpFormatted}</td>
-                                        <td>{movement.timeReturnFormatted}</td>
                                         <td className="check-table"><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
                                         <td className="check-table"><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
                                         <td className="check-table"><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
                                         <td className="check-table"><input type="checkbox" checked={movement.accessoriesCharger} disabled /></td>
-                                       <td onClick={() => handleDeleteMovement(movement.id)}>Delete</td>
+                                       <td className="delete" onClick={() => handleDeleteMovement(movement.id)}>Delete</td>
                                     </tr>
                                 ))}
                             </tbody>

@@ -149,6 +149,11 @@ section.section-main-box {
     width: 100%;
 }
 
+.section-main-box input[type='checkbox'] {
+    min-width: 20px;
+    min-height: 20px;
+}
+
 .title-page {
     text-align: center;
     font-size: 28px;
@@ -210,12 +215,6 @@ section.section-main-box {
 .field-box input:focus {
     outline-offset: 1px;
     outline-color: unset;
-}
-
-.field-box input[type='checkbox'] {
-    min-width: 20px;
-    min-height: 20px;
-    margin-right: 40px;
 }
 
 .field-box textarea {
@@ -526,8 +525,20 @@ section.section-main-box.movement-section {
     padding: 5px;
 }
 
+.movement-section .table-movements th.hidden,
+.movement-section .table-movements td.hidden {
+    padding: 0;
+    transition: ease-in-out 0.5s;
+}
+
 .movement-section .table-movements .check-table {
     min-width: 112px;
+    line-height: 0;
+}
+
+.movement-section .table-movements td.delete {
+    color: red;
+    cursor: pointer;
 }
 
 /* Modal Delete Movement --------------------------------- */
