@@ -201,7 +201,8 @@ class MovementViewSet(viewsets.ViewSet):
         movement = Movement.retrieve(Movement, id=pk)
         serializer = MovementRetrieveSerializer(data=movement)
         if serializer.is_valid(raise_exception=True):
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({"serializer": serializer.data,
+                             "message": ""}, status=status.HTTP_200_OK)
         return Response({"serializer": serializer.errors,
                          "message": "Erro ao retornar movimentação"}, status=status.HTTP_400_BAD_REQUEST)
             
@@ -229,7 +230,6 @@ class MovementViewSet(viewsets.ViewSet):
         request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
         scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
         if scooter_db.status.description != "Disponível":
-            
             return Response({"serializer": "",
                             "message": "Patinete não disponível"}, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -241,6 +241,10 @@ class MovementViewSet(viewsets.ViewSet):
                 request.data['peopleRegistration_id'] = people_registration_movement.id
             # internal movements does not need accessories
             elif request.data['typeOfMovement'] == "Interna":
+                if request.data['destinyScooterToAPI'] == "maintenance":
+                    request.data['destinyScooter']  = "Manutenção"
+                elif request.data['destinyScooterToAPI'] == "backup":
+                    request.data['destinyScooter']  = "Backup"
                 request.data['logisticOperator_id'] = request.data['logisticOperatorMovement']
                 request.data['accessoriesHelmet'] = False
                 request.data['accessoriesBag'] = False

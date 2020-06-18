@@ -43,43 +43,45 @@ export default function detailsMovement() {
     }
 
     useEffect(() => {
-        if (movement.scooter) {
-            if (movement.returnTime) {
-                setMovementState({
-                    intialDateMovement: movement.intialDateMovement,
-                    finalDateMovement: movement.finalDateMovement,
-                    scooter: movement.scooter.chassisNumber,
-                    cpfPeopleRegistration: movement.peopleRegistration ? movement.peopleRegistration.cpf : "",
-                    LO: movement.logisticOperator ? movement.logisticOperator_id : "",
-                    typeRelease: "Devolução",
-                    typeMovement: "",
-                    accessoriesHelmet: movement.accessoriesHelmet,
-                    accessoriesBag: movement.accessoriesBag,
-                    accessoriesCase: movement.accessoriesCase,
-                    accessoriesCharger: movement.accessoriesCharger,
-                    observation: movement.observation,
-                    destinyScooter: movement.destinyScooter,
-                    initialTimeFormatted: movement.intialDateMovement != null ? formattingTime(movement.intialDateMovement, movement.pickUpTime) : "",
-                    finalTimeFormatted: movement.finalDateMovement != null ? formattingTime(movement.finalDateMovement, movement.returnTime) : "",
-                })
-            }
-            else {
-                setMovementState({
-                    intialDateMovement: movement.intialDateMovement,
-                    finalDateMovement: movement.finalDateMovement,
-                    scooter: movement.scooter.chassisNumber,
-                    cpfPeopleRegistration: movement.peopleRegistration ? movement.peopleRegistration.cpf : "",
-                    LO: movement.logisticOperator ? movement.logisticOperator_id : "",
-                    typeRelease: "Retirada",
-                    typeMovement: "",
-                    accessoriesHelmet: movement.accessoriesHelmet,
-                    accessoriesBag: movement.accessoriesBag,
-                    accessoriesCase: movement.accessoriesCase,
-                    accessoriesCharger: movement.accessoriesCharger,
-                    observation: movement.observation,
-                    initialTimeFormatted: movement.intialDateMovement != null && movement.intialDateMovement != "" ? formattingTime(movement.intialDateMovement, movement.pickUpTime) : "",
-                    finalTimeFormatted: movement.finalDateMovement != null && movement.finalDateMovement != "" ? formattingTime(movement.finalDateMovement, movement.returnTime) : ""
-                })
+        if (movement !== undefined) {
+            if (movement.scooter) {
+                if (movement.returnTime) {
+                    setMovementState({
+                        intialDateMovement: movement.intialDateMovement,
+                        finalDateMovement: movement.finalDateMovement,
+                        scooter: movement.scooter ? movement.scooter.chassisNumber : "",
+                        cpfPeopleRegistration: movement.peopleRegistration ? movement.peopleRegistration.cpf : "",
+                        LO: movement.logisticOperator ? movement.logisticOperator_id : "",
+                        typeRelease: "Devolução",
+                        typeMovement: "",
+                        accessoriesHelmet: movement.accessoriesHelmet,
+                        accessoriesBag: movement.accessoriesBag,
+                        accessoriesCase: movement.accessoriesCase,
+                        accessoriesCharger: movement.accessoriesCharger,
+                        observation: movement.observation,
+                        destinyScooter: movement.destinyScooter,
+                        initialTimeFormatted: movement.intialDateMovement != null ? formattingTime(movement.intialDateMovement, movement.pickUpTime) : "",
+                        finalTimeFormatted: movement.finalDateMovement != null ? formattingTime(movement.finalDateMovement, movement.returnTime) : "",
+                    })
+                }
+                else {
+                    setMovementState({
+                        intialDateMovement: movement.intialDateMovement,
+                        finalDateMovement: movement.finalDateMovement,
+                        scooter: movement.scooter ? movement.scooter.chassisNumber : "",
+                        cpfPeopleRegistration: movement.peopleRegistration ? movement.peopleRegistration.cpf : "",
+                        LO: movement.logisticOperator ? movement.logisticOperator_id : "",
+                        typeRelease: "Retirada",
+                        typeMovement: "",
+                        accessoriesHelmet: movement.accessoriesHelmet,
+                        accessoriesBag: movement.accessoriesBag,
+                        accessoriesCase: movement.accessoriesCase,
+                        accessoriesCharger: movement.accessoriesCharger,
+                        observation: movement.observation,
+                        initialTimeFormatted: movement.intialDateMovement != null && movement.intialDateMovement != "" ? formattingTime(movement.intialDateMovement, movement.pickUpTime) : "",
+                        finalTimeFormatted: movement.finalDateMovement != null && movement.finalDateMovement != "" ? formattingTime(movement.finalDateMovement, movement.returnTime) : ""
+                    })
+                }
             }
         }
     }, [movement])
