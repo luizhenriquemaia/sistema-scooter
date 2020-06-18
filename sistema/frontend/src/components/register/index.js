@@ -151,10 +151,10 @@ export default function Register() {
                             <input type="text" name="logisticOperatorDescription" value={RegisterState.logisticOperatorDescription || ''} onChange={handleChange} />
                         </div>
                         <div className="field-box delivery-man">
-                            <label>CPF Entregador</label>
-                            <input type="text" name="cpfPeopleRegistration" value={RegisterState.cpfPeopleRegistration || ''} onChange={handleChange} />
                             <label>Nome Entregador</label>
                             <input type="text" name="peopleRegistrationName" value={RegisterState.peopleRegistrationName || ''} onChange={handleChange} />
+                            <label>CPF Entregador</label>
+                            <input type="text" name="cpfPeopleRegistration" value={RegisterState.cpfPeopleRegistration || ''} onChange={handleChange} />
                             <label>OL do Entregador</label>
                             <select name="logisticOperatorPeopleRegistration" onChange={handleChange}>
                                 <option value="">-----</option>

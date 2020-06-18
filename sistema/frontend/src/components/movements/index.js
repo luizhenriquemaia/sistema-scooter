@@ -255,12 +255,7 @@ export default function Movements() {
 
     if (shouldGetMovements === false) {
         return (
-            <main className="content">
-            <div className="dialog-box">
-                <h3>Você tem certeza que deseja excluir essa movimentação?</h3>
-                <button onClick={handleConfirmDelete}>Excluir</button>
-                <button onClick={handleCancelDelete}> Cancelar</button>
-            </div>
+            <main className="content table">  
                 <section className="section-main-box movement-section">
                     <div className="title-box">
                         <h1 className="title-page">Movimentações Patenetes</h1>
@@ -292,10 +287,12 @@ export default function Movements() {
                                 <input type="text" value={NumbersOfScootersState.numberOfScootersInBackup} disabled />
                             </div>
                         </div>
-                        <div>
-                            <label>Data</label>
-                            <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
-                            <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
+                        <div className="date-filter">
+                            <div className="date-box">
+                                <label>Data</label>
+                                <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
+                                <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
+                            </div>                                
                             <button onClick={handleSetFilters}>Aplicar Filtros</button>
                         </div>
                         <div className="filters">
@@ -324,6 +321,7 @@ export default function Movements() {
                                 <input type="text" name="filterByChassis" value={filtersMovements.filterByChassis || ''} onChange={handleFiltersChange} />
                             </div>
                         </div>
+                        <hr />
                         <table className="table-movements">
                             <thead>
                                 <tr>
@@ -357,10 +355,10 @@ export default function Movements() {
                                         <td>{movement.typeMovement ? movement.typeMovement.description : ""}</td>
                                         <td>{movement.timePickUpFormatted}</td>
                                         <td>{movement.timeReturnFormatted}</td>
-                                        <td><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
-                                        <td><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
-                                        <td><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
-                                        <td><input type="checkbox" checked={movement.accessoriesCharger} disabled /></td>
+                                        <td className="check-table"><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
+                                        <td className="check-table"><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
+                                        <td className="check-table"><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
+                                        <td className="check-table"><input type="checkbox" checked={movement.accessoriesCharger} disabled /></td>
                                        <td onClick={() => handleDeleteMovement(movement.id)}>Delete</td>
                                     </tr>
                                 ))}
@@ -368,6 +366,17 @@ export default function Movements() {
                         </table>
                     </section>
                 </section>
+                <div className="content dialog-section">
+                    <section className="section-main-box dialog-box">
+                        <div className="messege">
+                            <h3>Você tem certeza que deseja excluir essa movimentação?</h3>
+                        </div>
+                        <div className="buttonBox">
+                            <button className="submit-button clean" onClick={handleConfirmDelete}>Excluir</button>
+                            <button className="submit-button confirm" onClick={handleCancelDelete}> Cancelar</button>  
+                        </div>
+                    </section>
+                </div>
             </main>
         )
     }

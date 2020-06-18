@@ -73,6 +73,7 @@
 
 .userBox img.exit-img {
     width: 35px;
+    cursor: pointer;
 }
 
 .userBox p, .navBox p {
@@ -232,12 +233,20 @@ section.section-main-box {
     margin-top: 25px;
 }
 
+.buttonBox button:focus {
+    outline: transparent;
+}
+
+.buttonBox button:active {
+    box-shadow: none;
+}
+
 .submit-button {
     padding: 5px 30px;
     width: 135px;
     border: 1px solid darkgray;
     border-radius: 6px;
-    box-shadow: 1px 1px 2px darkslategray;
+    box-shadow: 2px 2px 1px gray;
     cursor: pointer;
     margin-left: 20px;
     font-size: 17px;
@@ -401,17 +410,160 @@ section.add-movement-section .data-box :last-child.field-box {
 
 
 /* Movement (hoot link) --------------------------------- */
-.add-movement-section .important-data {
+.content.table {
+    display: table;
+}
+
+.movement-section .content-box {
+    padding: 0 2% 4%;
+}
+
+section.section-main-box.movement-section {
     display: flex;
 }
 
-.add-movement-section .filters {
+.movement-section .important-data {
+    display: flex;
+    margin-bottom: 25px;
+}
+
+.movement-section .filters {
     display: flex;
 }
 
+.movement-section .content-box .field-box {
+    padding: 0 10px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 
+.movement-section .content-box .filters .field-box {
+    border: 2px solid gray;
+    border-radius: 12px;
+    margin: 10px 10px;
+    padding: 9px 20px 15px;
+    min-width: 260px;
+}
 
+.movement-section .content-box .field-box label {
+    margin: 0;
+    margin-bottom: 5px;
+    max-width: 255px;
+    min-height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.movement-section .content-box .field-box input {
+    text-align: center;
+    display: flex;
+    margin: 0;
+}
+
+.movement-section .date-filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 20px;
+    margin: 20px auto;
+    border: 2px solid gray;
+    border-radius: 14px;
+    width: max-content;
+}
+
+.movement-section .date-filter .date-box {
+    margin: 0 10px 0 0;
+    height: 30px;
+    font-size: 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+.movement-section .date-filter .date-box label {
+    margin-right: 12px;
+}
+
+.movement-section .date-filter .date-box input {
+    height: 30px;
+    margin: 0 10px;
+}
+
+.movement-section .date-filter button {
+    padding: 10px;
+    background: #fafafa;
+    border: 1px solid gray;
+    box-shadow: 2px 2px 1px grey;
+    border-radius: 9px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.movement-section .date-filter button:focus {
+    outline: transparent;
+}
+
+.movement-section .date-filter button:active {
+    box-shadow: none;
+}
+
+.movement-section .table-movements {
+    margin-top: 20px;
+    width: 100%;
+    display: table;
+}
+
+.movement-section .table-movements tbody {
+    text-align: center;
+}
+
+.movement-section .table-movements tr,
+.movement-section .table-movements td {
+    border: 1px solid;
+    padding: 5px;
+}
+
+.movement-section .table-movements .check-table {
+    min-width: 112px;
+}
+
+/* Modal Delete Movement --------------------------------- */
+.content.dialog-section {
+    position: relative;
+    right: 50%;
+    transform: translate(-50%, 0);
+    z-index: 15;
+    display: flex;
+    align-self: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.content.dialog-section.show-up {
+    opacity: 1;
+}
+
+.section-main-box.dialog-box {
+    width: 300px;
+    box-shadow: none;
+    border: 2px solid gray;
+}
+
+.dialog-box .messege {
+    text-align: center;
+    padding: 25px 30px 0;
+}
+
+.dialog-box .submit-button {
+    padding: 5px 20px;
+}
+
+.dialog-box .submit-button.clean {
+    margin: 0;
+}
 
 /* login ------------------------------- */
 
@@ -446,6 +598,7 @@ section.add-movement-section .data-box :last-child.field-box {
     margin-bottom: 10px;
     border: 1px solid;
 }
+
 .login-section .data-box  button {
     height: 40px;
     font-size: 18px;
