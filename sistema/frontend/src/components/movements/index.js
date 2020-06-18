@@ -176,8 +176,6 @@ export default function Movements() {
         setUserWantsToDeleteMovement(true)
     }
 
-    console.log(userWantsToDeleteMovement)
-
     const handleConfirmDelete = () => {
         if (idMovementUserWantsToDelete >= 0) {
             alert.info("a movimentação será excluida")

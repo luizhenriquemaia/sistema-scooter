@@ -17,7 +17,7 @@ export default function detailsMovement() {
         scooter: "",
         cpfPeopleRegistration: "",
         LO: "",
-        typeRelease: "",
+        typeRelease: "Retirada",
         typeMovement: "",
         destinyScooter: "",
         accessoriesHelmet: false,
@@ -168,17 +168,18 @@ export default function detailsMovement() {
                     <input type="text" name="cpfPeopleRegistration" value={movementState.cpfPeopleRegistration} onChange={handleChange} />
                 </div>
                 <div className="form-input">
-                    <label>Retirada</label>
-                    <input type="radio" name="typeRelease" value="Retirada" checked={movementState.typeRelease == "Retirada"} onChange={handleChange} />
-                    <label>Devolução</label>
-                    <input type="radio" name="typeRelease" value="Devolução" checked={movementState.typeRelease == "Devolução"} onChange={handleChange} />
+                    <select name="typeRelease" onChange={handleChange} value={movementState.typeRelease} >
+                        <option value="Retirada">Retirada</option>
+                        <option value="Devolução">Devolução</option>
+                    </select>
                 </div>
                 <div className="form-input">
-                    <label>Destino</label>
-                    <input type="radio" name="destinyScooter" value="Base" checked={movementState.destinyScooter == "Base"} onChange={handleChange} />
-                    <span>Base</span>
-                    <input type="radio" name="destinyScooter" value="Manutenção" checked={movementState.destinyScooter == "Manutenção"} onChange={handleChange} />
-                    <span>Manutenção</span>
+                    <select name="destinyScooter" onChange={handleChange} value={movementState.destinyScooter} >
+                        <option value="">-----</option>
+                        <option value="Base">Base</option>
+                        <option value="Manutenção">Manutenção</option>
+                        <option value="Backup">Backup</option>
+                    </select>
                 </div>
                 <div className="form-input">
                     <h4>Acessórios</h4>

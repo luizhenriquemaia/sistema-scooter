@@ -229,7 +229,7 @@ class MovementViewSet(viewsets.ViewSet):
                                  "message": "Entregador não cadastrado"}, status=status.HTTP_400_BAD_REQUEST)
         request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
         scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
-        if scooter_db.status.description != "Disponível":
+        if scooter_db.status.description != "Disponível" and scooter_db.status.description != "Backup":
             return Response({"serializer": "",
                             "message": "Patinete não disponível"}, status=status.HTTP_400_BAD_REQUEST)
         else:
