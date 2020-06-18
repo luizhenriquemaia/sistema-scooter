@@ -145,7 +145,7 @@ export default function Movements() {
                     numberOfScootersOperants += 1
                 }
                 if (scooter.status.description === "Manutenção") numberOfScootersUnderMaintenance += 1
-                if (scooter.status.description === "Em backup") numberOfScootersInBackup += 1
+                if (scooter.status.description === "Backup") numberOfScootersInBackup += 1
                 numberOfScooters += 1
             })
             setNumbersOfScootersState({
