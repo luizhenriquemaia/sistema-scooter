@@ -194,7 +194,7 @@ export default function detailsMovement() {
                 </div>
                 <div className="form-input">
                     <label>Observação</label>
-                    <textarea name="observation" onChange={handleChange}></textarea>
+                    <textarea name="observation" value={movementState.observation} onChange={handleChange}></textarea>
                 </div>
                 <button className="submit-button">Registrar</button>
                 <button className="submit-button" onClick={() => history.push("/")}>Cancelar</button>

@@ -11,8 +11,6 @@ class StatusScooterViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
     
     def list(self, request):
-        print("\n\n\n WTF 2 \n\n\n")
-
         queryset = StatusScooter.objects.all()
         serializer = StatusScooterSerializer(queryset, many=True)
         if len(serializer.data) > 0:
