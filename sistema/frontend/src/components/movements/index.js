@@ -173,13 +173,17 @@ export default function Movements() {
 
     const handleDeleteMovement = (idMovement) => {
         setIdMovementUserWantsToDelete(idMovement)
+        setUserWantsToDeleteMovement(true)
     }
+
+    console.log(userWantsToDeleteMovement)
 
     const handleConfirmDelete = () => {
         if (idMovementUserWantsToDelete >= 0) {
-            setUserWantsToDeleteMovement(true)
             alert.info("a movimentação será excluida")
             dispatch(deleteMovement(idMovementUserWantsToDelete))
+            setUserWantsToDeleteMovement(false)
+            setIdMovementUserWantsToDelete(-1)
         }
         
     }
@@ -366,9 +370,9 @@ export default function Movements() {
                         </table>
                     </section>
                 </section>
-                <div className="content dialog-section">
+                <div className={userWantsToDeleteMovement === true ? "content dialog-section show-up" : "content dialog-section"}>
                     <section className="section-main-box dialog-box">
-                        <div className="messege">
+                        <div className="message">
                             <h3>Você tem certeza que deseja excluir essa movimentação?</h3>
                         </div>
                         <div className="buttonBox">
