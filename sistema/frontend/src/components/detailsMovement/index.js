@@ -131,73 +131,103 @@ export default function detailsMovement() {
     }
 
     return (
-        <div className="content">
-            <h1 className="title-page">Registro de movimentação de patinetes</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="form-input">
-                    <label>Data Inicial</label>
-                    <input type="date" name="intialDateMovement" value={movementState.intialDateMovement || ""} onChange={handleChange} />
+        <main className="content">
+            <section className="section-main-box details-section">
+                <div className="title-box">
+                    <h1 className="title-page">Registro de movimentação de patinetes</h1>
                 </div>
-                <div className="form-input">
-                    <label>Data Final</label>
-                    <input type="date" name="finalDateMovement" value={movementState.finalDateMovement || ""} onChange={handleChange} />
+                <section className="content-box">
+                    <fieldset className="data-box" onSubmit={handleSubmit}>
+                        <div className="data-hora">
+                            <div className="field-box">
+                                <label>Data Inicial</label>
+                                <input type="date" name="intialDateMovement" value={movementState.intialDateMovement || ""} onChange={handleChange} />
+                            </div>
+                            <div className="field-box">
+                                <label>Data Final</label>
+                                <input type="date" name="finalDateMovement" value={movementState.finalDateMovement || ""} onChange={handleChange} />
+                            </div>
+                            <div className="field-box">
+                                <label>Hora Inicial</label>
+                                <input type="time" name="initialTimeFormatted" value={movementState.initialTimeFormatted || ""} onChange={handleChange} />
+                            </div>
+                            <div className="field-box">
+                                <label>Hora Final</label>
+                                <input type="time" name="finalTimeFormatted" value={movementState.finalTimeFormatted || ""} onChange={handleChange} />
+                            </div>
+                        </div>
+                        <div className="field-box">
+                            <label>Número do chassi</label>
+                            <input type="text" name="scooter" value={movementState.scooter} onChange={handleChange} />
+                        </div>
+                        <div className="field-box">
+                            <label>Operador Logístico</label>
+                            <select name="LO" onChange={handleChange} value={movementState.LO}>
+                                <option value="">-----</option>
+                                {logisticOperatorFromAPI.map(logisitcOperator => (
+                                    <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="field-box">
+                            <label>CPF do Entregador</label>
+                            <input type="text" name="cpfPeopleRegistration" value={movementState.cpfPeopleRegistration} onChange={handleChange} />
+                        </div>
+                        <div className="field-box movement">
+                            <div className="field-box">
+                                <label>Retirada</label>
+                                <input type="radio" name="typeRelease" value="Retirada" checked={movementState.typeRelease == "Retirada"} onChange={handleChange} />
+                            </div>
+                            <div className="field-box">
+                                <label>Devolução</label>
+                                <input type="radio" name="typeRelease" value="Devolução" checked={movementState.typeRelease == "Devolução"} onChange={handleChange} />
+                            </div>
+                        </div>
+                        <div className="field-box destination-box">
+                            <span>
+                                <h4>Destino</h4>
+                            </span>
+                            <div className="destination-choice">
+                                <div className="field-box">
+                                    <label>Base</label>
+                                    <input type="radio" name="destinyScooter" value="Base" checked={movementState.destinyScooter == "Base"} onChange={handleChange} />
+                                </div>
+                                <div className="field-box">
+                                    <label>Manutenção</label>
+                                    <input type="radio" name="destinyScooter" value="Manutenção" checked={movementState.destinyScooter == "Manutenção"} onChange={handleChange} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="field-box acessories">
+                            <h4>Acessórios</h4>
+                            <div className="field-box">
+                                <label>Capacete</label>
+                                <input type="checkbox" name="accessoriesHelmet" checked={movementState.accessoriesHelmet} onChange={handleCheck} />
+                            </div>
+                            <div className="field-box">
+                                <label>Bag</label>
+                                <input type="checkbox" name="accessoriesBag" checked={movementState.accessoriesBag} onChange={handleCheck} />
+                            </div>
+                            <div className="field-box">
+                                <label>Case</label>
+                                <input type="checkbox" name="accessoriesCase" checked={movementState.accessoriesCase} onChange={handleCheck} />
+                            </div>
+                            <div className="field-box">
+                                <label>Carregador</label>
+                                <input type="checkbox" name="accessoriesCharger" checked={movementState.accessoriesCharger} onChange={handleCheck} />
+                            </div>
+                        </div>
+                        <div className="field-box">
+                            <label>Observação</label>
+                            <textarea name="observation" onChange={handleChange}></textarea>
+                        </div>
+                    </fieldset>
+                </section>
+                <div className="buttonBox">
+                    <button className="submit-button clean" onClick={() => history.push("/")}>Cancelar</button>
+                    <button className="submit-button confirm">Registrar</button>
                 </div>
-                <div className="form-input">
-                    <label>Hora Inicial</label>
-                    <input type="time" name="initialTimeFormatted" value={movementState.initialTimeFormatted || ""} onChange={handleChange} />
-                </div>
-                <div className="form-input">
-                    <label>Hora Final</label>
-                    <input type="time" name="finalTimeFormatted" value={movementState.finalTimeFormatted || ""} onChange={handleChange} />
-                </div>
-                <div className="form-input">
-                    <label>Número do chassi</label>
-                    <input type="text" name="scooter" value={movementState.scooter} onChange={handleChange} />
-                </div>
-                <div className="form-input">
-                    <label>Operador Logístico</label>
-                    <select name="LO" onChange={handleChange} value={movementState.LO}>
-                        <option value="">-----</option>
-                        {logisticOperatorFromAPI.map(logisitcOperator => (
-                            <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
-                        ))}
-                    </select>
-                </div>
-                <div className="form-input">
-                    <label>CPF do Entregador</label>
-                    <input type="text" name="cpfPeopleRegistration" value={movementState.cpfPeopleRegistration} onChange={handleChange} />
-                </div>
-                <div className="form-input">
-                    <label>Retirada</label>
-                    <input type="radio" name="typeRelease" value="Retirada" checked={movementState.typeRelease == "Retirada"} onChange={handleChange} />
-                    <label>Devolução</label>
-                    <input type="radio" name="typeRelease" value="Devolução" checked={movementState.typeRelease == "Devolução"} onChange={handleChange} />
-                </div>
-                <div className="form-input">
-                    <label>Destino</label>
-                    <input type="radio" name="destinyScooter" value="Base" checked={movementState.destinyScooter == "Base"} onChange={handleChange} />
-                    <span>Base</span>
-                    <input type="radio" name="destinyScooter" value="Manutenção" checked={movementState.destinyScooter == "Manutenção"} onChange={handleChange} />
-                    <span>Manutenção</span>
-                </div>
-                <div className="form-input">
-                    <h4>Acessórios</h4>
-                    <label>Capacete</label>
-                    <input type="checkbox" name="accessoriesHelmet" checked={movementState.accessoriesHelmet} onChange={handleCheck} />
-                    <label>Bag</label>
-                    <input type="checkbox" name="accessoriesBag" checked={movementState.accessoriesBag} onChange={handleCheck} />
-                    <label>Case</label>
-                    <input type="checkbox" name="accessoriesCase" checked={movementState.accessoriesCase} onChange={handleCheck} />
-                    <label>Carregador</label>
-                    <input type="checkbox" name="accessoriesCharger" checked={movementState.accessoriesCharger} onChange={handleCheck} />
-                </div>
-                <div className="form-input">
-                    <label>Observação</label>
-                    <textarea name="observation" onChange={handleChange}></textarea>
-                </div>
-                <button className="submit-button">Registrar</button>
-                <button className="submit-button" onClick={() => history.push("/")}>Cancelar</button>
-            </form>
-        </div>
+            </section>
+        </main>
     )
 }

@@ -347,7 +347,7 @@ export default function Movements() {
                             <tbody>
                                 {MovementState.map(movement => (
                                     <tr key={movement.id}>
-                                        <td onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
+                                        <td className="pointer"onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
                                         {
                                             filtersMovements.filterShowFinalDate ? 
                                             <td onClick={() => handleGoToDetails(movement.id)}>{movement.finalDateMovement}</td> :
@@ -356,7 +356,7 @@ export default function Movements() {
                                         <td>{movement.timePickUpFormatted}</td>
                                         <td>{movement.timeReturnFormatted}</td>
                                         <td>{movement.typeMovement ? movement.typeMovement.description : ""}</td>
-                                        <td onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
+                                        <td className="pointer" onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
                                         <td>{movement.peopleRegistration ? movement.peopleRegistration.name : ""}</td>
                                         <td>{movement.logisticOperator ? movement.logisticOperator.description : ""}</td>
                                         <td className="check-table"><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
@@ -386,19 +386,21 @@ export default function Movements() {
     }
     else {
         return (
-            <main className="content">
+            <main className="content table">
                 <section className="section-main-box movement-section">
                     <div className="title-box">
                         <h1 className="title-page">Movimentações Patenetes</h1>
                     </div>
                     <section className="content-box">
-                        <div>
-                            <label>Data</label>
-                            <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
-                            <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
+                        <div className="date-filter">
+                            <div className="date-box">
+                                <label>Data</label>
+                                <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
+                                <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
+                            </div>                                
                             <button onClick={handleSetFilters}>Aplicar Filtros</button>
                         </div>
-                        <div>
+                        <div className="filters">
                             <div className="field-box">
                                 <label>Patinetes Totais</label>
                                 <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
@@ -416,7 +418,7 @@ export default function Movements() {
                                 <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
                             </div>
                         </div>
-
+                        <hr />
                         <table className="table-movements">
                             <thead>
                                 <tr>
