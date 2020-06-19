@@ -17,7 +17,7 @@ export default function detailsMovement() {
         scooter: "",
         cpfPeopleRegistration: "",
         LO: "",
-        typeRelease: "",
+        typeRelease: "Retirada",
         typeMovement: "",
         destinyScooter: "",
         accessoriesHelmet: false,
