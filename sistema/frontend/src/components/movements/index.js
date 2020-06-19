@@ -324,48 +324,50 @@ export default function Movements() {
                             </div>
                         </div>
                         <hr />
-                        <table className="table-movements">
-                            <thead>
-                                <tr>
-                                    <th>Data Retirada</th>
-                                    {filtersMovements.filterShowFinalDate ? <th>Data Devolução</th> : <th className="hidden"></th>}
-                                    <th>Hora Retirada</th>
-                                    <th>Hora Devolução</th>
-                                    <th>Movimentação</th>
-                                    <th>Chassi</th>
-                                    <th>Entregador</th>
-                                    <th>OL</th>
-                                    <th>Capacete</th>
-                                    <th>Bag</th>
-                                    <th>Case</th>
-                                    <th>Carregador</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {MovementState.map(movement => (
-                                    <tr key={movement.id}>
-                                        <td className="pointer"onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
-                                        {
-                                            filtersMovements.filterShowFinalDate ? 
-                                            <td onClick={() => handleGoToDetails(movement.id)}>{movement.finalDateMovement}</td> :
-                                            <td className="hidden"></td>
-                                        }
-                                        <td>{movement.timePickUpFormatted}</td>
-                                        <td>{movement.timeReturnFormatted}</td>
-                                        <td>{movement.typeMovement ? movement.typeMovement.description : ""}</td>
-                                        <td className="pointer" onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
-                                        <td>{movement.peopleRegistration ? movement.peopleRegistration.name : ""}</td>
-                                        <td>{movement.logisticOperator ? movement.logisticOperator.description : ""}</td>
-                                        <td className="check-table"><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
-                                        <td className="check-table"><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
-                                        <td className="check-table"><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
-                                        <td className="check-table"><input type="checkbox" checked={movement.accessoriesCharger} disabled /></td>
-                                       <td className="delete" onClick={() => handleDeleteMovement(movement.id)}>Delete</td>
+                        <div className="table-responsive-vertical">
+                            <table className="table-movements table-bordered table-striped table-mc-gray">
+                                <thead>
+                                    <tr>
+                                        <th>Data Retirada</th>
+                                        {filtersMovements.filterShowFinalDate ? <th>Data Devolução</th> : <th className="hidden"></th>}
+                                        <th>Hora Retirada</th>
+                                        <th>Hora Devolução</th>
+                                        <th>Movimentação</th>
+                                        <th>Chassi</th>
+                                        <th>Entregador</th>
+                                        <th>OL</th>
+                                        <th>Capacete</th>
+                                        <th>Bag</th>
+                                        <th>Case</th>
+                                        <th>Carregador</th>
+                                        <th></th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {MovementState.map(movement => (
+                                        <tr key={movement.id}>
+                                            <td data-title="Data Retirada" className="pointer"onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
+                                            {
+                                                filtersMovements.filterShowFinalDate ? 
+                                                <td data-title="Data Devolução" onClick={() => handleGoToDetails(movement.id)}>{movement.finalDateMovement}</td> :
+                                                <td data-title="Data Retirada" className="hidden"></td>
+                                            }
+                                            <td data-title="Hora Retirada">{movement.timePickUpFormatted}</td>
+                                            <td data-title="Data Devolução">{movement.timeReturnFormatted}</td>
+                                            <td data-title="Movimentação">{movement.typeMovement ? movement.typeMovement.description : ""}</td>
+                                            <td data-title="Chassi" className="pointer" onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
+                                            <td data-title="Entregador">{movement.peopleRegistration ? movement.peopleRegistration.name : ""}</td>
+                                            <td data-title="OL">{movement.logisticOperator ? movement.logisticOperator.description : ""}</td>
+                                            <td data-title="Capacete" className="check-table"><input type="checkbox" checked={movement.accessoriesHelmet} disabled /></td>
+                                            <td data-title="Bag" className="check-table"><input type="checkbox" checked={movement.accessoriesBag} disabled /></td>
+                                            <td data-title="Case" className="check-table"><input type="checkbox" checked={movement.accessoriesCase} disabled /></td>
+                                            <td data-title="Carregador" className="check-table"><input type="checkbox" checked={movement.accessoriesCharger} disabled /></td>
+                                        <td className="delete" onClick={() => handleDeleteMovement(movement.id)}>Delete</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </section>
                 </section>
                 <div className={userWantsToDeleteMovement === true ? "content dialog-section show-up" : "content dialog-section"}>
@@ -390,6 +392,32 @@ export default function Movements() {
                         <h1 className="title-page">Movimentações Patenetes</h1>
                     </div>
                     <section className="content-box">
+                        <div className="important-data">
+                            <div className="field-box">
+                                <label>Total</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
+                            </div>
+                            <div className="field-box">
+                                <label>Disponíveis</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
+                            </div>
+                            <div className="field-box">
+                                <label>Em Uso</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
+                            </div>
+                            <div className="field-box">    
+                                <label>Operantes</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersOperants} disabled  />
+                            </div>
+                            <div className="field-box">
+                                <label>Manutenção</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
+                            </div>
+                            <div className="field-box">
+                                <label>Backup</label>
+                                <input type="text" value={NumbersOfScootersState.numberOfScootersInBackup} disabled />
+                            </div>
+                        </div>
                         <div className="date-filter">
                             <div className="date-box">
                                 <label>Data</label>
@@ -398,44 +426,28 @@ export default function Movements() {
                             </div>                                
                             <button onClick={handleSetFilters}>Aplicar Filtros</button>
                         </div>
-                        <div className="filters">
-                            <div className="field-box">
-                                <label>Patinetes Totais</label>
-                                <input type="text" value={NumbersOfScootersState.numberOfScooters} disabled />
-                            </div>
-                            <div className="field-box">
-                                <label>Patinetes Disponíveis</label>
-                                <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
-                            </div>
-                            <div className="field-box">
-                                <label>Patinetes Sendo Utilizados</label>
-                                <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
-                            </div>
-                            <div className="field-box">
-                                <label>Patinetes em Manutenção</label>
-                                <input type="text" value={NumbersOfScootersState.numberOfScootersUnderMaintenance} disabled />
-                            </div>
-                        </div>
                         <hr />
-                        <table className="table-movements">
-                            <thead>
-                                <tr>
-                                    <th>Data</th>
-                                    <th>Chassi</th>
-                                    <th>Entregador</th>
-                                    <th>OL</th>
-                                    <th>Hora Retirada</th>
-                                    <th>Hora Devolução</th>
-                                    <th>Capacete</th>
-                                    <th>Bag</th>
-                                    <th>Case</th>
-                                    <th>Carregador</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        <div className="table-responsive-vertical">
+                            <table className="table-movements table-bordered table-striped table-mc-gray">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Chassi</th>
+                                        <th>Entregador</th>
+                                        <th>OL</th>
+                                        <th>Hora Retirada</th>
+                                        <th>Hora Devolução</th>
+                                        <th>Capacete</th>
+                                        <th>Bag</th>
+                                        <th>Case</th>
+                                        <th>Carregador</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </section>
                 </section>
             </main>
