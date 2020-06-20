@@ -2,8 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { useAlert } from 'react-alert'
+import Select from 'react-select'
 import { getMovements, getMovementsWithFilters, deleteMovement } from '../../actions/movement'
 import { getScooters } from '../../actions/scooters'
+
+
+// const optionsTypeMovementSelect  = [
+//     { value: 'Interna', 'label': 'Interna' },
+//     { value: 'Externa', 'label': 'Externa' }
+// ]
 
 
 export default function Movements() {
@@ -11,6 +18,7 @@ export default function Movements() {
     const history = useHistory()
     const alert = useAlert()
     const today = new Date()
+    let typesMovementsArray = []
     const [userWantsToDeleteMovement, setUserWantsToDeleteMovement] = useState(false)
     const [idMovementUserWantsToDelete, setIdMovementUserWantsToDelete] = useState(-1)
     const [MovementState, setMovementState] = useState([{
@@ -51,6 +59,10 @@ export default function Movements() {
         numberOfScootersInBackup: 0
     })
 
+    const [optionsTypeMovementSelect, setOptionsTypeMovementSelect] = useState([
+        {value: -1, label: ""}
+    ])
+
     const [filtersMovements, setFiltersMovements] = useState({
         filterInitialDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
         filterFinalDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
@@ -77,31 +89,44 @@ export default function Movements() {
         return timeMovementFormatted
     }
 
+    const checkForDuplicateElementInArray = (array) =>{
+        if (array.length) {
+            var index = 0
+            var modifiedArray = array
+            array.map(elementForCheck => {
+                if (index !== 0) {
+                    var valueToCheck = elementForCheck.value
+                    array.some(elementArray => {
+                        if (elementArray.value !== valueToCheck) modifiedArray.splice(index, 1)
+                    })
+                }
+                index += 1
+            })
+            return modifiedArray
+        }
+    }
+
     useEffect(() => {
         if (movements !== undefined) {
             if (movements.length !== 0) {
-
                 if (isDetails === false && isAdd === false) {
                     if (movements.map) {
                         movements.map(movement => {
                             movement.timePickUpFormatted = formattingTime(movement.intialDateMovement, movement.pickUpTime)
                             if (movement.returnTime !== null) movement.timeReturnFormatted = formattingTime(movement.intialDateMovement, movement.returnTime)
+                            typesMovementsArray.push({
+                                value: movement.typeMovement.id, label: movement.typeMovement.description
+                            })
                         })
+                        setOptionsTypeMovementSelect(checkForDuplicateElementInArray(typesMovementsArray))
                         setMovementState(movements)
                         setShouldGetMovements(false)
                     }
                 }
-                else {
-                    setShouldGetMovements(true)
-                }
+                else setShouldGetMovements(true)
             }
             else {
-                if (movements !== '') {
-                    setShouldGetMovements(true)
-                }
-                else {
-                    setShouldGetMovements(false)
-                }
+                movements !== '' ? setShouldGetMovements(true) : setShouldGetMovements(false)
                 setMovementState([{
                     id: 0, dataMovement: "", scooter: { chassisNumber: "" }, logisticOperator: { description: "" },
                     peopleRegistration: { name: "" }, typeRelease: "", accessoriesHelmet: false, accessoriesBag: false,
@@ -112,12 +137,7 @@ export default function Movements() {
         
         else {
             // api returns "" so if movements is empty is because there is not a movement in database
-            if (movements !== '') {
-                setShouldGetMovements(true)
-            }
-            else {
-                setShouldGetMovements(false)
-            }
+            movements !== '' ? setShouldGetMovements(true) : setShouldGetMovements(false)
             setMovementState([{
                 id: 0, dataMovement: "", scooter: { chassisNumber: "" }, logisticOperator: { description: "" },
                 peopleRegistration: { name: "" }, typeRelease: "", accessoriesHelmet: false, accessoriesBag: false,
@@ -167,7 +187,7 @@ export default function Movements() {
             dispatch(getScooters())
         }
     }, [shouldGetMovements])
-
+    
 
     const handleGoToDetails = (idMovement) => history.push(`details-movement/${idMovement}`)
 
@@ -233,6 +253,21 @@ export default function Movements() {
         })
     }
 
+    const hadleFilterSelectChange = (valueOfObject, objectWhoCalls) => {
+        const { name } = objectWhoCalls
+        let valueForFilter = ""
+        if (objectWhoCalls.action === "select-option") valueForFilter = valueOfObject.label
+        if (objectWhoCalls.action === "clear") valueForFilter = ""
+        console.log(valueForFilter)
+        setFiltersMovements({
+            ...filtersMovements,
+            [name]: valueForFilter
+        })
+    }
+
+    console.log(filtersMovements)
+    
+
     const handleCheckFilter = e => {
         const { name, checked } = e.target
         setFiltersMovements({
@@ -254,6 +289,7 @@ export default function Movements() {
             }
         }
     }
+
 
     if (shouldGetMovements === false) {
         return (
@@ -294,7 +330,7 @@ export default function Movements() {
                                 <label>Data</label>
                                 <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
                                 <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
-                            </div>                                
+                            </div>
                             <button onClick={handleSetFilters}>Aplicar Filtros</button>
                         </div>
                         <div className="filters">
@@ -308,7 +344,9 @@ export default function Movements() {
                             </div>
                             <div className="field-box">    
                                 <label>Mostrar Apenas Movimentações do Tipo</label>
+                                <Select options={optionsTypeMovementSelect} name="filterTypesMovements" onChange={hadleFilterSelectChange} isSearchable isClearable />
                                 <input type="text" name="filterTypesMovements" value={filtersMovements.filterTypesMovements || ''} onChange={handleFiltersChange} />
+                                
                             </div>
                             <div className="field-box">
                                 <label>Mostrar Apenas a OL</label>
