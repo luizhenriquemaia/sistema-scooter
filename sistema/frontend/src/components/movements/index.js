@@ -8,8 +8,10 @@ import { getScooters } from '../../actions/scooters'
 
 
 const styleOfSelectFilter = {
-    control: () => {
-    }
+    control: (provided) => ({
+        ...provided,
+        width: 200
+    })
 }
 
 
@@ -243,7 +245,7 @@ export default function Movements() {
     useEffect(() => {
         if (movements !== '') {
             if (filtersMovements.filterShowReturnedScooters) {
-                if (filtersMovements.filterShowReturnedScooters === "Todos") {
+                if (filtersMovements.filterShowReturnedScooters === "noValue") {
                     setMovementState(movements)
                 }
                 if (filtersMovements.filterShowReturnedScooters === "Patinetes Devolvidos") {
@@ -254,27 +256,38 @@ export default function Movements() {
                 }
             }
             if (filtersMovements.filterTypesMovements) {
-                if (filtersMovements.filterTypesMovements !== "" && filtersMovements.filterTypesMovements !== "None") {
+                if (filtersMovements.filterTypesMovements !== "" && filtersMovements.filterTypesMovements !== "noValue") {
                     setMovementState(movements.filter(movement => movement.typeMovement ? movement.typeMovement.description === filtersMovements.filterTypesMovements : movement.typeMovement === filtersMovements.filterTypesMovements ))
                     filtersMovements.filterTypesMovements === "Interna" ? setShowReturnData(true) : setShowReturnData(false)
                 }
                 else {
                     setShowReturnData(false)
+                    setMovementState(movements)
                 }
             }
             if (filtersMovements.filterShowJustOneOL) {
-                if (filtersMovements.filterShowJustOneOL !== "") {
+                if (filtersMovements.filterShowJustOneOL !== "" && filtersMovements.filterShowJustOneOL !== "noValue") {
                     setMovementState(movements.filter(movement => movement.logisticOperator.description === filtersMovements.filterShowJustOneOL))
+                }
+                else {
+                    setMovementState(movements)
                 }
             }
             if (filtersMovements.filterByNamePeopleRegistration) {
-                if (filtersMovements.filterByNamePeopleRegistration !== "") {
+                if (filtersMovements.filterByNamePeopleRegistration !== "" && filtersMovements.filterByNamePeopleRegistration !== "noValue") {
                     setMovementState(movements.filter(movement => movement.peopleRegistration ? movement.peopleRegistration.name === filtersMovements.filterByNamePeopleRegistration : movement.peopleRegistration === filtersMovements.filterByNamePeopleRegistration))
+                }
+                else {
+                    setMovementState(movements)
                 }
             }
             if (filtersMovements.filterByChassis) {
-                if (filtersMovements.filterByChassis !== "") {
+                if (filtersMovements.filterByChassis !== "" && filtersMovements.filterByChassis !== "noValue") {
                     setMovementState(movements.filter(movement => movement.scooter.chassisNumber == filtersMovements.filterByChassis))
+                }
+                else {
+                    console.log(1)
+                    setMovementState(movements)
                 }
             }
         }
@@ -292,10 +305,7 @@ export default function Movements() {
         const { name } = objectWhoCalls
         let valueForFilter = ""
         if (objectWhoCalls.action === "select-option") valueForFilter = valueOfObject.label
-        if (objectWhoCalls.action === "clear") {
-            name === "filterShowReturnedScooters" ? valueForFilter = "Todos" : valueForFilter = ""
-            name === "filterTypesMovements" ? valueForFilter = "None" : valueForFilter = ""
-        }
+        if (objectWhoCalls.action === "clear") valueForFilter = "noValue"
         setFiltersMovements({
             ...filtersMovements,
             [name]: valueForFilter
