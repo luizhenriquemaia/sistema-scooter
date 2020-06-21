@@ -23,6 +23,7 @@ export default function Movements() {
     let typesMovementsArray = []
     let logisticsOperatorsArray = []
     let deliverymanArray = []
+    let scootersArray = []
     const [userWantsToDeleteMovement, setUserWantsToDeleteMovement] = useState(false)
     const [idMovementUserWantsToDelete, setIdMovementUserWantsToDelete] = useState(-1)
     const [MovementState, setMovementState] = useState([{
@@ -70,6 +71,9 @@ export default function Movements() {
         { value: -1, label: "" }
     ])
     const [optionsDeliverymanSelect, setOptionsDeliverymanSelect] = useState([
+        { value: -1, label: "" }
+    ])
+    const [optionsScooterSelect, setOptionsScooterSelect] = useState([
         { value: -1, label: "" }
     ])
 
@@ -130,10 +134,14 @@ export default function Movements() {
                                     value: movement.peopleRegistration.id, label: movement.peopleRegistration.name
                                 })
                             }
+                            scootersArray.push({
+                                value: movement.scooter.id, label: movement.scooter.chassisNumber
+                            })
                         })
                         setOptionsTypeMovementSelect(getUniqueValues(typesMovementsArray, "value"))
                         setOptionsLogisticOperatorSelect(getUniqueValues(logisticsOperatorsArray, "value"))
                         setOptionsDeliverymanSelect(getUniqueValues(deliverymanArray, "value"))
+                        setOptionsScooterSelect(getUniqueValues(scootersArray, "value"))
                         setMovementState(movements)
                         setShouldGetMovements(false)
                     }
@@ -369,7 +377,7 @@ export default function Movements() {
                             </div>
                             <div className="field-box">
                                 <label>Mostrar Apenas o Patinete</label>
-                                <input type="text" name="filterByChassis" value={filtersMovements.filterByChassis || ''} onChange={handleFiltersChange} />
+                                <Select options={optionsScooterSelect} name="filterByChassis" onChange={hadleFilterSelectChange} styles={styleOfSelectFilter} isSearchable isClearable />
                             </div>
                         </div>
                         <hr />
