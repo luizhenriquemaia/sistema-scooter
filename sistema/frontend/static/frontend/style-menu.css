@@ -197,7 +197,7 @@ section.section-main-box {
     flex-direction: column;
     height: auto;
     max-height: 500px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .field-box label {
