@@ -8,8 +8,8 @@ import { getScooters } from '../../actions/scooters'
 
 
 const styleOfSelectFilter = {
-    control: () => {
-    }
+    control: () => ({
+    })
 }
 
 
@@ -22,6 +22,7 @@ export default function Movements() {
     let logisticsOperatorsArray = []
     let deliverymanArray = []
     let scootersArray = []
+    let valuesToFilterMovements = []
     const [userWantsToDeleteMovement, setUserWantsToDeleteMovement] = useState(false)
     const [idMovementUserWantsToDelete, setIdMovementUserWantsToDelete] = useState(-1)
     const [MovementState, setMovementState] = useState([{
@@ -82,7 +83,6 @@ export default function Movements() {
     const [filtersMovements, setFiltersMovements] = useState({
         filterInitialDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
         filterFinalDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
-        filterShowFinalDate: false,
         filterShowReturnedScooters: true,
         filterTypesMovements: "",
         filterShowJustOneOL: "",
@@ -96,6 +96,13 @@ export default function Movements() {
     const isDetails = useSelector(state => state.movements.isDetails)
     const isAdd = useSelector(state => state.movements.isAdd)
     const [showReturnData, setShowReturnData] = useState(false)
+    const [shouldFilter, setShouldFilter] = useState({
+        shouldFilterShowReturnedScooters: false,
+        shouldFilterTypesMovement: false,
+        shouldFilterShowJustOneOL: false,
+        shouldFilterNamePeopleRegistration: false,
+        shouldFilterByChassis: false
+    })
 
     const formattingTime = (dateMovement, timeMovement) => {
         var dateSplited = dateMovement.split("-")
@@ -239,46 +246,64 @@ export default function Movements() {
     }
 
 
-    // HANDLE FILTER THINGS
-    useEffect(() => {
-        if (movements !== '') {
-            if (filtersMovements.filterShowReturnedScooters) {
-                if (filtersMovements.filterShowReturnedScooters === "Todos") {
-                    setMovementState(movements)
+    // FILTER THINGS
+    const setFilteredMovementsToState = (arrayFilters) => {
+        let filteredMovementsToState = [...movements]
+        arrayFilters.forEach(filterObj => {
+            if (filterObj.propertie === "returnTime") {
+                if (filterObj.value === "!== null") {
+                    filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.returnTime !== null))
+                } else {
+                    filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.returnTime === null))
                 }
-                if (filtersMovements.filterShowReturnedScooters === "Patinetes Devolvidos") {
-                    setMovementState(movements.filter(movement => movement.returnTime !== null))
-                }
-                if (filtersMovements.filterShowReturnedScooters === "Patinetes Sendo Utilizados") {
-                    setMovementState(movements.filter(movement => movement.returnTime === null))
-                }
+            } if (filterObj.propertie === "typeMovement.description") {
+                filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.typeMovement.description === filterObj.value))
+            } if (filterObj.propertie === "logisticOperator.description") {
+               filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.logisticOperator.description === filterObj.value))
+            } if (filterObj.propertie === "scooter.chassisNumber") {
+               filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.scooter.chassisNumber === filterObj.value))
+            } if (filterObj.propertie === "peopleRegistration.name") {
+                filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.peopleRegistration ? movementToFilter.peopleRegistration.name === filterObj.value : movementToFilter.peopleRegistration === filterObj.value))
             }
-            if (filtersMovements.filterTypesMovements) {
-                if (filtersMovements.filterTypesMovements !== "" && filtersMovements.filterTypesMovements !== "None") {
-                    setMovementState(movements.filter(movement => movement.typeMovement ? movement.typeMovement.description === filtersMovements.filterTypesMovements : movement.typeMovement === filtersMovements.filterTypesMovements ))
+        })
+        setMovementState(filteredMovementsToState)
+    }
+
+    useEffect(() => {
+        valuesToFilterMovements = []
+        if (movements !== '') {
+            if (shouldFilter.shouldFilterShowReturnedScooters) {
+                if (filtersMovements.filterShowReturnedScooters === "Patinetes Devolvidos") {
+                    valuesToFilterMovements.push({ propertie: "returnTime", value: "!== null" })
+                } if (filtersMovements.filterShowReturnedScooters === "Patinetes Sendo Utilizados") {
+                    valuesToFilterMovements.push({ propertie: "returnTime", value: "=== null" })
+                }   
+            } if (shouldFilter.shouldFilterTypesMovement) {
+                if (filtersMovements.filterTypesMovements !== "") {
+                    valuesToFilterMovements.push({ propertie: "typeMovement.description", value: filtersMovements.filterTypesMovements })
                     filtersMovements.filterTypesMovements === "Interna" ? setShowReturnData(true) : setShowReturnData(false)
                 }
-                else {
-                    setShowReturnData(false)
-                }
-            }
-            if (filtersMovements.filterShowJustOneOL) {
+            } if (!shouldFilter.shouldFilterTypesMovement) {
+                setShowReturnData(false)
+            } if (shouldFilter.shouldFilterShowJustOneOL) {
                 if (filtersMovements.filterShowJustOneOL !== "") {
-                    setMovementState(movements.filter(movement => movement.logisticOperator.description === filtersMovements.filterShowJustOneOL))
+                    valuesToFilterMovements.push({ propertie: "logisticOperator.description", value: filtersMovements.filterShowJustOneOL })
                 }
-            }
-            if (filtersMovements.filterByNamePeopleRegistration) {
+            } if (shouldFilter.shouldFilterNamePeopleRegistration) {
                 if (filtersMovements.filterByNamePeopleRegistration !== "") {
-                    setMovementState(movements.filter(movement => movement.peopleRegistration ? movement.peopleRegistration.name === filtersMovements.filterByNamePeopleRegistration : movement.peopleRegistration === filtersMovements.filterByNamePeopleRegistration))
+                    valuesToFilterMovements.push({ propertie: "peopleRegistration.name", value: filtersMovements.filterByNamePeopleRegistration })
                 }
-            }
-            if (filtersMovements.filterByChassis) {
+            } if (shouldFilter.shouldFilterByChassis) {
                 if (filtersMovements.filterByChassis !== "") {
-                    setMovementState(movements.filter(movement => movement.scooter.chassisNumber == filtersMovements.filterByChassis))
+                    valuesToFilterMovements.push({ propertie: "scooter.chassisNumber", value: filtersMovements.filterByChassis })
                 }
+            } if (valuesToFilterMovements.length === 0) {
+                setMovementState(movements)
+            } else {
+                setFilteredMovementsToState(valuesToFilterMovements)
             }
         }
-    }, [filtersMovements])
+    }, [filtersMovements, shouldFilter])
 
     const handleFiltersChange = e => {
         const { name, value } = e.target
@@ -292,10 +317,52 @@ export default function Movements() {
         const { name } = objectWhoCalls
         let valueForFilter = ""
         if (objectWhoCalls.action === "select-option") valueForFilter = valueOfObject.label
-        if (objectWhoCalls.action === "clear") {
-            name === "filterShowReturnedScooters" ? valueForFilter = "Todos" : valueForFilter = ""
-            name === "filterTypesMovements" ? valueForFilter = "None" : valueForFilter = ""
+        if (name === "filterShowReturnedScooters") {
+            if (objectWhoCalls.action === "clear") {
+                setShouldFilter({...shouldFilter, shouldFilterShowReturnedScooters: false})
+                valueForFilter = "noValue"
+            }
+            else {
+                setShouldFilter({ ...shouldFilter, shouldFilterShowReturnedScooters: true })
+            }
         }
+        if (name === "filterTypesMovements") {
+            if (objectWhoCalls.action === "clear") {
+                setShouldFilter({...shouldFilter, shouldFilterTypesMovement: false})
+                valueForFilter = "noValue"
+            }
+            else {
+                setShouldFilter({ ...shouldFilter, shouldFilterTypesMovement: true })
+            }
+        }
+        if (name === "filterShowJustOneOL") {
+            if (objectWhoCalls.action === "clear") {
+                setShouldFilter({...shouldFilter, shouldFilterShowJustOneOL: false})
+                valueForFilter = "noValue"
+            }
+            else {
+                setShouldFilter({ ...shouldFilter, shouldFilterShowJustOneOL: true })
+            }
+        }
+        if (name === "filterByNamePeopleRegistration") {
+            if (objectWhoCalls.action === "clear") {
+                setShouldFilter({...shouldFilter, shouldFilterNamePeopleRegistration: false})
+                valueForFilter = "noValue"
+            }
+            else {
+                setShouldFilter({ ...shouldFilter, shouldFilterNamePeopleRegistration: true })
+            }
+        }
+        if (name === "filterByChassis") {
+            if (objectWhoCalls.action === "clear") {
+                setShouldFilter({...shouldFilter, shouldFilterByChassis: false})
+                valueForFilter = "noValue"
+            }
+            else {
+                setShouldFilter({ ...shouldFilter, shouldFilterByChassis: true })
+            }
+        }
+
         setFiltersMovements({
             ...filtersMovements,
             [name]: valueForFilter
@@ -314,6 +381,7 @@ export default function Movements() {
             }
         }
     }
+
 
 
     if (shouldGetMovements === false) {
