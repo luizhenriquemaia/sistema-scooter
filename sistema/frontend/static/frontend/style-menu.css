@@ -181,6 +181,7 @@ section.section-main-box {
     border: 2px solid #505050;
     border-radius: 12px;
     min-inline-size: auto;
+    padding: 10px 30px 25px;
 }
 
 .register-type {
@@ -197,7 +198,7 @@ section.section-main-box {
     flex-direction: column;
     height: auto;
     max-height: 500px;
-    /* overflow: hidden; */
+    overflow: hidden;
 }
 
 .field-box label {
@@ -278,14 +279,12 @@ section.section-main-box {
     main.content {
         padding: 20px 10px 20px 10px;
     }
-
-    .data-box {
-        padding: 18px 10px;
+    
+    .field-box label {
+        margin: 20px 0 0 0;
     }
-   
+
     .register-type {
-        margin-bottom: 20px;
-        padding: 10px 15px 10px 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -314,9 +313,12 @@ section.section-main-box {
 }
 
 /* Register Section  -------------------------------*/
+.register-section .data-box {
+    padding: 0px 20px;
+}
+
 .register-section .field-box {
     max-height: 0;
-    overflow: hidden;
     padding: 0px;
     transition: all ease-out 0.3s;
 }
@@ -324,12 +326,13 @@ section.section-main-box {
 .logistic-operator .field-box.logistic-operator,
 .delivery-man .field-box.delivery-man,
 .scooter .field-box.scooter {
-    padding: 3% 5%;
-    transition-delay: 0.4s; 
+    transition-delay: 0.4s;
+    padding: 20px 20px 30px; 
 }
 
 .logistic-operator .field-box.logistic-operator {
     max-height: 160px;
+    
 }
 
 .delivery-man .field-box.delivery-man {
@@ -345,13 +348,18 @@ section.section-main-box {
     .logistic-operator .field-box.logistic-operator,
     .delivery-man .field-box.delivery-man,
     .scooter .field-box.scooter {
-        padding: 7% 5%;
+        padding: 0% 0% 10%;
     }
 }
 
 /* Add Movement Section ------------------------- */
+
+.add-movement-section .data-box {
+
+}
+
 .add-movement-section .field-box {
-    padding: 3% 5%;
+    padding: 2% 10px;
     border-bottom: 1px solid #505050;
     flex-direction: row;
     flex-wrap: wrap;
@@ -360,10 +368,12 @@ section.section-main-box {
 
 section.add-movement-section .data-box :last-child.field-box {
     border: none;
+    margin-top: 20px;
 }
 
-.add-movement-section .field-box.accessories {
-    justify-content: space-between;
+.add-movement-section .content-box select {
+    width: 200px;
+    margin-left: 20px ;
 }
 
 .add-movement-section .field-box input {
@@ -375,13 +385,15 @@ section.add-movement-section .data-box :last-child.field-box {
 
 .add-movement-section .field-box label {
     display: flex;
-    margin-right: 215px;
+    margin-right: 0;    
 }
 
 .add-movement-section .data-box :last-child.field-box label {
-    width: auto;
-    margin: 0;
     display: contents;
+}
+
+.add-movement-section .field-box.accessories {
+    justify-content: space-between;
 }
 
 .add-movement-section .field-box.accessories label{
@@ -392,15 +404,16 @@ section.add-movement-section .data-box :last-child.field-box {
     width: min-content;
 }
 
-.add-movement-section .content-box select {
-    width: 200px;
-    margin-left: 20px ;
+.add-movement-section .field-box.logistic-operator {
+    padding-bottom: 30px;
+    justify-content: space-around;
 }
 
 .internal .field-box.delivery-man,
 .internal .field-box.accessories {
     max-height: 0px;
     padding: 0;
+    justify-content: space-around;
 }
 
 .external .field-box.logistic-operator {
@@ -412,7 +425,7 @@ section.add-movement-section .data-box :last-child.field-box {
 
 @media(max-width: 600px) {
     .add-movement-section .field-box input {
-        margin: 15px 0;
+        margin: 15px auto;
         overflow: hidden;
     }
 
@@ -423,7 +436,9 @@ section.add-movement-section .data-box :last-child.field-box {
     }
 
     .add-movement-section .content-box select {
-        width: 200px;
+        margin: 15px 0;
+        width: auto;
+        min-width: 180px;
     }
 }
 @media(max-width: 720px) {
