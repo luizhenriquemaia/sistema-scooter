@@ -8,10 +8,8 @@ import { getScooters } from '../../actions/scooters'
 
 
 const styleOfSelectFilter = {
-    control: styles => ({
-        ...styles,
-        width: 400
-    })
+    control: () => {
+    }
 }
 
 
@@ -97,6 +95,7 @@ export default function Movements() {
     const scooters = useSelector(state => state.scooters.scooter)
     const isDetails = useSelector(state => state.movements.isDetails)
     const isAdd = useSelector(state => state.movements.isAdd)
+    const [showReturnData, setShowReturnData] = useState(false)
 
     const formattingTime = (dateMovement, timeMovement) => {
         var dateSplited = dateMovement.split("-")
@@ -255,8 +254,12 @@ export default function Movements() {
                 }
             }
             if (filtersMovements.filterTypesMovements) {
-                if (filtersMovements.filterTypesMovements !== "") {
+                if (filtersMovements.filterTypesMovements !== "" && filtersMovements.filterTypesMovements !== "None") {
                     setMovementState(movements.filter(movement => movement.typeMovement ? movement.typeMovement.description === filtersMovements.filterTypesMovements : movement.typeMovement === filtersMovements.filterTypesMovements ))
+                    filtersMovements.filterTypesMovements === "Interna" ? setShowReturnData(true) : setShowReturnData(false)
+                }
+                else {
+                    setShowReturnData(false)
                 }
             }
             if (filtersMovements.filterShowJustOneOL) {
@@ -291,23 +294,13 @@ export default function Movements() {
         if (objectWhoCalls.action === "select-option") valueForFilter = valueOfObject.label
         if (objectWhoCalls.action === "clear") {
             name === "filterShowReturnedScooters" ? valueForFilter = "Todos" : valueForFilter = ""
+            name === "filterTypesMovements" ? valueForFilter = "None" : valueForFilter = ""
         }
         setFiltersMovements({
             ...filtersMovements,
             [name]: valueForFilter
         })
     }
-
-    
-
-    const handleCheckFilter = e => {
-        const { name, checked } = e.target
-        setFiltersMovements({
-            ...filtersMovements,
-            [name]: checked
-        })
-    }
-
 
     const handleSetFilters = e => {
         const { filterInitialDate, filterFinalDate } = filtersMovements
@@ -367,10 +360,6 @@ export default function Movements() {
                         </div>
                         <div className="filters">
                             <div className="field-box">
-                                <label>Incluir Data Final</label>
-                                <input type="checkbox" name="filterShowFinalDate" checked={filtersMovements.filterShowFinalDate} onChange={handleCheckFilter} />
-                            </div>
-                            <div className="field-box">
                                 <label>Mostrar Apenas Patinetes</label>
                                 <Select options={optionsShowScooters} name="filterShowReturnedScooters" onChange={hadleFilterSelectChange} styles={styleOfSelectFilter} isSearchable isClearable />
                             </div>
@@ -397,7 +386,7 @@ export default function Movements() {
                                 <thead>
                                     <tr>
                                         <th>Data Retirada</th>
-                                        {filtersMovements.filterShowFinalDate ? <th>Data Devolução</th> : <th className="hidden"></th>}
+                                        {showReturnData ? <th>Data Devolução</th> : <th className="hidden"></th>}
                                         <th>Hora Retirada</th>
                                         <th>Hora Devolução</th>
                                         <th>Movimentação</th>
@@ -416,7 +405,7 @@ export default function Movements() {
                                         <tr key={movement.id}>
                                             <td data-title="Data Retirada" className="pointer"onClick={() => handleGoToDetails(movement.id)}>{movement.intialDateMovement}</td>
                                             {
-                                                filtersMovements.filterShowFinalDate ? 
+                                                showReturnData ? 
                                                 <td data-title="Data Devolução" onClick={() => handleGoToDetails(movement.id)}>{movement.finalDateMovement}</td> :
                                                 <td data-title="Data Retirada" className="hidden"></td>
                                             }
