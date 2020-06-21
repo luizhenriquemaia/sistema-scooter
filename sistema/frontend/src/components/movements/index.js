@@ -7,10 +7,12 @@ import { getMovements, getMovementsWithFilters, deleteMovement } from '../../act
 import { getScooters } from '../../actions/scooters'
 
 
-// const optionsTypeMovementSelect  = [
-//     { value: 'Interna', 'label': 'Interna' },
-//     { value: 'Externa', 'label': 'Externa' }
-// ]
+const styleOfSelectFilter = {
+    control: styles => ({
+        ...styles,
+        width: 400
+    })
+}
 
 
 export default function Movements() {
@@ -89,22 +91,46 @@ export default function Movements() {
         return timeMovementFormatted
     }
 
-    const checkForDuplicateElementInArray = (array) =>{
-        if (array.length) {
-            var index = 0
-            var modifiedArray = array
-            array.map(elementForCheck => {
-                if (index !== 0) {
-                    var valueToCheck = elementForCheck.value
-                    array.some(elementArray => {
-                        if (elementArray.value !== valueToCheck) modifiedArray.splice(index, 1)
-                    })
-                }
-                index += 1
-            })
-            return modifiedArray
-        }
+
+    const getUniqueValues = (array, valueToCompare) => {
+        const uniqueArray = array
+            // store the comparison values in array
+            .map(element => element[valueToCompare])
+            // store the keys of the unique objects
+            .map((element, index, final) => final.indexOf(element) === index && index)
+            // eliminate the dead keys & store unique objects
+            .filter(element => array[element])
+            .map(element => array[element])
+        
+        return uniqueArray
     }
+
+    // const checkForDuplicateElementInArray = (array) =>{
+    //     if (array.length) {
+    //         var uniqueValuesArray = new Set()
+
+    //         array.forEach(object => {
+    //             uniqueValuesArray.add(object)
+    //         })
+            
+
+    //         console.log(uniqueValuesArray)
+
+    //         // console.log(uniqueValuesArray)
+    //         // array.map(elementForCheck => {
+    //         //     if (index !== 0) {
+    //         //         array.map(elementArray => {
+    //         //             if (elementArray.value === elementForCheck.value) {
+    //         //                 modifiedArray.splice(index, 1)
+    //         //                 console.log(index)
+    //         //             }
+    //         //         })
+    //         //     }
+    //         //     index += 1
+    //         // })
+    //         return uniqueValuesArray
+    //     }
+    // }
 
     useEffect(() => {
         if (movements !== undefined) {
@@ -118,7 +144,7 @@ export default function Movements() {
                                 value: movement.typeMovement.id, label: movement.typeMovement.description
                             })
                         })
-                        setOptionsTypeMovementSelect(checkForDuplicateElementInArray(typesMovementsArray))
+                        setOptionsTypeMovementSelect(getUniqueValues(typesMovementsArray, "value"))
                         setMovementState(movements)
                         setShouldGetMovements(false)
                     }
@@ -258,14 +284,12 @@ export default function Movements() {
         let valueForFilter = ""
         if (objectWhoCalls.action === "select-option") valueForFilter = valueOfObject.label
         if (objectWhoCalls.action === "clear") valueForFilter = ""
-        console.log(valueForFilter)
         setFiltersMovements({
             ...filtersMovements,
             [name]: valueForFilter
         })
     }
 
-    console.log(filtersMovements)
     
 
     const handleCheckFilter = e => {
@@ -344,7 +368,7 @@ export default function Movements() {
                             </div>
                             <div className="field-box">    
                                 <label>Mostrar Apenas Movimentações do Tipo</label>
-                                <Select options={optionsTypeMovementSelect} name="filterTypesMovements" onChange={hadleFilterSelectChange} isSearchable isClearable />
+                                <Select options={optionsTypeMovementSelect} name="filterTypesMovements" onChange={hadleFilterSelectChange} styles={styleOfSelectFilter} isSearchable isClearable />
                                 <input type="text" name="filterTypesMovements" value={filtersMovements.filterTypesMovements || ''} onChange={handleFiltersChange} />
                                 
                             </div>
