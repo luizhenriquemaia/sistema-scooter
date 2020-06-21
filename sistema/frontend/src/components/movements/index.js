@@ -21,6 +21,7 @@ export default function Movements() {
     const alert = useAlert()
     const today = new Date()
     let typesMovementsArray = []
+    let logisticsOperatorsArray = []
     const [userWantsToDeleteMovement, setUserWantsToDeleteMovement] = useState(false)
     const [idMovementUserWantsToDelete, setIdMovementUserWantsToDelete] = useState(-1)
     const [MovementState, setMovementState] = useState([{
@@ -64,6 +65,9 @@ export default function Movements() {
     const [optionsTypeMovementSelect, setOptionsTypeMovementSelect] = useState([
         {value: -1, label: ""}
     ])
+    const [optionsLogisticOperatorSelect, setOptionsLogisticOperatorSelect] = useState([
+        { value: -1, label: "" }
+    ])
 
     const [filtersMovements, setFiltersMovements] = useState({
         filterInitialDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
@@ -82,7 +86,6 @@ export default function Movements() {
     const isDetails = useSelector(state => state.movements.isDetails)
     const isAdd = useSelector(state => state.movements.isAdd)
 
-
     const formattingTime = (dateMovement, timeMovement) => {
         var dateSplited = dateMovement.split("-")
         var timeSplited = timeMovement.split(":")
@@ -90,7 +93,6 @@ export default function Movements() {
         var timeMovementFormatted = `${String(dateMovementFormatted.getHours()).padStart(2, '0')}:${String(dateMovementFormatted.getMinutes()).padStart(2, '0')}`
         return timeMovementFormatted
     }
-
 
     const getUniqueValues = (array, valueToCompare) => {
         const uniqueArray = array
@@ -105,33 +107,6 @@ export default function Movements() {
         return uniqueArray
     }
 
-    // const checkForDuplicateElementInArray = (array) =>{
-    //     if (array.length) {
-    //         var uniqueValuesArray = new Set()
-
-    //         array.forEach(object => {
-    //             uniqueValuesArray.add(object)
-    //         })
-            
-
-    //         console.log(uniqueValuesArray)
-
-    //         // console.log(uniqueValuesArray)
-    //         // array.map(elementForCheck => {
-    //         //     if (index !== 0) {
-    //         //         array.map(elementArray => {
-    //         //             if (elementArray.value === elementForCheck.value) {
-    //         //                 modifiedArray.splice(index, 1)
-    //         //                 console.log(index)
-    //         //             }
-    //         //         })
-    //         //     }
-    //         //     index += 1
-    //         // })
-    //         return uniqueValuesArray
-    //     }
-    // }
-
     useEffect(() => {
         if (movements !== undefined) {
             if (movements.length !== 0) {
@@ -143,8 +118,12 @@ export default function Movements() {
                             typesMovementsArray.push({
                                 value: movement.typeMovement.id, label: movement.typeMovement.description
                             })
+                            logisticsOperatorsArray.push({
+                                value: movement.logisticOperator.id, label: movement.logisticOperator.description
+                            })
                         })
                         setOptionsTypeMovementSelect(getUniqueValues(typesMovementsArray, "value"))
+                        setOptionsLogisticOperatorSelect(getUniqueValues(logisticsOperatorsArray, "value"))
                         setMovementState(movements)
                         setShouldGetMovements(false)
                     }
@@ -369,12 +348,10 @@ export default function Movements() {
                             <div className="field-box">    
                                 <label>Mostrar Apenas Movimentações do Tipo</label>
                                 <Select options={optionsTypeMovementSelect} name="filterTypesMovements" onChange={hadleFilterSelectChange} styles={styleOfSelectFilter} isSearchable isClearable />
-                                <input type="text" name="filterTypesMovements" value={filtersMovements.filterTypesMovements || ''} onChange={handleFiltersChange} />
-                                
                             </div>
                             <div className="field-box">
                                 <label>Mostrar Apenas a OL</label>
-                                <input type="text" name="filterShowJustOneOL" value={filtersMovements.filterShowJustOneOL || ''} onChange={handleFiltersChange} />
+                                <Select options={optionsLogisticOperatorSelect} name="filterShowJustOneOL" onChange={hadleFilterSelectChange} styles={styleOfSelectFilter} isSearchable isClearable />
                             </div>
                             <div className="field-box">
                                 <label>Mostrar Apenas o Entregador</label>
