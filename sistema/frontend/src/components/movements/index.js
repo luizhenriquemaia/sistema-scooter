@@ -350,10 +350,10 @@ export default function Movements() {
                                             {
                                                 filtersMovements.filterShowFinalDate ? 
                                                 <td data-title="Data Devolução" onClick={() => handleGoToDetails(movement.id)}>{movement.finalDateMovement}</td> :
-                                                <td data-title="Data Retirada" className="hidden"></td>
+                                                <td className="hidden"></td>
                                             }
                                             <td data-title="Hora Retirada">{movement.timePickUpFormatted}</td>
-                                            <td data-title="Data Devolução">{movement.timeReturnFormatted}</td>
+                                            <td data-title="Hora Devolução">{movement.timeReturnFormatted}</td>
                                             <td data-title="Movimentação">{movement.typeMovement ? movement.typeMovement.description : ""}</td>
                                             <td data-title="Chassi" className="pointer" onClick={() => handleGoToDetails(movement.id)}>{movement.scooter.chassisNumber}</td>
                                             <td data-title="Entregador">{movement.peopleRegistration ? movement.peopleRegistration.name : ""}</td>

@@ -198,23 +198,27 @@ export default function detailsMovement() {
                                 </div>
                             </div>
                         </div>
-                        <div className="field-box acessories">
-                            <h4>Acessórios</h4>
-                            <div className="field-box">
-                                <label>Capacete</label>
-                                <input type="checkbox" name="accessoriesHelmet" checked={movementState.accessoriesHelmet} onChange={handleCheck} />
-                            </div>
-                            <div className="field-box">
-                                <label>Bag</label>
-                                <input type="checkbox" name="accessoriesBag" checked={movementState.accessoriesBag} onChange={handleCheck} />
-                            </div>
-                            <div className="field-box">
-                                <label>Case</label>
-                                <input type="checkbox" name="accessoriesCase" checked={movementState.accessoriesCase} onChange={handleCheck} />
-                            </div>
-                            <div className="field-box">
-                                <label>Carregador</label>
-                                <input type="checkbox" name="accessoriesCharger" checked={movementState.accessoriesCharger} onChange={handleCheck} />
+                        <div className="field-box">
+                            <span>
+                                <h4>Acessórios</h4>
+                            </span>
+                            <div className="acessories-options">
+                                <div className="field-box">
+                                    <label>Capacete</label>
+                                    <input type="checkbox" name="accessoriesHelmet" checked={movementState.accessoriesHelmet} onChange={handleCheck} />
+                                </div>
+                                <div className="field-box">
+                                    <label>Bag</label>
+                                    <input type="checkbox" name="accessoriesBag" checked={movementState.accessoriesBag} onChange={handleCheck} />
+                                </div>
+                                <div className="field-box">
+                                    <label>Case</label>
+                                    <input type="checkbox" name="accessoriesCase" checked={movementState.accessoriesCase} onChange={handleCheck} />
+                                </div>
+                                <div className="field-box">
+                                    <label>Carregador</label>
+                                    <input type="checkbox" name="accessoriesCharger" checked={movementState.accessoriesCharger} onChange={handleCheck} />
+                                </div>
                             </div>
                         </div>
                         <div className="field-box">

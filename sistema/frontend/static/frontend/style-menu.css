@@ -5,6 +5,10 @@
     box-sizing: border-box;
 }
 
+html {
+    width: 100%;
+}
+
 
 /* Opend Menu -------------------------------*/
 .menuBlock {
@@ -274,6 +278,10 @@ section.section-main-box {
     main.content {
         padding: 20px 10px 20px 10px;
     }
+
+    .data-box {
+        padding: 18px 10px;
+    }
    
     .register-type {
         margin-bottom: 20px;
@@ -285,6 +293,10 @@ section.section-main-box {
     
     .register-type label {
         margin-right: 0;
+    }
+
+    .field-box textarea {
+        margin: 0;
     }
     
     .submit-button {
@@ -400,18 +412,25 @@ section.add-movement-section .data-box :last-child.field-box {
 
 @media(max-width: 600px) {
     .add-movement-section .field-box input {
-        margin-right: 0px;
-        margin-left: 0px;
+        margin: 15px 0;
         overflow: hidden;
     }
 
     .add-movement-section .field-box label {
         margin-right: 0;
+        min-width: 107px;
         flex-direction: column;
     }
 
     .add-movement-section .content-box select {
         width: 200px;
+    }
+}
+@media(max-width: 720px) {
+    .details-section .data-hora {
+    justify-content: unset;
+    justify-content: center;
+    flex-direction: column;
     }
 }
 
@@ -526,6 +545,7 @@ section.section-main-box.movement-section {
 
 .movement-section .table-movements th.hidden,
 .movement-section .table-movements td.hidden {
+    display: none;
     padding: 0;
     transition: ease-in-out 0.5s;
 }
@@ -685,6 +705,13 @@ section.section-main-box.movement-section {
         margin: 20px 10px;
         padding: 20px 10px;
     }
+
+    .movement-section .date-filter button {
+        margin-top: 20px;
+        max-width: 300px;
+        display: flex;
+        justify-content: center;
+    }
 }
 
 @media screen and (max-width: 1675px) {
@@ -794,6 +821,10 @@ section.section-main-box.movement-section {
 }
 
 /* Details Movement Section */
+.details-section .field-box {
+    min-width: 107px;
+}
+
 .details-section .field-box label {
     margin: 0;
 }
@@ -828,7 +859,7 @@ section.section-main-box.movement-section {
     margin-top: -2px;
 }
 
-.details-section .destination-box span {
+.details-section .data-box span {
     text-align: center;
     padding: 15px 0 24px;
 }
@@ -841,14 +872,30 @@ section.section-main-box.movement-section {
 
 .field-box.destination-box .field-box {
     align-items: center;
-    min-width: 100px;
 }
 
+.details-section .acessories-options {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
 
-/* Details Movement Section -------------------*/
+.details-section .acessories-options .field-box{
+    min-width: 137px;
+}
+
+.details-section .acessories-options input{
+    margin: 10px auto 0;
+}
+
+/* Details Movement Section - Mobile-------------------*/
 @media(max-width: 600px) {
     .details-section .data-box {
         padding: 2% 4%;
+    }
+
+    .details-section .acessories-options .field-box {
+        margin: 0 auto;
     }
 }
 
