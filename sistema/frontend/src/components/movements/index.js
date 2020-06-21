@@ -22,6 +22,7 @@ export default function Movements() {
     const today = new Date()
     let typesMovementsArray = []
     let logisticsOperatorsArray = []
+    let deliverymanArray = []
     const [userWantsToDeleteMovement, setUserWantsToDeleteMovement] = useState(false)
     const [idMovementUserWantsToDelete, setIdMovementUserWantsToDelete] = useState(-1)
     const [MovementState, setMovementState] = useState([{
@@ -66,6 +67,9 @@ export default function Movements() {
         {value: -1, label: ""}
     ])
     const [optionsLogisticOperatorSelect, setOptionsLogisticOperatorSelect] = useState([
+        { value: -1, label: "" }
+    ])
+    const [optionsDeliverymanSelect, setOptionsDeliverymanSelect] = useState([
         { value: -1, label: "" }
     ])
 
@@ -121,9 +125,15 @@ export default function Movements() {
                             logisticsOperatorsArray.push({
                                 value: movement.logisticOperator.id, label: movement.logisticOperator.description
                             })
+                            if (movement.peopleRegistration !== null) {
+                                deliverymanArray.push({
+                                    value: movement.peopleRegistration.id, label: movement.peopleRegistration.name
+                                })
+                            }
                         })
                         setOptionsTypeMovementSelect(getUniqueValues(typesMovementsArray, "value"))
                         setOptionsLogisticOperatorSelect(getUniqueValues(logisticsOperatorsArray, "value"))
+                        setOptionsDeliverymanSelect(getUniqueValues(deliverymanArray, "value"))
                         setMovementState(movements)
                         setShouldGetMovements(false)
                     }
@@ -355,7 +365,7 @@ export default function Movements() {
                             </div>
                             <div className="field-box">
                                 <label>Mostrar Apenas o Entregador</label>
-                                <input type="text" name="filterByNamePeopleRegistration" value={filtersMovements.filterByNamePeopleRegistration || ''} onChange={handleFiltersChange} />
+                                <Select options={optionsDeliverymanSelect} name="filterByNamePeopleRegistration" onChange={hadleFilterSelectChange} styles={styleOfSelectFilter} isSearchable isClearable />
                             </div>
                             <div className="field-box">
                                 <label>Mostrar Apenas o Patinete</label>
