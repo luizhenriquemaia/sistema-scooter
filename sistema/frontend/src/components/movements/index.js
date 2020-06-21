@@ -76,6 +76,10 @@ export default function Movements() {
     const [optionsScooterSelect, setOptionsScooterSelect] = useState([
         { value: -1, label: "" }
     ])
+    const optionsShowScooters = [
+        { value: "0", label: "Patinetes Devolvidos" },
+        { value: "1", label: "Patinetes Sendo Utilizados" },
+    ]
 
     const [filtersMovements, setFiltersMovements] = useState({
         filterInitialDate: String(today.getFullYear()) + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0'),
@@ -239,11 +243,16 @@ export default function Movements() {
     // HANDLE FILTER THINGS
     useEffect(() => {
         if (movements !== '') {
-            if (!filtersMovements.filterShowReturnedScooters) {
-                setMovementState(movements.filter(movement => movement.returnTime === null))
-            }
             if (filtersMovements.filterShowReturnedScooters) {
-                setMovementState(movements)
+                if (filtersMovements.filterShowReturnedScooters === "Todos") {
+                    setMovementState(movements)
+                }
+                if (filtersMovements.filterShowReturnedScooters === "Patinetes Devolvidos") {
+                    setMovementState(movements.filter(movement => movement.returnTime !== null))
+                }
+                if (filtersMovements.filterShowReturnedScooters === "Patinetes Sendo Utilizados") {
+                    setMovementState(movements.filter(movement => movement.returnTime === null))
+                }
             }
             if (filtersMovements.filterTypesMovements) {
                 if (filtersMovements.filterTypesMovements !== "") {
@@ -280,7 +289,9 @@ export default function Movements() {
         const { name } = objectWhoCalls
         let valueForFilter = ""
         if (objectWhoCalls.action === "select-option") valueForFilter = valueOfObject.label
-        if (objectWhoCalls.action === "clear") valueForFilter = ""
+        if (objectWhoCalls.action === "clear") {
+            name === "filterShowReturnedScooters" ? valueForFilter = "Todos" : valueForFilter = ""
+        }
         setFiltersMovements({
             ...filtersMovements,
             [name]: valueForFilter
@@ -360,8 +371,8 @@ export default function Movements() {
                                 <input type="checkbox" name="filterShowFinalDate" checked={filtersMovements.filterShowFinalDate} onChange={handleCheckFilter} />
                             </div>
                             <div className="field-box">
-                                <label>Patinetes Devolvidos</label>
-                                <input type="checkbox" name="filterShowReturnedScooters" checked={filtersMovements.filterShowReturnedScooters} onChange={handleCheckFilter} />
+                                <label>Mostrar Apenas Patinetes</label>
+                                <Select options={optionsShowScooters} name="filterShowReturnedScooters" onChange={hadleFilterSelectChange} styles={styleOfSelectFilter} isSearchable isClearable />
                             </div>
                             <div className="field-box">    
                                 <label>Mostrar Apenas Movimentações do Tipo</label>
