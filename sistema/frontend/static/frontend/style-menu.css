@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -9,6 +8,46 @@ html {
     width: 100%;
 }
 
+/* login ------------------------------- */
+
+.content.login {
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.section-main-box.login-section {
+    width: 300px;
+}
+
+.login-section .content-box{
+    padding: 0
+}
+
+.login-section .data-box {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.login-section .data-box label {
+    margin: 10px 0 0;   
+}
+
+.login-section .data-box input {
+    height: 24px;
+    padding: 2px 5px;
+    margin-bottom: 10px;
+    border: 1px solid;
+}
+
+.login-section .data-box  button {
+    height: 40px;
+    font-size: 18px;
+    background-color: beige;
+    cursor: pointer;
+}
 
 /* Opend Menu -------------------------------*/
 .menuBlock {
@@ -19,7 +58,7 @@ html {
     overflow: hidden;
     transition: 
         width ease-out 0.4s, 
-        border-radius 3s, 
+        border-radius 1.5s, 
         height ease-out 0.5s 0.4s;
 }
 
@@ -120,11 +159,11 @@ html {
     background-color: rgba(0, 0, 0, 0.95);
 }
 
-/* Closed Mobile Menu -----------------------------*/
+/* Closed Menu - Mobile -----------------------------*/
 @media screen and (max-width: 600px) {
     .menuBlock.closedMenu {
         height: 65px;
-        border-radius: 0px 0px 12px;
+        border-radius: 0px 0px 30px;
     }
 
     .menuBlock.closedMenu .menuIconBox {
@@ -165,6 +204,7 @@ section.section-main-box {
 
 .content-box {
     padding: 0 6%;
+    min-height: 420px;
     height: 100%;
     font-size: 21px;
 }
@@ -264,10 +304,10 @@ section.section-main-box {
     border-color: red;
 }
 
-/* General mobile  ---------------------------------------*/
+/* General - Mobile  ---------------------------------------*/
 @media(max-width: 600px) {
     .title-page {
-        padding: 7% 5%;
+        padding: 15% 5% 7%;
     }
 
     .field-box {
@@ -281,7 +321,7 @@ section.section-main-box {
     }
     
     .field-box label {
-        margin: 20px 0 0 0;
+        margin: 30px 0 0 0;
     }
 
     .register-type {
@@ -299,16 +339,19 @@ section.section-main-box {
     }
     
     .submit-button {
+        width: 100%;
+        height: 45px;
         margin: 0;
     }
 
     .buttonBox {
-        justify-content: center;
-        margin-top: 5px;
+        align-content: center;
+        flex-direction: column;
+        padding-bottom: 30px;
     }
     
     .submit-button.confirm {
-        margin-left: 30px;
+        margin: 20px 0 0;
     }
 }
 
@@ -343,7 +386,7 @@ section.section-main-box {
     max-height: 250px;
  }
 
-/* Register Section Mobile ------------------------- */
+/* Register Section - Mobile ------------------------- */
 @media(max-width: 600px) {
     .logistic-operator .field-box.logistic-operator,
     .delivery-man .field-box.delivery-man,
@@ -363,7 +406,7 @@ section.section-main-box {
     border-bottom: 1px solid #505050;
     flex-direction: row;
     flex-wrap: wrap;
-    transition: max-height ease-out 0.5s, padding ease 1.2s;
+    transition: max-height ease-in-out 1s, padding 1s
 }
 
 section.add-movement-section .data-box :last-child.field-box {
@@ -384,8 +427,7 @@ section.add-movement-section .data-box :last-child.field-box {
 }
 
 .add-movement-section .field-box label {
-    display: flex;
-    margin-right: 0;    
+    display: flex;  
 }
 
 .add-movement-section .data-box :last-child.field-box label {
@@ -394,14 +436,6 @@ section.add-movement-section .data-box :last-child.field-box {
 
 .add-movement-section .field-box.accessories {
     justify-content: space-between;
-}
-
-.add-movement-section .field-box.accessories label{
-    margin-right: 0;
-}
-
-.add-movement-section .field-box.acessories input {
-    width: min-content;
 }
 
 .add-movement-section .field-box.logistic-operator {
@@ -421,16 +455,24 @@ section.add-movement-section .data-box :last-child.field-box {
     padding: 0;
 }
 
-/* Add Movement Section Mobile------------------------- */
+/* Add Movement Section -Mobile------------------------- */
 
 @media(max-width: 600px) {
+
+    .add-movement-section .field-box.accessories {
+        justify-content: center;
+}
+
     .add-movement-section .field-box input {
-        margin: 15px auto;
+        margin: 15px 0;
         overflow: hidden;
     }
 
+    .add-movement-section .field-box.accessories input {
+        margin: 15px auto;
+    }
+
     .add-movement-section .field-box label {
-        margin-right: 0;
         min-width: 107px;
         flex-direction: column;
     }
@@ -677,12 +719,16 @@ section.section-main-box.movement-section {
     background-color: #fafafa;
 }
 
-/* Movement (hoot link) Mobile ------------------------------ */
+/* Movement (hoot link) - Mobile ------------------------------ */
 @media(max-width:600px) {
     .movement-section .date-filter .date-box {
         height: auto;
         margin: 0;
         flex-direction: column;
+    }
+
+    .movement-section .content-box .filters .field-box {
+        min-width: auto;
     }
 
     .movement-section .date-filter .date-box label {
@@ -835,7 +881,7 @@ section.section-main-box.movement-section {
     margin: 0;
 }
 
-/* Details Movement Section */
+/* Details Movement Section ---------------------------*/
 .details-section .field-box {
     min-width: 107px;
 }
@@ -889,68 +935,27 @@ section.section-main-box.movement-section {
     align-items: center;
 }
 
-.details-section .acessories-options {
+.details-section .accessories-options {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
 }
 
-.details-section .acessories-options .field-box{
+.details-section .accessories-options .field-box{
     min-width: 137px;
 }
 
-.details-section .acessories-options input{
+.details-section .accessories-options input{
     margin: 10px auto 0;
 }
 
-/* Details Movement Section - Mobile-------------------*/
+/* Details Movement Section - Mobile-----------------------*/
 @media(max-width: 600px) {
     .details-section .data-box {
-        padding: 2% 4%;
+        padding: 4% 4%;
     }
 
-    .details-section .acessories-options .field-box {
+    .details-section .accessories-options .field-box {
         margin: 0 auto;
     }
-}
-
-/* login ------------------------------- */
-
-.content.login {
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-}
-
-.section-main-box.login-section {
-    width: 300px;
-}
-
-.login-section .content-box{
-    padding: 0
-}
-
-.login-section .data-box {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding: 20px;
-}
-
-.login-section .data-box label {
-    margin: 10px 0 0;   
-}
-
-.login-section .data-box input {
-    height: 24px;
-    padding: 2px 5px;
-    margin-bottom: 10px;
-    border: 1px solid;
-}
-
-.login-section .data-box  button {
-    height: 40px;
-    font-size: 18px;
-    background-color: beige;
-    cursor: pointer;
 }

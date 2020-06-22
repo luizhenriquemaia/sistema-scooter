@@ -202,7 +202,7 @@ export default function detailsMovement() {
                             <span>
                                 <h4>Acessórios</h4>
                             </span>
-                            <div className="acessories-options">
+                            <div className="accessories-options">
                                 <div className="field-box">
                                     <label>Capacete</label>
                                     <input type="checkbox" name="accessoriesHelmet" checked={movementState.accessoriesHelmet} onChange={handleCheck} />
