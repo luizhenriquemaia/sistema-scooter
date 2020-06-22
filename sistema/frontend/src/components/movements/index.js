@@ -388,6 +388,7 @@ export default function Movements() {
 
     if (shouldGetMovements === false) {
         return (
+            <div>
             <main className="content table">  
                 <section className="section-main-box movement-section">
                     <div className="title-box">
@@ -404,7 +405,7 @@ export default function Movements() {
                                 <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
                             </div>
                             <div className="field-box">
-                                <label>Em Uso</label>
+                                <label>Em uso</label>
                                 <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
                             </div>
                             <div className="field-box">    
@@ -497,18 +498,19 @@ export default function Movements() {
                         </div>
                     </section>
                 </section>
-                <div className={userWantsToDeleteMovement === true ? "content dialog-section show-up" : "content dialog-section"}>
-                    <section className="section-main-box dialog-box">
-                        <div className="message">
-                            <h3>Você tem certeza que deseja excluir essa movimentação?</h3>
-                        </div>
-                        <div className="buttonBox">
-                            <button className="submit-button clean" onClick={handleConfirmDelete}>Excluir</button>
-                            <button className="submit-button confirm" onClick={handleCancelDelete}> Cancelar</button>  
-                        </div>
-                    </section>
-                </div>
             </main>
+            <div className={userWantsToDeleteMovement === true ? "content dialog-section show-up" : "content dialog-section"}>
+                <section className="section-main-box dialog-box">
+                    <div className="message">
+                        <h3>Você tem certeza que deseja excluir essa movimentação?</h3>
+                    </div>
+                    <div className="buttonBox">
+                        <button className="submit-button clean" onClick={handleConfirmDelete}>Excluir</button>
+                        <button className="submit-button confirm" onClick={handleCancelDelete}> Cancelar</button>  
+                    </div>
+                </section>
+            </div>
+            </div>
         )
     }
     else {
@@ -529,7 +531,7 @@ export default function Movements() {
                                 <input type="text" value={NumbersOfScootersState.numberOfScootersAvailable} disabled />
                             </div>
                             <div className="field-box">
-                                <label>Em Uso</label>
+                                <label>Em uso</label>
                                 <input type="text" value={NumbersOfScootersState.numberOfScootersInUse} disabled />
                             </div>
                             <div className="field-box">    

@@ -183,7 +183,7 @@ export default function detailsMovement() {
                                 <input type="radio" name="typeRelease" value="Devolução" checked={movementState.typeRelease == "Devolução"} onChange={handleChange} />
                             </div>
                         </div>
-                        <div className="field-box destination-box">
+                        <div className="field-box destination-box">                        
                             <span>
                                 <h4>Destino</h4>
                             </span>
