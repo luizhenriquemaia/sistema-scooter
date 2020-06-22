@@ -8,7 +8,9 @@ import { getScooters } from '../../actions/scooters'
 
 
 const styleOfSelectFilter = {
-    control: () => ({
+    control: (provided) => ({
+        ...provided,
+        width: 200
     })
 }
 
