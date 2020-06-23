@@ -427,7 +427,7 @@ export default function Movements() {
                                 <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
                                 <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
                             </div>
-                            <button onClick={handleSetFilters}>Aplicar Filtros</button>
+                            <button onClick={handleSetFilters}>Filtrar Data</button>
                         </div>
                         <div className="filters">
                             <div className="field-box">
@@ -499,7 +499,7 @@ export default function Movements() {
                     </section>
                 </section>
             </main>
-            <div className={userWantsToDeleteMovement === true ? "content dialog-section show-up" : "content dialog-section"}>
+            <section className={userWantsToDeleteMovement === true ? "content dialog-section show-up" : "content dialog-section"}>
                 <section className="section-main-box dialog-box">
                     <div className="message">
                         <h3>Você tem certeza que deseja excluir essa movimentação?</h3>
@@ -509,7 +509,7 @@ export default function Movements() {
                         <button className="submit-button confirm" onClick={handleCancelDelete}> Cancelar</button>  
                     </div>
                 </section>
-            </div>
+            </section>
             </div>
         )
     }
@@ -553,7 +553,7 @@ export default function Movements() {
                                 <input type="date" name="filterInitialDate" value={filtersMovements.filterInitialDate || ''} onChange={handleFiltersChange} />
                                 <input type="date" name="filterFinalDate" value={filtersMovements.filterFinalDate || ''} onChange={handleFiltersChange} />
                             </div>                                
-                            <button onClick={handleSetFilters}>Aplicar Filtros</button>
+                            <button onClick={handleSetFilters}>Filtrar Data</button>
                         </div>
                         <hr />
                         <div className="table-responsive-vertical">
