@@ -229,7 +229,7 @@ export default function detailsMovement() {
                 </section>
                 <div className="buttonBox">
                     <button className="submit-button clean" onClick={() => history.push("/")}>Cancelar</button>
-                    <button className="submit-button confirm">Registrar</button>
+                    <button className="submit-button confirm" onClick={handleSubmit}>Registrar</button>
                 </div>
             </section>
         </main>
