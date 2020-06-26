@@ -968,6 +968,10 @@ div.dialog-section {
     margin: 10px auto 0;
 }
 
+.details-section textarea {
+    width: auto;
+}
+
 /* Details Movement Section - Mobile-----------------------*/
 @media(max-width: 600px) {
     .details-section .data-box {
