@@ -411,7 +411,7 @@ section.section-main-box {
     border-bottom: 1px solid #505050;
     flex-direction: row;
     flex-wrap: wrap;
-    transition: max-height ease-out 0.6s, padding 0.4s
+    transition: max-height ease-out 0.6s, padding 1s
 }
 
 section.add-movement-section .data-box :last-child.field-box {
