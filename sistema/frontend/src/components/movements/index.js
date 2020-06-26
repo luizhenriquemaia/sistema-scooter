@@ -183,7 +183,7 @@ export default function Movements() {
 
     useEffect(() => {
         if (scooters !== undefined) {
-            if (scooters.length !== 0 && scooters !== undefined) {
+            if (scooters.length !== 0) {
                 let numberOfScooters = 0
                 let numberOfScootersInUse = 0
                 let numberOfScootersAvailable = 0
