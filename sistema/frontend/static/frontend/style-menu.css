@@ -61,6 +61,11 @@ html {
         width ease-out 0.4s, 
         border-radius 1.5s, 
         height ease-out 0.5s 0.4s;
+    z-index: 10;
+}
+
+.show-up .dialog-box {
+    width: auto;
 }
 
 .menuIconBox {
