@@ -139,7 +139,7 @@ export default function addMovementComponent() {
                     </div>
                     <fieldset className={typeOfMovementSelect ? `data-box ${typeOfMovementSelect}` : "data-box"} >
                         <div className="field-box">
-                            <label>Scooter
+                            <label>Chassi do Patinete
                                 <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
                             </label>
                         </div>
