@@ -43,6 +43,19 @@ export const getMovement = (id) => (dispatch, getState) => {
 }
 
 
+export const getLastMovementsOfScooter = (chassis) => (dispatch, getState) => {
+    axios.get(`/api/movement/?chassis=${chassis}`, tokenConfig(getState))
+        .then(res => {
+            dispatch({
+                type: GET_MOVEMENTS,
+                payload: res.data.serializer
+            })
+            dispatch(returnSuccess("", res.status))
+        })
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
+}
+
+
 export const getTypesMovement = () => (dispatch, getState) => {
     axios.get(`/api/type-movement/`, tokenConfig(getState))
         .then(res => {
