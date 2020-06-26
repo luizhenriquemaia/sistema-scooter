@@ -501,7 +501,7 @@ export default function Movements() {
                     </section>
                 </section>
             </main>
-            <section className={userWantsToDeleteMovement === true ? "content dialog-section show-up" : "content dialog-section"}>
+            <div className={userWantsToDeleteMovement === true ? "content dialog-section show-up" : "content dialog-section"}>
                 <section className="section-main-box dialog-box">
                     <div className="message">
                         <h3>Você tem certeza que deseja excluir essa movimentação?</h3>
@@ -511,7 +511,7 @@ export default function Movements() {
                         <button className="submit-button confirm" onClick={handleCancelDelete}> Cancelar</button>  
                     </div>
                 </section>
-            </section>
+            </div>
             </div>
         )
     }
