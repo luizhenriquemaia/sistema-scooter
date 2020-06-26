@@ -47,7 +47,7 @@ export const getLastMovementsOfScooter = (chassis) => (dispatch, getState) => {
     axios.get(`/api/movement/?chassis=${chassis}`, tokenConfig(getState))
         .then(res => {
             dispatch({
-                type: GET_MOVEMENTS,
+                type: GET_MOVEMENT_BY_SCOOTER,
                 payload: res.data.serializer
             })
             dispatch(returnSuccess("", res.status))
