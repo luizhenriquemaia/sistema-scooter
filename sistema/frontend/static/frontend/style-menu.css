@@ -69,13 +69,10 @@ html {
         border-radius 1.5s, 
         height ease-out 0.5s 0.4s;
     z-index: 10;
-<<<<<<< HEAD
 }
 
 .show-up .dialog-box {
     width: auto;
-=======
->>>>>>> ba212160d3ec07559147410f4211daf919b3b065
 }
 
 .menuIconBox {
