@@ -38,7 +38,7 @@ export default function Register() {
     useEffect(() => {
         if (statusScooter !== undefined && statusScooter !== "") {
             setStatusScooterFromAPI(
-                statusScooter.filter(status => (status.description !== "Em Uso" && status.description !== "Manutenção"))
+                statusScooter.filter(status => (status.description !== "Em uso" && status.description !== "Manutenção"))
             )
         }
     }, [statusScooter])
