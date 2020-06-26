@@ -392,7 +392,7 @@ export default function Movements() {
             <main className="content table">  
                 <section className="section-main-box movement-section">
                     <div className="title-box">
-                        <h1 className="title-page">Movimentações Patenetes</h1>
+                        <h1 className="title-page">Movimentações Patinetes</h1>
                     </div>
                     <section className="content-box">
                         <div className="important-data">
@@ -518,7 +518,7 @@ export default function Movements() {
             <main className="content table">
                 <section className="section-main-box movement-section">
                     <div className="title-box">
-                        <h1 className="title-page">Movimentações Patenetes</h1>
+                        <h1 className="title-page">Movimentações Patinetes</h1>
                     </div>
                     <section className="content-box">
                         <div className="important-data">
