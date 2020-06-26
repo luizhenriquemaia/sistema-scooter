@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
 import { postMovement } from '../../actions/movement'
 import { getLogisticOperator } from '../../actions/logisticOperator'
+import { getLastMovementsOfScooter } from '../../actions/movement'
 
 
 export default function addMovementComponent() {
@@ -38,6 +39,9 @@ export default function addMovementComponent() {
     
     const [typeOfMovementSelect, setTypeOfMovementSelect] = useState("external")
 
+
+    
+
     const handleChange = e => {
         const { name, value } = e.target
         if (name === "typeOfMovement") {
@@ -45,6 +49,13 @@ export default function addMovementComponent() {
         }
         else if (name === "destinyScooterInternalMovement") {
             setDestinyScooterInternalMovement(value)
+        }
+        else if (name === "scooter") {
+            setNewMovementState({
+                ...newMovementState,
+                [name]: value
+            })
+            dispatch(getLastMovementsOfScooter(value))
         }
         else {
             setNewMovementState({
