@@ -413,17 +413,13 @@ section.section-main-box {
     border-bottom: 1px solid #505050;
     flex-direction: row;
     flex-wrap: wrap;
-<<<<<<< HEAD
-    transition: max-height ease-out 0.6s, padding 1s
-=======
     transition: max-height ease-in-out 1s, padding 1s
->>>>>>> 88d7d1765726d3fc57cf7943e3e80c5afb826347
 }
 
 section.add-movement-section .data-box :last-child.field-box {
     border: none;
     margin-top: 20px;
-}
+ }
 
 .add-movement-section .content-box select {
     width: 200px;
@@ -537,6 +533,7 @@ section.section-main-box.movement-section {
     margin: 10px 10px;
     padding: 9px 20px 15px;
     min-width: 300px;
+    overflow: initial;
 }
 
 .movement-section .content-box .field-box label {
@@ -869,7 +866,6 @@ div.dialog-section {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: 0.3s;
     z-index: 11;
 }
 
