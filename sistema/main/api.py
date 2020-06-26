@@ -168,22 +168,35 @@ class MovementViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        query_from_url_initial_date = request.GET.get("initialDate")
-        query_from_url_final_date = request.GET.get("finalDate")
-        if request.user.is_staff or request.user.is_superuser:
-            if query_from_url_initial_date and query_from_url_final_date:
-                queryset_list = Movement.objects.filter(intialDateMovement__range=(
-                    query_from_url_initial_date, query_from_url_final_date))
-            else:
-                queryset_list = Movement.objects.filter(intialDateMovement=datetime.today())
+        if request.GET.get("chassis"):
+            query_from_url_chassis = request.GET.get("chassis")
+            try:
+                id_scooter_from_db = Scooter.objects.get(chassisNumber=query_from_url_chassis).id
+            except ObjectDoesNotExist:
+                return Response({"serializer": "",
+                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
+            queryset_list = Movement.objects.filter(scooter_id=id_scooter_from_db).order_by('id').last()
+            if queryset_list.returnTime:
+                return Response({"serializer": "",
+                            "message": ""}, status=status.HTTP_204_NO_CONTENT)
+            serializer = MovementSerializer(queryset_list, many=False)
         else:
-            if query_from_url_initial_date and query_from_url_final_date:
-                queryset_list = Movement.objects.filter(intialDateMovement__range=(
-                    query_from_url_initial_date, query_from_url_final_date), owner=request.user)
+            query_from_url_initial_date = request.GET.get("initialDate")
+            query_from_url_final_date = request.GET.get("finalDate")
+            if request.user.is_staff or request.user.is_superuser:
+                if query_from_url_initial_date and query_from_url_final_date:
+                    queryset_list = Movement.objects.filter(intialDateMovement__range=(
+                        query_from_url_initial_date, query_from_url_final_date))
+                else:
+                    queryset_list = Movement.objects.filter(intialDateMovement=datetime.today())
             else:
-                queryset_list = Movement.objects.filter(
-                    intialDateMovement=datetime.today(), owner=request.user)
-        serializer = MovementSerializer(queryset_list, many=True)
+                if query_from_url_initial_date and query_from_url_final_date:
+                    queryset_list = Movement.objects.filter(intialDateMovement__range=(
+                        query_from_url_initial_date, query_from_url_final_date), owner=request.user)
+                else:
+                    queryset_list = Movement.objects.filter(
+                        intialDateMovement=datetime.today(), owner=request.user)
+            serializer = MovementSerializer(queryset_list, many=True)
         if len(serializer.data) > 0:
             return Response({"serializer": serializer.data,
                              "message": ""}, status=status.HTTP_200_OK)
