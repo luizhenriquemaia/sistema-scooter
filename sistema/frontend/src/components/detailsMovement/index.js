@@ -140,12 +140,8 @@ export default function detailsMovement() {
                     <fieldset className="data-box" onSubmit={handleSubmit}>
                         <div className="data-hora">
                             <div className="field-box">
-                                <label>Data Inicial</label>
+                                <label>Data</label>
                                 <input type="date" name="intialDateMovement" value={movementState.intialDateMovement || ""} onChange={handleChange} />
-                            </div>
-                            <div className="field-box">
-                                <label>Data Final</label>
-                                <input type="date" name="finalDateMovement" value={movementState.finalDateMovement || ""} onChange={handleChange} />
                             </div>
                             <div className="field-box">
                                 <label>Hora Inicial</label>
