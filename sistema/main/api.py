@@ -176,10 +176,21 @@ class MovementViewSet(viewsets.ViewSet):
                 return Response({"serializer": "",
                              "message": ""}, status=status.HTTP_204_NO_CONTENT)
             queryset_list = Movement.objects.filter(scooter_id=id_scooter_from_db).order_by('id').last()
-            if queryset_list.returnTime:
+            # if there is not a movement in scooter yet
+            try:
+               if queryset_list.returnTime:
+                    return Response({"serializer": "", "message": ""}, status=status.HTTP_204_NO_CONTENT)
+            except:
                 return Response({"serializer": "",
                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
             serializer = MovementSerializer(queryset_list, many=False)
+            if serializer.data:
+                print(f"\n\n\n{serializer.data}\n\n\n")
+                return Response({"serializer": serializer.data,
+                                "message": ""}, status=status.HTTP_200_OK)
+            else:
+                return Response({"serializer": serializer.data,
+                                "message": ""}, status=status.HTTP_204_NO_CONTENT)
         else:
             query_from_url_initial_date = request.GET.get("initialDate")
             query_from_url_final_date = request.GET.get("finalDate")
@@ -197,12 +208,12 @@ class MovementViewSet(viewsets.ViewSet):
                     queryset_list = Movement.objects.filter(
                         intialDateMovement=datetime.today(), owner=request.user)
             serializer = MovementSerializer(queryset_list, many=True)
-        if len(serializer.data) > 0:
-            return Response({"serializer": serializer.data,
-                             "message": ""}, status=status.HTTP_200_OK)
-        else:
-            return Response({"serializer": serializer.data,
-                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
+            if len(serializer.data) > 0:
+                return Response({"serializer": serializer.data,
+                                "message": ""}, status=status.HTTP_200_OK)
+            else:
+                return Response({"serializer": serializer.data,
+                                "message": ""}, status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, pk): 
         if not request.user.is_staff or not request.user.is_superuser:

@@ -11,6 +11,7 @@ export default function addMovementComponent() {
     const dispatch = useDispatch()
     const alert = useAlert()
     const [newMovementState, setNewMovementState] = useState({
+        idMovement: "",
         scooter: "",
         logisticOperatorMovement: "",
         cpfPeopleRegistrationState: "",
@@ -41,7 +42,41 @@ export default function addMovementComponent() {
     const [typeOfMovementSelect, setTypeOfMovementSelect] = useState("external")
 
 
-    
+    const openMovementOfScooter = useSelector(state => state.movements.movement)
+    const movementForAddComponent = useSelector(state => state.movements.isAdd)
+
+    useEffect(() => {
+        if (openMovementOfScooter !== undefined && openMovementOfScooter !== "") {
+            if (movementForAddComponent === true) {
+                if (!openMovementOfScooter.map) {
+                    setNewMovementState({
+                        idMovement: openMovementOfScooter.id,
+                        scooter: openMovementOfScooter.scooter.chassisNumber,
+                        logisticOperatorMovement: openMovementOfScooter.logisticOperatorMovement !== undefined ? openMovementOfScooter.logisticOperatorMovement.description : "",
+                        cpfPeopleRegistrationState: openMovementOfScooter.peopleRegistration !== undefined ? openMovementOfScooter.peopleRegistration.cpf : "",
+                        accessoriesHelmet: openMovementOfScooter.accessoriesHelmet,
+                        accessoriesBag: openMovementOfScooter.accessoriesBag,
+                        accessoriesCase: openMovementOfScooter.accessoriesCase,
+                        accessoriesCharger: openMovementOfScooter.accessoriesCharger,
+                        observation: openMovementOfScooter.observation
+                    })
+                }
+            }
+        } else {
+            setNewMovementState({
+                ...newMovementState,
+                idMovement: "",
+                logisticOperatorMovement: "",
+                cpfPeopleRegistrationState: "",
+                accessoriesHelmet: false,
+                accessoriesBag: false,
+                accessoriesCase: false,
+                accessoriesCharger: false,
+                observation: ""
+            })
+        }
+    }, [openMovementOfScooter])
+
 
     const handleChange = e => {
         const { name, value } = e.target
@@ -88,7 +123,7 @@ export default function addMovementComponent() {
     }
 
     const handleClickAdd = e => {
-        const { scooter, cpfPeopleRegistrationState, logisticOperatorMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
+        const { idMovement, scooter, cpfPeopleRegistrationState, logisticOperatorMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfPeopleRegistration = cpfPeopleRegistrationState.replace(/\D/g, '')
         var typeOfMovement = typeOfMovementSelect
         if (typeOfMovement === "external") {
@@ -99,10 +134,11 @@ export default function addMovementComponent() {
                 alert.error("cpf inválido")
             }
             else {
-                var newMovementToAPI = { typeOfMovement, scooter, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+                var newMovementToAPI = { idMovement, typeOfMovement, scooter, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
                 dispatch(postMovement(newMovementToAPI))
                 setNewMovementState({
                     ...newMovementState,
+                    idMovement: "",
                     scooter: "",
                     cpfPeopleRegistrationState: "",
                     accessoriesHelmet: false,
