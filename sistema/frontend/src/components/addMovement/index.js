@@ -210,6 +210,14 @@ export default function addMovementComponent() {
                                     </label>
                                 </div>
                             </div>
+                            <div className="scooter-destination">
+                                <label>Destino
+                                    <select name="" onChange={handleChange}>
+                                        <option value="maintenance">Base</option>
+                                        <option value="backup">Manutenção</option>
+                                    </select>
+                                </label>
+                            </div>
                             <div className="field-box accessories">
                                 <label>Capacete
                                     <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
@@ -224,9 +232,14 @@ export default function addMovementComponent() {
                                     <input type="checkbox" name="accessoriesCharger" checked={newMovementState.accessoriesCharger} onChange={handleCheck} />
                                 </label>
                             </div>
-                            <div className="field-box">
+                            <div className="field-box observation">
                                 <label>Observação
                                     <textarea name="observation" value={newMovementState.observation} onChange={handleChange}></textarea>
+                                </label>
+                            </div>
+                            <div className="confirmation">
+                                <label>Confirmo que todos os acessórios foram devolvidos
+                                <input type="checkbox" name="" onChange={handleCheck} />
                                 </label>
                             </div>
                         </div>
@@ -250,6 +263,14 @@ export default function addMovementComponent() {
                                 <label>Destino
                                     <select name="destinyScooterInternalMovement" onChange={handleChange} value={destinyScooterInternalMovement}>
                                         <option value="maintenance">Manutenção</option>
+                                        <option value="backup">Backup</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div className="scooter-destination">
+                                <label>Destino
+                                    <select name="" onChange={handleChange}>
+                                        <option value="maintenance">Base</option>
                                         <option value="backup">Backup</option>
                                     </select>
                                 </label>

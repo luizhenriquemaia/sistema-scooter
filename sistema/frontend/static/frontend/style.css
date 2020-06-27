@@ -195,6 +195,7 @@ section.section-main-box {
     box-shadow: -4px 0px 6px grey;
     background: #fafafa;
     font-family: sans-serif;
+    text-align: center;
     display: inherit;
     flex-direction: column;
     width: 100%;
@@ -406,7 +407,6 @@ section.section-main-box {
 }
 
 /* Add Movement Section ------------------------- */
-
 .add-movement-section .field-box {
     padding: 0;
     max-height: 0;
@@ -443,6 +443,28 @@ section.section-main-box {
     max-height: 250px;
 }
 
+.add-movement-section .data-box.external .scooter-destination,
+.add-movement-section .data-box.internal .scooter-destination,
+.add-movement-section .data-box.external .confirmation {
+    max-height: 0px;
+    overflow: hidden;
+}
+
+.add-movement-section.return .data-box.external .scooter-destination,
+.add-movement-section.return .data-box.internal .scooter-destination,
+.add-movement-section.return .data-box.external .confirmation { 
+    max-height: 400px;
+    padding: 20px;
+    border-bottom: 1px solid #505050;
+    transition: all ease-out 0.3s;
+}
+
+.add-movement-section.return .data-box.internal .field-box.internal .field-box.scooter-destination {
+    max-height: 0;
+    padding: 0;
+    border: 0;
+}
+
 .add-movement-section .data-box.external .field-box.external,
 .add-movement-section .data-box.internal .field-box.internal {
     transition-delay: 0.5s;
@@ -462,6 +484,10 @@ section.section-main-box {
     max-height: 400px;
     padding: 20px;
     border-bottom: 1px solid #505050;
+}
+
+.add-movement-section .data-box .field-box.observation {
+    border: none !important;
 }
 
 .add-movement-section .data-box .field-box :last-child.field-box {
@@ -500,12 +526,20 @@ section.section-main-box {
     }
 
     .add-movement-section .field-box input {
-        margin: 0;
+        margin: 10px 0 0;
         max-width: inherit;
     }
 
     .add-movement-section .data-box .two-boxes .field-box label {
         flex-direction: column;
+    }
+
+    .add-movement-section.return .data-box.external .scooter-destination,
+    .add-movement-section.return .data-box.internal .scooter-destination,
+    .add-movement-section.return .data-box.external .confirmation {
+        padding: 0 0 25px;
+        justify-content: center;
+        display: flex;
     }
 
     .add-movement-section .data-box.external .field-box.external,
@@ -519,13 +553,7 @@ section.section-main-box {
         padding: 0 0 25px;
     }
 }
-@media(max-width: 720px) {
-    .details-section .data-hora {
-        justify-content: unset;
-        justify-content: center;
-        flex-direction: column;
-    }
-
+@media(max-width: 800px) {
     .add-movement-section .data-box.external .field-box.external,
     .add-movement-section .data-box.internal .field-box.internal {
         padding: 0;
