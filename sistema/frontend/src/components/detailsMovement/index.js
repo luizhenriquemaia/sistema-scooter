@@ -221,7 +221,7 @@ export default function detailsMovement() {
                         </div>
                         <div className="field-box">
                             <label>Observação</label>
-                            <textarea name="observation" onChange={handleChange}></textarea>
+                            <textarea name="observation" value={movementState.observation} onChange={handleChange}></textarea>
                         </div>
                     </fieldset>
                 </section>

@@ -12,6 +12,7 @@ export default function addMovementComponent() {
     const [newMovementState, setNewMovementState] = useState({
         idMovement: "",
         typeMovement: "Externa",
+        destinyScooter: "",
         scooter: "",
         logisticOperatorMovement: "",
         cpfPeopleRegistration: "",
@@ -25,7 +26,9 @@ export default function addMovementComponent() {
         id: "",
         description: ""
     }])
-    const [destinyScooterInternalMovement, setDestinyScooterInternalMovement] = useState("maintenance")
+    const [destinyScooterInternalMovement, setDestinyScooterInternalMovement] = useState("Manutenção")
+    const [destinyScooterExternalMovement, setDestinyScooterExternalMovement] = useState("Base")
+    const [confimReturnedAccessories, setConfimReturnedAccessories] = useState(false)
 
     useEffect(() => {
         dispatch(getLogisticOperator())
@@ -40,24 +43,24 @@ export default function addMovementComponent() {
     }, [logisticOperator])
 
 
-    const openMovementOfScooter = useSelector(state => state.movements.movement)
+    const movementsFromAPI = useSelector(state => state.movements.movement)
     const movementForAddComponent = useSelector(state => state.movements.isAdd)
 
     useEffect(() => {
-        if (openMovementOfScooter !== undefined && openMovementOfScooter !== "") {
+        if (movementsFromAPI !== undefined && movementsFromAPI !== "") {
             if (movementForAddComponent === true) {
-                if (!openMovementOfScooter.map) {
+                if (!movementsFromAPI.map) {
                     setNewMovementState({
-                        idMovement: openMovementOfScooter.id,
-                        typeMovement: openMovementOfScooter.typeMovement !== undefined && openMovementOfScooter.typeMovement !== null ? openMovementOfScooter.typeMovement.description : "Externa",
-                        scooter: openMovementOfScooter.scooter !== undefined && openMovementOfScooter.scooter !== null ? openMovementOfScooter.scooter.chassisNumber : "",
-                        logisticOperatorMovement: openMovementOfScooter.logisticOperatorMovement !== undefined && openMovementOfScooter.logisticOperatorMovement !== null ? openMovementOfScooter.logisticOperatorMovement.description : "",
-                        cpfPeopleRegistration: openMovementOfScooter.peopleRegistration !== undefined && openMovementOfScooter.peopleRegistration !== null ? openMovementOfScooter.peopleRegistration.cpf : "",
-                        accessoriesHelmet: openMovementOfScooter.accessoriesHelmet,
-                        accessoriesBag: openMovementOfScooter.accessoriesBag,
-                        accessoriesCase: openMovementOfScooter.accessoriesCase,
-                        accessoriesCharger: openMovementOfScooter.accessoriesCharger,
-                        observation: openMovementOfScooter.observation
+                        idMovement: movementsFromAPI.id,
+                        typeMovement: movementsFromAPI.typeMovement !== undefined && movementsFromAPI.typeMovement !== null ? movementsFromAPI.typeMovement.description : "Externa",
+                        scooter: movementsFromAPI.scooter !== undefined && movementsFromAPI.scooter !== null ? movementsFromAPI.scooter.chassisNumber : "",
+                        logisticOperatorMovement: movementsFromAPI.logisticOperator !== undefined && movementsFromAPI.logisticOperator !== null ? movementsFromAPI.logisticOperator.id : "",
+                        cpfPeopleRegistration: movementsFromAPI.peopleRegistration !== undefined && movementsFromAPI.peopleRegistration !== null ? movementsFromAPI.peopleRegistration.cpf : "",
+                        accessoriesHelmet: movementsFromAPI.accessoriesHelmet,
+                        accessoriesBag: movementsFromAPI.accessoriesBag,
+                        accessoriesCase: movementsFromAPI.accessoriesCase,
+                        accessoriesCharger: movementsFromAPI.accessoriesCharger,
+                        observation: movementsFromAPI.observation
                     })
                 }
             }
@@ -65,7 +68,6 @@ export default function addMovementComponent() {
             setNewMovementState({
                 ...newMovementState,
                 idMovement: "",
-                typeMovement: "Externa",
                 logisticOperatorMovement: "",
                 cpfPeopleRegistration: "",
                 accessoriesHelmet: false,
@@ -75,15 +77,22 @@ export default function addMovementComponent() {
                 observation: ""
             })
         }
-    }, [openMovementOfScooter])
+    }, [movementsFromAPI])
 
 
     const handleChange = e => {
         const { name, value } = e.target
         if (name === "destinyScooterInternalMovement") {
             setDestinyScooterInternalMovement(value)
-        }
-        else {
+        } else if (name === "destinyScooterExternalMovement") {
+            setDestinyScooterExternalMovement(value)
+        } else if (name === "scooter") {
+            setNewMovementState({
+                ...newMovementState,
+                [name]: value
+            })
+            if (value.toString().length >= 4) dispatch(getLastMovementsOfScooter(value))
+        } else {
             setNewMovementState({
                 ...newMovementState,
                 [name]: value
@@ -112,6 +121,8 @@ export default function addMovementComponent() {
         })
     }
 
+    
+
     const handleSubmit = e => {
         const { idMovement, typeMovement, scooter, logisticOperatorMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         let cpfPeopleRegistration = newMovementState.cpfPeopleRegistration.replace(/\D/g, '')
@@ -123,68 +134,73 @@ export default function addMovementComponent() {
                 alert.error("cpf inválido")
             }
             else {
-                var newMovementToAPI = { idMovement, typeMovement, scooter, cpfPeopleRegistration, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
-                if (idMovement !== "") {
-                    newMovementToAPI = {
-                        ...newMovementToAPI,
-                        initialTimeFormatted: "",
-                        finalTimeFormatted: ""
-                    }
-                    dispatch(updateMovement(idMovement, newMovementState))
+                if (scooter.toString().length < 4) {
+                    alert.error("o chassi deve ter pelo menos 4 números")
                 } else {
-                    dispatch(postMovement(newMovementToAPI))
+                    var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, cpfPeopleRegistration, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+                    var newMovementToAPI = { ...newMovementToAPI, destinyScooter: destinyScooterExternalMovement, typeRelease: "Devolução"}
+                    if (newMovementToAPI.idMovement !== "") {
+                        if (confimReturnedAccessories === true) {
+                            dispatch(updateMovement(idMovement, newMovementToAPI))
+                        } else {
+                            alert.error("você precisa confirmar que foram devolvidos os acessórios")
+                            return
+                        }
+                    }
+                    else dispatch(postMovement(newMovementToAPI))
+                    setNewMovementState({
+                        ...newMovementState,
+                        idMovement: "",
+                        scooter: "",
+                        cpfPeopleRegistration: "",
+                        accessoriesHelmet: false,
+                        accessoriesBag: false,
+                        accessoriesCase: false,
+                        accessoriesCharger: false,
+                        observation: ""
+                    })
                 }
-                setNewMovementState({
-                    ...newMovementState,
-                    idMovement: "",
-                    typeOfMovement: "Externa",
-                    scooter: "",
-                    cpfPeopleRegistration: "",
-                    accessoriesHelmet: false,
-                    accessoriesBag: false,
-                    accessoriesCase: false,
-                    accessoriesCharger: false,
-                    observation: ""
-                })
             }
         }
         else if (typeMovement === "Interna") {
-            if (scooter === "") {
+            if (scooter === "" || logisticOperatorMovement === "") {
                 alert.error("preencha todos os campos obrigatórios")
-            }
-            else {
-                var newMovementToAPI = { idMovement, typeMovement, destinyScooterToAPI, scooter, logisticOperatorMovement, observation }
-                var destinyScooterToAPI = destinyScooterInternalMovement
-                // is a return of scooter
-                if (idMovement !== "") {
-                    newMovementToAPI = {
-                        ...newMovementToAPI,
-                        initialTimeFormatted: "",
-                        finalTimeFormatted: ""
-                    }
-                    dispatch(updateMovement(idMovement, newMovementState))
+            } else {
+                if (scooter.toString().length < 4) {
+                    alert.error("o chassi deve ter pelo menos 4 números")
                 } else {
-                    dispatch(postMovement(newMovementToAPI))
+                    var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, observation  }
+                    var newMovementToAPI = { ...newMovementToAPI, destinyScooter: destinyScooterInternalMovement }
+                    // is a return of scooter
+                    if (newMovementToAPI.idMovement !== "") {
+                        var newMovementToAPI = { ...newMovementToAPI, 
+                            accessoriesHelmet: false, 
+                            accessoriesBag: false, 
+                            accessoriesCase: false, 
+                            accessoriesCharger: false,
+                            typeRelease: "Devolução"
+                        }
+                        dispatch(updateMovement(idMovement, newMovementToAPI))
+                    } else dispatch(postMovement(newMovementToAPI))
+                    setNewMovementState({
+                        ...newMovementState,
+                        idMovement: "",
+                        scooter: "",
+                        cpfPeopleRegistration: "",
+                        accessoriesHelmet: false,
+                        accessoriesBag: false,
+                        accessoriesCase: false,
+                        accessoriesCharger: false,
+                        observation: ""
+                    })
                 }
-                setNewMovementState({
-                    ...newMovementState,
-                    idMovement: "",
-                    typeMovement: "Externa",
-                    scooter: "",
-                    cpfPeopleRegistration: "",
-                    accessoriesHelmet: false,
-                    accessoriesBag: false,
-                    accessoriesCase: false,
-                    accessoriesCharger: false,
-                    observation: ""
-                })
             }
         }
     }
 
     return (
         <main className="content">
-            <section className="section-main-box add-movement-section">
+            <section className={newMovementState.idMovement !== "" ? "section-main-box add-movement-section return" : "section-main-box add-movement-section"}>
                 <div className="title-box">
                     <h1 className="title-page">Adicionar Movimentação</h1>
                 </div>
@@ -212,24 +228,24 @@ export default function addMovementComponent() {
                             </div>
                             <div className="scooter-destination">
                                 <label>Destino
-                                    <select name="" onChange={handleChange}>
-                                        <option value="maintenance">Base</option>
-                                        <option value="backup">Manutenção</option>
+                                    <select name="destinyScooterExternalMovement" onChange={handleChange} value={destinyScooterExternalMovement}>
+                                        <option value="Base">Base</option>
+                                        <option value="Manutenção">Manutenção</option>
                                     </select>
                                 </label>
                             </div>
                             <div className="field-box accessories">
                                 <label>Capacete
-                                    <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} />
+                                    <input type="checkbox" name="accessoriesHelmet" checked={newMovementState.accessoriesHelmet} onChange={handleCheck} disabled={newMovementState.idMovement !== ""} />
                                 </label>
                                 <label>Bag
-                                    <input type="checkbox" name="accessoriesBag" checked={newMovementState.accessoriesBag} onChange={handleCheck} />
+                                    <input type="checkbox" name="accessoriesBag" checked={newMovementState.accessoriesBag} onChange={handleCheck} disabled={newMovementState.idMovement !== ""} />
                                 </label>
                                 <label>Case
-                                    <input type="checkbox" name="accessoriesCase" checked={newMovementState.accessoriesCase} onChange={handleCheck} />
+                                    <input type="checkbox" name="accessoriesCase" checked={newMovementState.accessoriesCase} onChange={handleCheck} disabled={newMovementState.idMovement !== ""} />
                                 </label>
                                 <label>Carregador
-                                    <input type="checkbox" name="accessoriesCharger" checked={newMovementState.accessoriesCharger} onChange={handleCheck} />
+                                    <input type="checkbox" name="accessoriesCharger" checked={newMovementState.accessoriesCharger} onChange={handleCheck} disabled={newMovementState.idMovement !== ""} />
                                 </label>
                             </div>
                             <div className="field-box observation">
@@ -239,7 +255,7 @@ export default function addMovementComponent() {
                             </div>
                             <div className="confirmation">
                                 <label>Confirmo que todos os acessórios foram devolvidos
-                                <input type="checkbox" name="" onChange={handleCheck} />
+                                <input type="checkbox" name="" onChange={() => setConfimReturnedAccessories(true)} checked={confimReturnedAccessories} />
                                 </label>
                             </div>
                         </div>
@@ -262,16 +278,16 @@ export default function addMovementComponent() {
                             <div className="field-box scooter-destination">
                                 <label>Destino
                                     <select name="destinyScooterInternalMovement" onChange={handleChange} value={destinyScooterInternalMovement}>
-                                        <option value="maintenance">Manutenção</option>
-                                        <option value="backup">Backup</option>
+                                        <option value="Manutenção">Manutenção</option>
+                                        <option value="Backup">Backup</option>
                                     </select>
                                 </label>
                             </div>
                             <div className="scooter-destination">
                                 <label>Destino
-                                    <select name="" onChange={handleChange}>
-                                        <option value="maintenance">Base</option>
-                                        <option value="backup">Backup</option>
+                                    <select name="destinyScooterInternalMovement" onChange={handleChange} value={destinyScooterInternalMovement}>
+                                        <option value="Base">Base</option>
+                                        <option value="Backup">Backup</option>
                                     </select>
                                 </label>
                             </div>
