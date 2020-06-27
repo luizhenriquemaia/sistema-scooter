@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
-import { postMovement } from '../../actions/movement'
+import { postMovement, getLastMovementsOfScooter, updateMovement } from '../../actions/movement'
 import { getLogisticOperator } from '../../actions/logisticOperator'
-import { getLastMovementsOfScooter } from '../../actions/movement'
 
 
+//// SE A MOVIMENTAÇÃO TIVER ID DISPATCH PARA O UPDATE
 export default function addMovementComponent() {
     const dispatch = useDispatch()
     const alert = useAlert()
     const [newMovementState, setNewMovementState] = useState({
         idMovement: "",
-        typeOfMovement: "Externa",
+        typeMovement: "Externa",
         scooter: "",
         logisticOperatorMovement: "",
-        cpfPeopleRegistrationState: "",
+        cpfPeopleRegistration: "",
         accessoriesHelmet: false,
         accessoriesBag: false,
         accessoriesCase: false,
@@ -49,10 +49,10 @@ export default function addMovementComponent() {
                 if (!openMovementOfScooter.map) {
                     setNewMovementState({
                         idMovement: openMovementOfScooter.id,
-                        typeOfMovement: openMovementOfScooter.typeMovement !== undefined && openMovementOfScooter.typeMovement !== null ? openMovementOfScooter.typeMovement.description : "Externa",
+                        typeMovement: openMovementOfScooter.typeMovement !== undefined && openMovementOfScooter.typeMovement !== null ? openMovementOfScooter.typeMovement.description : "Externa",
                         scooter: openMovementOfScooter.scooter !== undefined && openMovementOfScooter.scooter !== null ? openMovementOfScooter.scooter.chassisNumber : "",
                         logisticOperatorMovement: openMovementOfScooter.logisticOperatorMovement !== undefined && openMovementOfScooter.logisticOperatorMovement !== null ? openMovementOfScooter.logisticOperatorMovement.description : "",
-                        cpfPeopleRegistrationState: openMovementOfScooter.peopleRegistration !== undefined && openMovementOfScooter.peopleRegistration !== null ? openMovementOfScooter.peopleRegistration.cpf : "",
+                        cpfPeopleRegistration: openMovementOfScooter.peopleRegistration !== undefined && openMovementOfScooter.peopleRegistration !== null ? openMovementOfScooter.peopleRegistration.cpf : "",
                         accessoriesHelmet: openMovementOfScooter.accessoriesHelmet,
                         accessoriesBag: openMovementOfScooter.accessoriesBag,
                         accessoriesCase: openMovementOfScooter.accessoriesCase,
@@ -65,9 +65,9 @@ export default function addMovementComponent() {
             setNewMovementState({
                 ...newMovementState,
                 idMovement: "",
-                typeOfMovement: "Externa",
+                typeMovement: "Externa",
                 logisticOperatorMovement: "",
-                cpfPeopleRegistrationState: "",
+                cpfPeopleRegistration: "",
                 accessoriesHelmet: false,
                 accessoriesBag: false,
                 accessoriesCase: false,
@@ -102,7 +102,7 @@ export default function addMovementComponent() {
         setNewMovementState({
             ...newMovementState,
             scooter: "",
-            cpfPeopleRegistrationState: "",
+            cpfPeopleRegistration: "",
             accessoriesHelmet: false,
             accessoriesBag: false,
             accessoriesCase: false,
@@ -119,10 +119,10 @@ export default function addMovementComponent() {
         })
     }
 
-    const handleClickAdd = e => {
-        const { idMovement, typeOfMovement, scooter, cpfPeopleRegistrationState, logisticOperatorMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
-        const cpfPeopleRegistration = cpfPeopleRegistrationState.replace(/\D/g, '')
-        if (typeOfMovement === "Externa") {
+    const handleSubmit = e => {
+        const { idMovement, typeMovement, scooter, logisticOperatorMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
+        let cpfPeopleRegistration = newMovementState.cpfPeopleRegistration.replace(/\D/g, '')
+        if (typeMovement === "Externa") {
             if (scooter === "" || cpfPeopleRegistration === "") {
                 alert.error("preencha todos os campos obrigatórios")
             }
@@ -130,14 +130,23 @@ export default function addMovementComponent() {
                 alert.error("cpf inválido")
             }
             else {
-                var newMovementToAPI = { idMovement, typeOfMovement, scooter, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
-                dispatch(postMovement(newMovementToAPI))
+                var newMovementToAPI = { idMovement, typeMovement, scooter, cpfPeopleRegistration, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+                if (idMovement !== "") {
+                    newMovementToAPI = {
+                        ...newMovementToAPI,
+                        initialTimeFormatted: "",
+                        finalTimeFormatted: ""
+                    }
+                    dispatch(updateMovement(idMovement, newMovementState))
+                } else {
+                    dispatch(postMovement(newMovementToAPI))
+                }
                 setNewMovementState({
                     ...newMovementState,
                     idMovement: "",
                     typeOfMovement: "Externa",
                     scooter: "",
-                    cpfPeopleRegistrationState: "",
+                    cpfPeopleRegistration: "",
                     accessoriesHelmet: false,
                     accessoriesBag: false,
                     accessoriesCase: false,
@@ -146,20 +155,30 @@ export default function addMovementComponent() {
                 })
             }
         }
-        else if (typeOfMovement === "Interna") {
+        else if (typeMovement === "Interna") {
             if (scooter === "") {
                 alert.error("preencha todos os campos obrigatórios")
             }
             else {
+                var newMovementToAPI = { idMovement, typeMovement, destinyScooterToAPI, scooter, logisticOperatorMovement, observation }
                 var destinyScooterToAPI = destinyScooterInternalMovement
-                var newMovementToAPI = { idMovement, typeOfMovement, destinyScooterToAPI, scooter, logisticOperatorMovement, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
-                dispatch(postMovement(newMovementToAPI))
+                // is a return of scooter
+                if (idMovement !== "") {
+                    newMovementToAPI = {
+                        ...newMovementToAPI,
+                        initialTimeFormatted: "",
+                        finalTimeFormatted: ""
+                    }
+                    dispatch(updateMovement(idMovement, newMovementState))
+                } else {
+                    dispatch(postMovement(newMovementToAPI))
+                }
                 setNewMovementState({
                     ...newMovementState,
                     idMovement: "",
-                    typeOfMovement: "Externa",
+                    typeMovement: "Externa",
                     scooter: "",
-                    cpfPeopleRegistrationState: "",
+                    cpfPeopleRegistration: "",
                     accessoriesHelmet: false,
                     accessoriesBag: false,
                     accessoriesCase: false,
@@ -179,12 +198,12 @@ export default function addMovementComponent() {
                 <section className="content-box">
                     <div className="register-type">
                         <label>Tipo de Movimentação</label>
-                        <select name="typeOfMovement" value={newMovementState.typeOfMovement} onChange={handleChange} >
+                        <select name="typeMovement" value={newMovementState.typeMovement} onChange={handleChange} >
                             <option value="Externa">Externa</option>
                             <option value="Interna">Interna</option>
                         </select>
                     </div>
-                    <fieldset className={newMovementState.typeOfMovement === "Externa" ? `data-box external` : "data-box internal"} >
+                    <fieldset className={newMovementState.typeMovement === "Externa" ? `data-box external` : "data-box internal"} >
                         <div className="field-box">
                             <label>Chassi do Patinete
                                 <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
@@ -192,7 +211,7 @@ export default function addMovementComponent() {
                         </div>
                         <div className="field-box logistic-operator">
                             <label>Operador Logístico
-                                <select name="logisticOperatorMovement" onChange={handleChange} value={newMovementState.LO}>
+                                <select name="logisticOperatorMovement" onChange={handleChange} value={newMovementState.logisticOperatorMovement}>
                                     <option value="">-----</option>
                                     {logisticOperatorFromAPI.map(logisitcOperator => (
                                         <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
@@ -208,7 +227,7 @@ export default function addMovementComponent() {
                         </div>
                         <div className="field-box delivery-man">
                             <label>CPF Entregador
-                                <input type="text" name="cpfPeopleRegistrationState" value={newMovementState.cpfPeopleRegistrationState} onChange={handleChange} />
+                                <input type="text" name="cpfPeopleRegistration" value={newMovementState.cpfPeopleRegistration} onChange={handleChange} />
                             </label>
                         </div>
                         <div className="field-box accessories">
@@ -234,7 +253,7 @@ export default function addMovementComponent() {
                 </section>
                 <div className="buttonBox">
                     <button className="submit-button clean" onClick={handleClean}>Limpar</button>
-                    <button className="submit-button confirm" onClick={handleClickAdd}>Registrar</button>
+                    <button className="submit-button confirm" onClick={handleSubmit}>Registrar</button>
                 </div>
             </section>
         </main>
