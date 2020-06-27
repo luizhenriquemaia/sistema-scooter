@@ -28,6 +28,7 @@ export default function addMovementComponent() {
     }])
     const [destinyScooterInternalMovement, setDestinyScooterInternalMovement] = useState("Manutenção")
     const [destinyScooterExternalMovement, setDestinyScooterExternalMovement] = useState("Base")
+    const [confimReturnedAccessories, setConfimReturnedAccessories] = useState(false)
 
     useEffect(() => {
         dispatch(getLogisticOperator())
@@ -138,7 +139,14 @@ export default function addMovementComponent() {
                 } else {
                     var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, cpfPeopleRegistration, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
                     var newMovementToAPI = { ...newMovementToAPI, destinyScooter: destinyScooterExternalMovement, typeRelease: "Devolução"}
-                    if (newMovementToAPI.idMovement !== "") dispatch(updateMovement(idMovement, newMovementToAPI))
+                    if (newMovementToAPI.idMovement !== "") {
+                        if (confimReturnedAccessories === true) {
+                            dispatch(updateMovement(idMovement, newMovementToAPI))
+                        } else {
+                            alert.error("você precisa confirmar que foram devolvidos os acessórios")
+                            return
+                        }
+                    }
                     else dispatch(postMovement(newMovementToAPI))
                     setNewMovementState({
                         ...newMovementState,
@@ -247,7 +255,7 @@ export default function addMovementComponent() {
                             </div>
                             <div className="confirmation">
                                 <label>Confirmo que todos os acessórios foram devolvidos
-                                <input type="checkbox" name="" onChange={handleCheck} />
+                                <input type="checkbox" name="" onChange={() => setConfimReturnedAccessories(true)} checked={confimReturnedAccessories} />
                                 </label>
                             </div>
                         </div>
