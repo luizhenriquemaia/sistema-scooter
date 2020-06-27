@@ -17,12 +17,12 @@ html {
 }
 
 .section-main-box.login-section {
-    width: 300px;
-    height: 222px;
+    width: 400px;
 }
 
 .login-section .content-box{
-    padding: 0
+    padding: 0;
+    min-height: 0;
 }
 
 .login-section .data-box {
@@ -37,7 +37,7 @@ html {
 }
 
 .login-section .data-box input {
-    height: 24px;
+    height: 30px;
     padding: 2px 5px;
     margin-bottom: 10px;
     border: 1px solid;
@@ -48,6 +48,13 @@ html {
     font-size: 18px;
     background-color: beige;
     cursor: pointer;
+    margin: 20px 0;
+}
+
+@media(max-width: 600px) {
+    .section-main-box.login-section {
+        width: 300px;
+    }
 }
 
 /* Opend Menu -------------------------------*/
@@ -62,10 +69,6 @@ html {
         border-radius 1.5s, 
         height ease-out 0.5s 0.4s;
     z-index: 10;
-}
-
-.show-up .dialog-box {
-    width: auto;
 }
 
 .menuIconBox {
@@ -149,7 +152,6 @@ html {
 /* Closed Menu ---------------------------------------*/
 .menuBlock.closedMenu {
     width: 82px;
-    z-index: 10;
 }
 
 .menuBlock.closedMenu .menuIconBox {
@@ -218,10 +220,12 @@ section.section-main-box {
 
 .content-box select {
     height: 30px;
+    min-width: 200px;
     font-size: 18px;
     background: #fafafa;
     border-radius: 3px;
     padding: 0 10px;
+    margin-left: 15px;
 }
 
 .data-box {
@@ -236,15 +240,10 @@ section.section-main-box {
     padding: 10px 15px 10px;
 }
 
-.register-type label {
-    margin-right: 15px;
-}
-
 .field-box {
     display: flex;
     flex-direction: column;
     height: auto;
-    max-height: 500px;
     overflow: hidden;
 }
 
@@ -269,7 +268,7 @@ section.section-main-box {
 }
 
 .field-box textarea {
-    margin: 15px;
+    margin: 48px 0 0;
     width: 100%;
     height: 80px;
     padding: 10px 20px;
@@ -323,12 +322,16 @@ section.section-main-box {
         text-align: center;
     }
 
+    .field-box label {
+        margin: 30px 0 0 0;
+    }
+
     main.content {
         padding: 20px 10px 20px 10px;
     }
-    
-    .field-box label {
-        margin: 30px 0 0 0;
+
+    .content-box select { 
+        margin: 0;
     }
 
     .register-type {
@@ -404,26 +407,11 @@ section.section-main-box {
 
 /* Add Movement Section ------------------------- */
 
-.add-movement-section .data-box {
-
-}
-
 .add-movement-section .field-box {
-    padding: 2% 10px;
-    border-bottom: 1px solid #505050;
-    flex-direction: row;
+    padding: 0;
+    max-height: 0;
     flex-wrap: wrap;
-    transition: max-height ease-in-out 1s, padding 1s
-}
-
-section.add-movement-section .data-box :last-child.field-box {
-    border: none;
-    margin-top: 20px;
- }
-
-.add-movement-section .content-box select {
-    width: 200px;
-    margin-left: 20px ;
+    transition: all ease-in-out 0.3s;
 }
 
 .add-movement-section .field-box input {
@@ -435,69 +423,114 @@ section.add-movement-section .data-box :last-child.field-box {
 
 .add-movement-section .field-box label {
     display: flex;  
+    min-width: 200px;
 }
 
-.add-movement-section .data-box :last-child.field-box label {
-    display: contents;
+.add-movement-section .data-box {
+    padding: 0 20px;
+}
+
+.add-movement-section .two-boxes {
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.add-movement-section .data-box .two-boxes .field-box label {
+    flex-direction: row;
+}
+
+.add-movement-section .two-boxes .field-box {
+    max-height: 250px;
+}
+
+.add-movement-section .data-box.external .field-box.external,
+.add-movement-section .data-box.internal .field-box.internal {
+    transition-delay: 0.5s;
+    padding: 20px 20px 30px;
+}
+
+.add-movement-section .data-box.external .field-box.external {
+    max-height: 1000px;
+}
+
+.add-movement-section .data-box.internal .field-box.internal { 
+    max-height: 1000px;
+}
+
+.add-movement-section .data-box.external .field-box.external > .field-box,
+.add-movement-section .data-box.internal .field-box.internal > .field-box {
+    max-height: 400px;
+    padding: 20px;
+    border-bottom: 1px solid #505050;
+}
+
+.add-movement-section .data-box .field-box :last-child.field-box {
+    border: none !important;
 }
 
 .add-movement-section .field-box.accessories {
     justify-content: space-between;
+    flex-direction: row;
 }
 
 .add-movement-section .field-box.logistic-operator {
-    padding-bottom: 30px;
     justify-content: space-around;
 }
 
 .internal .field-box.delivery-man,
 .internal .field-box.accessories {
-    max-height: 0px;
-    padding: 0;
     justify-content: space-around;
-}
-
-.external .field-box.logistic-operator {
-    max-height: 0px;
-    padding: 0;
 }
 
 /* Add Movement Section -Mobile------------------------- */
 
 @media(max-width: 600px) {
-
-    .add-movement-section .field-box.accessories {
+     .add-movement-section .field-box.accessories {
         justify-content: center;
-}
-
-    .add-movement-section .field-box input {
-        margin: 15px 0;
-        overflow: hidden;
     }
 
-    .add-movement-section .field-box.accessories input {
-        margin: 15px auto;
+    .add-movement-section .field-box {
+        flex-direction: initial;
     }
 
     .add-movement-section .field-box label {
-        min-width: 107px;
+        flex-direction: column;
+        align-items: center;
+        max-width: 200px;
+    }
+
+    .add-movement-section .field-box input {
+        margin: 0;
+        max-width: inherit;
+    }
+
+    .add-movement-section .data-box .two-boxes .field-box label {
         flex-direction: column;
     }
 
-    .add-movement-section .content-box select {
-        margin: 15px 0;
-        width: auto;
-        min-width: 180px;
+    .add-movement-section .data-box.external .field-box.external,
+    .add-movement-section .data-box.internal .field-box.internal {
+        padding: 0 0 10%;
+        flex-direction: column;
+    }
+
+    .add-movement-section .data-box.external .field-box.external > .field-box,
+    .add-movement-section .data-box.internal .field-box.internal > .field-box {
+        padding: 0 0 25px;
     }
 }
 @media(max-width: 720px) {
     .details-section .data-hora {
-    justify-content: unset;
-    justify-content: center;
-    flex-direction: column;
+        justify-content: unset;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .add-movement-section .data-box.external .field-box.external,
+    .add-movement-section .data-box.internal .field-box.internal {
+        padding: 0;
     }
 }
-
 
 /* Movement (hoot link) --------------------------------- */
 .movement-section .content-box {
@@ -533,7 +566,8 @@ section.section-main-box.movement-section {
     margin: 10px 10px;
     padding: 9px 20px 15px;
     min-width: 300px;
-    overflow: initial;
+    justify-content: end;
+    min-height: 140px;
 }
 
 .movement-section .content-box .field-box label {
@@ -727,6 +761,13 @@ section.section-main-box.movement-section {
     background-color: #fafafa;
 }
 
+    /* searching selection feature */
+    .css-2b097c-container {
+        position: absolute !important;
+        box-sizing: border-box;
+        padding-top: 58px;
+    }
+
 /* Movement (hoot link) - Mobile ------------------------------ */
 @media(max-width:600px) {
     .movement-section .date-filter .date-box {
@@ -760,11 +801,6 @@ section.section-main-box.movement-section {
 
     .movement-section .filters {
         flex-direction: column;
-    }
-
-    /* searching selection feature */
-    .css-2b097c-container > div {
-        position: relative;
     }
 }
 
@@ -866,6 +902,7 @@ div.dialog-section {
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: 0.3s;
     z-index: 11;
 }
 
@@ -873,9 +910,9 @@ div.dialog-section {
     visibility: visible;
 }
 
-.dialog-section.dialog-box {
+.dialog-section .section-main-box.dialog-box {
     width: 300px;
-    height: 200px;
+    height: fit-content;
     box-shadow: none;
     border: 2px solid gray;
 }
@@ -937,6 +974,7 @@ div.dialog-section {
 
 .details-section .field-box.destination-box.destination-up {
     max-height: 203px;
+    padding: 7% 2%
 }
 
 .details-section .data-box span {
@@ -966,10 +1004,6 @@ div.dialog-section {
 
 .details-section .accessories-options input{
     margin: 10px auto 0;
-}
-
-.details-section textarea {
-    width: auto;
 }
 
 /* Details Movement Section - Mobile-----------------------*/
