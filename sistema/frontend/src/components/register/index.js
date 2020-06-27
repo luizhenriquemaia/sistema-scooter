@@ -140,7 +140,7 @@ export default function Register() {
                 </div>
                 <section className="content-box">
                     <div className="register-type">
-                        <label>Tipo de cadastro</label>
+                        <label>Tipo de Cadastro</label>
                         <select name="register-type" onChange={handleChange}>
                             <option value="logistic-operator">Operador Logístico</option>
                             <option value="delivery-man">Entregador</option>
@@ -153,11 +153,11 @@ export default function Register() {
                             <input type="text" name="logisticOperatorDescription" value={RegisterState.logisticOperatorDescription || ''} onChange={handleChange} />
                         </div>
                         <div className="field-box delivery-man">
-                            <label>Nome Entregador</label>
+                            <label>Nome</label>
                             <input type="text" name="peopleRegistrationName" value={RegisterState.peopleRegistrationName || ''} onChange={handleChange} />
-                            <label>CPF Entregador</label>
+                            <label>CPF</label>
                             <input type="text" name="cpfPeopleRegistration" value={RegisterState.cpfPeopleRegistration || ''} onChange={handleChange} />
-                            <label>OL do Entregador</label>
+                            <label>Operador Logístico</label>
                             <select name="logisticOperatorPeopleRegistration" onChange={handleChange}>
                                 <option value="">-----</option>
                                 {logisticOperatorFromAPI.map(logisitcOperator => (
@@ -166,9 +166,9 @@ export default function Register() {
                             </select>
                         </div>
                         <div className="field-box scooter">
-                            <label>Chassi Patinete</label>
+                            <label>Chassi</label>
                             <input type="text" name="chassisScooter" value={RegisterState.chassisScooter || ''} onChange={handleChange} />
-                            <label>Status Patinete</label>
+                            <label>Status</label>
                             <select name="statusScooter" onChange={handleChange} >
                                 <option value="0">-----</option>
                                 {statusScooterFromAPI.map(status => (

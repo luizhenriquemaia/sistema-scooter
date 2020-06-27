@@ -134,7 +134,7 @@ export default function detailsMovement() {
         <main className="content">
             <section className="section-main-box details-section">
                 <div className="title-box">
-                    <h1 className="title-page">Registro de movimentação de patinetes</h1>
+                    <h1 className="title-page">Detalhamento da Movimentação</h1>
                 </div>
                 <section className="content-box">
                     <fieldset className="data-box" onSubmit={handleSubmit}>
@@ -153,7 +153,7 @@ export default function detailsMovement() {
                             </div>
                         </div>
                         <div className="field-box">
-                            <label>Número do chassi</label>
+                            <label>Chassi</label>
                             <input type="text" name="scooter" value={movementState.scooter} onChange={handleChange} />
                         </div>
                         <div className="field-box">

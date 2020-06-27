@@ -380,7 +380,7 @@ export default function Movements() {
                 <main className="content table">  
                     <section className="section-main-box movement-section">
                         <div className="title-box">
-                            <h1 className="title-page">Movimentações Patinetes</h1>
+                            <h1 className="title-page">Movimentações de Patinetes</h1>
                         </div>
                         <section className="content-box">
                             <div className="important-data">
@@ -419,7 +419,7 @@ export default function Movements() {
                             </div>
                             <div className="filters">
                                 <div className="field-box">
-                                    <label>Mostrar Apenas Patinetes</label>
+                                    <label>Filtrar por Status Scooter</label>
                                         <Select options={optionsStatusScooter} name="filterStatusScooter" onChange={hadleFilterSelectChange} styles={styleOfSelectFilter} isSearchable isClearable />
                                 </div>
                                 <div className="field-box">

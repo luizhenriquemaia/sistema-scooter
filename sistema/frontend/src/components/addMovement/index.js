@@ -205,7 +205,7 @@ export default function addMovementComponent() {
                                 </label>
                             </div>
                                 <div className="field-box scooter">
-                                    <label>Chassi do Patinete
+                                    <label>Chassi
                                         <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
                                     </label>
                                 </div>
@@ -232,7 +232,7 @@ export default function addMovementComponent() {
                         </div>
                         <div className="field-box internal">
                             <div className="field-box scooter">
-                                <label>Scooter
+                                <label>Chassi
                                     <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
                                 </label>
                             </div>
@@ -247,7 +247,7 @@ export default function addMovementComponent() {
                                 </label>
                             </div>
                             <div className="field-box scooter-destination">
-                                <label>Destino do Patinete
+                                <label>Destino
                                     <select name="destinyScooterInternalMovement" onChange={handleChange} value={destinyScooterInternalMovement}>
                                         <option value="maintenance">Manutenção</option>
                                         <option value="backup">Backup</option>
