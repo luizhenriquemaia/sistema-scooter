@@ -1,5 +1,7 @@
 import axios from 'axios'
-import { GET_MOVEMENTS, GET_MOVEMENT, GET_TYPES_MOVEMENT, DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from './types'
+import { GET_MOVEMENTS, GET_MOVEMENT, 
+    GET_TYPES_MOVEMENT, GET_MOVEMENT_BY_SCOOTER, 
+    DELETE_MOVEMENT, ADD_MOVEMENT, UPDATE_MOVEMENT } from './types'
 import { returnErrors, returnSuccess } from './messages'
 import { tokenConfig } from './auth'
 
@@ -52,7 +54,9 @@ export const getLastMovementsOfScooter = (chassis) => (dispatch, getState) => {
             })
             dispatch(returnSuccess("", res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
+        .catch(err => (
+            err.response !== undefined ? dispatch(returnErrors(err.response.data.message, err.response.status)) : dispatch(returnErrors(err.response, err.response))
+        ))
 }
 
 

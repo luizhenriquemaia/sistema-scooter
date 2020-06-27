@@ -16,7 +16,7 @@ export default function detailsMovement() {
         finalDateMovement: "",
         scooter: "",
         cpfPeopleRegistration: "",
-        LO: "",
+        logisticOperatorMovement: "",
         typeRelease: "Retirada",
         typeMovement: "",
         destinyScooter: "",
@@ -51,7 +51,7 @@ export default function detailsMovement() {
                         finalDateMovement: movement.finalDateMovement,
                         scooter: movement.scooter ? movement.scooter.chassisNumber : "",
                         cpfPeopleRegistration: movement.peopleRegistration ? movement.peopleRegistration.cpf : "",
-                        LO: movement.logisticOperator ? movement.logisticOperator_id : "",
+                        logisticOperatorMovement: movement.logisticOperator ? movement.logisticOperator_id : "",
                         typeRelease: "Devolução",
                         typeMovement: "",
                         accessoriesHelmet: movement.accessoriesHelmet,
@@ -70,7 +70,7 @@ export default function detailsMovement() {
                         finalDateMovement: movement.finalDateMovement,
                         scooter: movement.scooter ? movement.scooter.chassisNumber : "",
                         cpfPeopleRegistration: movement.peopleRegistration ? movement.peopleRegistration.cpf : "",
-                        LO: movement.logisticOperator ? movement.logisticOperator_id : "",
+                        logisticOperatorMovement: movement.logisticOperator ? movement.logisticOperator_id : "",
                         typeRelease: "Retirada",
                         typeMovement: "",
                         accessoriesHelmet: movement.accessoriesHelmet,
@@ -124,8 +124,8 @@ export default function detailsMovement() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        const { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfPeopleRegistration, LO, typeRelease, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
-        const updateMovementData = { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfPeopleRegistration, LO, typeRelease, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+        const { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfPeopleRegistration, logisticOperatorMovement, typeRelease, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
+        const updateMovementData = { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfPeopleRegistration, logisticOperatorMovement, typeRelease, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
         dispatch(updateMovement(idMovement, updateMovementData))
         history.push("/")
     }
@@ -140,12 +140,8 @@ export default function detailsMovement() {
                     <fieldset className="data-box" onSubmit={handleSubmit}>
                         <div className="data-hora">
                             <div className="field-box">
-                                <label>Data Inicial</label>
+                                <label>Data</label>
                                 <input type="date" name="intialDateMovement" value={movementState.intialDateMovement || ""} onChange={handleChange} />
-                            </div>
-                            <div className="field-box">
-                                <label>Data Final</label>
-                                <input type="date" name="finalDateMovement" value={movementState.finalDateMovement || ""} onChange={handleChange} />
                             </div>
                             <div className="field-box">
                                 <label>Hora Inicial</label>
@@ -162,7 +158,7 @@ export default function detailsMovement() {
                         </div>
                         <div className="field-box">
                             <label>Operador Logístico</label>
-                            <select name="LO" onChange={handleChange} value={movementState.LO}>
+                            <select name="logisticOperatorMovement" onChange={handleChange} value={movementState.logisticOperatorMovement}>
                                 <option value="">-----</option>
                                 {logisticOperatorFromAPI.map(logisitcOperator => (
                                     <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
@@ -229,7 +225,7 @@ export default function detailsMovement() {
                 </section>
                 <div className="buttonBox">
                     <button className="submit-button clean" onClick={() => history.push("/")}>Cancelar</button>
-                    <button className="submit-button confirm">Registrar</button>
+                    <button className="submit-button confirm" onClick={handleSubmit}>Registrar</button>
                 </div>
             </section>
         </main>

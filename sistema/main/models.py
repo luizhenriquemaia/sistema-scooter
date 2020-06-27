@@ -227,7 +227,7 @@ class Movement(models.Model):
                 scooter_db.save()
                 # create a internal movement to send scooter to repair
                 type_movement_db = TypeMovement.objects.get_or_create(
-                    description="Interno")[0]
+                    description="Interna")[0]
                 new_internal_movement = Movement(
                     scooter = scooter_db,
                     logisticOperator = movement.logisticOperator,
@@ -243,7 +243,7 @@ class Movement(models.Model):
                 scooter_db.save()
                 # create a internal movement to send scooter to backup
                 type_movement_db = TypeMovement.objects.get_or_create(
-                    description="Interno")[0]
+                    description="Interna")[0]
                 new_internal_movement = Movement(
                     scooter = scooter_db,
                     logisticOperator = movement.logisticOperator,
