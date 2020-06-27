@@ -970,6 +970,8 @@ div.dialog-section {
 
 .details-section .field-box label {
     margin: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .details-section .data-box {
@@ -980,7 +982,7 @@ div.dialog-section {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    padding: 30px 20px 0;
+    padding: 20px 20px 0;
     border-bottom: 1px solid gray;
 }
 
@@ -1012,7 +1014,7 @@ div.dialog-section {
 }
 
 .details-section .field-box.destination-box.destination-up {
-    max-height: 203px;
+    max-height: 350px;
     padding-top: 20px;
 }
 
@@ -1058,6 +1060,10 @@ div.dialog-section {
     }
 
     .details-section .field-box.movement {
+        flex-direction: column;
+    }
+
+    .details-section .destination-choice {
         flex-direction: column;
     }
 
