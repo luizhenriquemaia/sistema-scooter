@@ -185,7 +185,6 @@ class MovementViewSet(viewsets.ViewSet):
                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
             serializer = MovementSerializer(queryset_list, many=False)
             if serializer.data:
-                print(f"\n\n\n{serializer.data}\n\n\n")
                 return Response({"serializer": serializer.data,
                                 "message": ""}, status=status.HTTP_200_OK)
             else:
@@ -281,18 +280,36 @@ class MovementViewSet(viewsets.ViewSet):
 
     
     def update(self, request, pk):
+        #print(f"\n\n\n{request.data}\n\n\n")
         movement = Movement.objects.get(id=pk)
         if request.user.is_staff:
             try:
-                request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
+                request.data['scooter_id'] = Scooter.objects.get(
+                    chassisNumber=request.data['scooter']).id
                 request.data['logisticOperator_id'] = LogisticOperator.objects.get(
                     id=request.data['logisticOperatorMovement']).id
-                if request.data['cpfPeopleRegistration']:
+                # if this data was not passed don't need to update them
+                try:
                     request.data['peopleRegistration_id'] = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration']).id
-                if request.data['initialTimeFormatted'] != "":
-                    request.data['pickUpTime'] = request.data['initialTimeFormatted']
-                if request.data['finalTimeFormatted'] != "":
-                    request.data['returnTime'] = request.data['finalTimeFormatted']
+                except: pass
+                try:
+                    if request.data['initialTimeFormatted'] != "":
+                        request.data['pickUpTime'] = request.data['initialTimeFormatted']
+                except:
+                    request.data['pickUpTime'] = movement.pickUpTime
+                try:
+                    if request.data['finalTimeFormatted'] != "":
+                        request.data['returnTime'] = request.data['finalTimeFormatted']
+                except:
+                    request.data['returnTime'] = movement.returnTime
+                try: 
+                    request.data['intialDateMovement']
+                except: 
+                    request.data['intialDateMovement'] = movement.intialDateMovement
+                try: 
+                    request.data['finalDateMovement']
+                except: 
+                    request.data['finalDateMovement'] = movement.finalDateMovement
             except ObjectDoesNotExist:
                 return Response({"serializer": "",
                                  "message": "valor(es) não existente(s) na base de dados"}, status=status.HTTP_400_BAD_REQUEST)
