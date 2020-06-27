@@ -152,22 +152,24 @@ export default function detailsMovement() {
                                 <input type="time" name="finalTimeFormatted" value={movementState.finalTimeFormatted || ""} onChange={handleChange} />
                             </div>
                         </div>
-                        <div className="field-box">
-                            <label>Chassi</label>
-                            <input type="text" name="scooter" value={movementState.scooter} onChange={handleChange} />
-                        </div>
-                        <div className="field-box">
-                            <label>Operador Logístico</label>
-                            <select name="logisticOperatorMovement" onChange={handleChange} value={movementState.logisticOperatorMovement}>
-                                <option value="">-----</option>
-                                {logisticOperatorFromAPI.map(logisitcOperator => (
-                                    <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="field-box">
-                            <label>CPF do Entregador</label>
-                            <input type="text" name="cpfPeopleRegistration" value={movementState.cpfPeopleRegistration} onChange={handleChange} />
+                        <div className="informations">
+                            <div className="field-box">
+                                <label>Chassi</label>
+                                <input type="text" name="scooter" value={movementState.scooter} onChange={handleChange} />
+                            </div>
+                            <div className="field-box">
+                                <label>Operador Logístico</label>
+                                <select name="logisticOperatorMovement" onChange={handleChange} value={movementState.logisticOperatorMovement}>
+                                    <option value="">-----</option>
+                                    {logisticOperatorFromAPI.map(logisitcOperator => (
+                                        <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="field-box">
+                                <label>CPF do Entregador</label>
+                                <input type="text" name="cpfPeopleRegistration" value={movementState.cpfPeopleRegistration} onChange={handleChange} />
+                            </div>
                         </div>
                         <div className="field-box movement">
                             <div className="field-box">
