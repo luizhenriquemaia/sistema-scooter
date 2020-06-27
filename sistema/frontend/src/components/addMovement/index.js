@@ -5,13 +5,13 @@ import { postMovement } from '../../actions/movement'
 import { getLogisticOperator } from '../../actions/logisticOperator'
 import { getLastMovementsOfScooter } from '../../actions/movement'
 
-// opa
 
 export default function addMovementComponent() {
     const dispatch = useDispatch()
     const alert = useAlert()
     const [newMovementState, setNewMovementState] = useState({
         idMovement: "",
+        typeOfMovement: "Externa",
         scooter: "",
         logisticOperatorMovement: "",
         cpfPeopleRegistrationState: "",
@@ -38,8 +38,6 @@ export default function addMovementComponent() {
             setLogisticOperatorFromAPI(logisticOperator)
         }
     }, [logisticOperator])
-    
-    const [typeOfMovementSelect, setTypeOfMovementSelect] = useState("external")
 
 
     const openMovementOfScooter = useSelector(state => state.movements.movement)
@@ -51,9 +49,10 @@ export default function addMovementComponent() {
                 if (!openMovementOfScooter.map) {
                     setNewMovementState({
                         idMovement: openMovementOfScooter.id,
-                        scooter: openMovementOfScooter.scooter.chassisNumber,
-                        logisticOperatorMovement: openMovementOfScooter.logisticOperatorMovement !== undefined ? openMovementOfScooter.logisticOperatorMovement.description : "",
-                        cpfPeopleRegistrationState: openMovementOfScooter.peopleRegistration !== undefined ? openMovementOfScooter.peopleRegistration.cpf : "",
+                        typeOfMovement: openMovementOfScooter.typeMovement !== undefined && openMovementOfScooter.typeMovement !== null ? openMovementOfScooter.typeMovement.description : "Externa",
+                        scooter: openMovementOfScooter.scooter !== undefined && openMovementOfScooter.scooter !== null ? openMovementOfScooter.scooter.chassisNumber : "",
+                        logisticOperatorMovement: openMovementOfScooter.logisticOperatorMovement !== undefined && openMovementOfScooter.logisticOperatorMovement !== null ? openMovementOfScooter.logisticOperatorMovement.description : "",
+                        cpfPeopleRegistrationState: openMovementOfScooter.peopleRegistration !== undefined && openMovementOfScooter.peopleRegistration !== null ? openMovementOfScooter.peopleRegistration.cpf : "",
                         accessoriesHelmet: openMovementOfScooter.accessoriesHelmet,
                         accessoriesBag: openMovementOfScooter.accessoriesBag,
                         accessoriesCase: openMovementOfScooter.accessoriesCase,
@@ -66,6 +65,7 @@ export default function addMovementComponent() {
             setNewMovementState({
                 ...newMovementState,
                 idMovement: "",
+                typeOfMovement: "Externa",
                 logisticOperatorMovement: "",
                 cpfPeopleRegistrationState: "",
                 accessoriesHelmet: false,
@@ -80,10 +80,7 @@ export default function addMovementComponent() {
 
     const handleChange = e => {
         const { name, value } = e.target
-        if (name === "typeOfMovement") {
-            setTypeOfMovementSelect(value)
-        }
-        else if (name === "destinyScooterInternalMovement") {
+        if (name === "destinyScooterInternalMovement") {
             setDestinyScooterInternalMovement(value)
         }
         else if (name === "scooter") {
@@ -123,10 +120,9 @@ export default function addMovementComponent() {
     }
 
     const handleClickAdd = e => {
-        const { idMovement, scooter, cpfPeopleRegistrationState, logisticOperatorMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
+        const { idMovement, typeOfMovement, scooter, cpfPeopleRegistrationState, logisticOperatorMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         const cpfPeopleRegistration = cpfPeopleRegistrationState.replace(/\D/g, '')
-        var typeOfMovement = typeOfMovementSelect
-        if (typeOfMovement === "external") {
+        if (typeOfMovement === "Externa") {
             if (scooter === "" || cpfPeopleRegistration === "") {
                 alert.error("preencha todos os campos obrigatórios")
             }
@@ -139,6 +135,7 @@ export default function addMovementComponent() {
                 setNewMovementState({
                     ...newMovementState,
                     idMovement: "",
+                    typeOfMovement: "Externa",
                     scooter: "",
                     cpfPeopleRegistrationState: "",
                     accessoriesHelmet: false,
@@ -149,16 +146,18 @@ export default function addMovementComponent() {
                 })
             }
         }
-        else if (typeOfMovement === "internal") {
+        else if (typeOfMovement === "Interna") {
             if (scooter === "") {
                 alert.error("preencha todos os campos obrigatórios")
             }
             else {
                 var destinyScooterToAPI = destinyScooterInternalMovement
-                var newMovementToAPI = { typeOfMovement, destinyScooterToAPI, scooter, logisticOperatorMovement, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+                var newMovementToAPI = { idMovement, typeOfMovement, destinyScooterToAPI, scooter, logisticOperatorMovement, cpfPeopleRegistrationState, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
                 dispatch(postMovement(newMovementToAPI))
                 setNewMovementState({
                     ...newMovementState,
+                    idMovement: "",
+                    typeOfMovement: "Externa",
                     scooter: "",
                     cpfPeopleRegistrationState: "",
                     accessoriesHelmet: false,
@@ -180,12 +179,12 @@ export default function addMovementComponent() {
                 <section className="content-box">
                     <div className="register-type">
                         <label>Tipo de Movimentação</label>
-                        <select name="typeOfMovement" onChange={handleChange} >
-                            <option value="external">Externa</option>
-                            <option value="internal">Interna</option>
+                        <select name="typeOfMovement" value={newMovementState.typeOfMovement} onChange={handleChange} >
+                            <option value="Externa">Externa</option>
+                            <option value="Interna">Interna</option>
                         </select>
                     </div>
-                    <fieldset className={typeOfMovementSelect ? `data-box ${typeOfMovementSelect}` : "data-box"} >
+                    <fieldset className={newMovementState.typeOfMovement === "Externa" ? `data-box external` : "data-box internal"} >
                         <div className="field-box">
                             <label>Chassi do Patinete
                                 <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
