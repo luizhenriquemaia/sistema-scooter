@@ -1065,6 +1065,10 @@ div.dialog-section {
         padding: 4% 4%;
     }
 
+    .details-section .data-hora {
+        flex-direction: column;
+    }
+
     .details-section .field-box input{
         margin: 10px auto 0;
         max-width: 100%;
