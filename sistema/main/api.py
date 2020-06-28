@@ -5,12 +5,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
 
-from .models import (BaseOfWork, Employee, LogisticOperator, Movement, PeopleRegistration, Scooter,
-                     StatusScooter, TypeMovement)
-from .serializers import (BaseOfWorkSerializer, EmployeeSerializer, LogisticOperatorSerializer,
+from .models import (BaseOfWork, Employee, LogisticOperator, Movement,
+                     PeopleRegistration, Scooter, StatusScooter, TypeMovement)
+from .serializers import (BaseOfWorkSerializer, EmployeeSerializer,
+                          LogisticOperatorSerializer,
                           MovementRetrieveSerializer, MovementSerializer,
                           PeopleRegistrationSerializer, ScooterSerializer,
-                          StatusScooterSerializer, TypeMovementSerializer)
+                          StatusScooterSerializer, TypeMovementSerializer,
+                          UserSerializer)
 
 
 class BaseOfWorkViewSet(viewsets.ViewSet):
@@ -36,7 +38,7 @@ class BaseOfWorkViewSet(viewsets.ViewSet):
                          "message": "Erro ao criar a base"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class EmployeeSerializer(viewsets.ViewSet):
+class EmployeeViewSet(viewsets.ViewSet):
     permissions_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
@@ -48,7 +50,59 @@ class EmployeeSerializer(viewsets.ViewSet):
         else:
             return Response({"serializer": serializer.data,
                              "message": ""}, status=status.HTTP_204_NO_CONTENT)
-    #### create a user and then create a employee
+
+    def create(self, request):
+        try:
+            # if user already exists
+            id_user_in_db = User.objects.get(
+                username=request.data['name']).id
+            # if employee already exists
+            try:
+                employee_in_db = Employee.objects.get(user_id=id_user_in_db)
+                return Response({"serializer": "",
+                                "message": "Usuário já cadastrado"}, status=status.HTTP_400_BAD_REQUEST)
+            # if user exists but employee not try to add employee
+            except ObjectDoesNotExist:
+                data_for_create_employee = {
+                    'user_id': id_user_in_db,
+                    'base_id': 1
+                }
+                serializer_employee = EmployeeSerializer(data=data_for_create_employee)
+                if serializer_employee.is_valid(raise_exception=True):
+                    new_employee = serializer_employee.save()
+                    return Response({"serializer": serializer_employee.data,
+                                    "message": "Colaborador adicionado com sucesso"}, status=status.HTTP_201_CREATED)
+                return Response({"serializer": serializer_employee.errors,
+                                "message": "Erro ao criar colaborador"}, status=status.HTTP_400_BAD_REQUEST)
+        except ObjectDoesNotExist:
+            # create a user
+            try:
+                request.data['email']
+            except:
+                request.data['email'] = ""
+            data_for_create_user = {
+                'username': request.data['name'],
+                'email': request.data['email'],
+                'password': request.data['password']
+            }
+            serializer_user = UserSerializer(data=data_for_create_user)
+            if serializer_user.is_valid(raise_exception=True):
+                new_user = serializer_user.save()
+            else:
+                return Response({"serializer": serializer_user.errors,
+                                "message": "Erro ao criar usuário"}, status=status.HTTP_400_BAD_REQUEST)
+            # create a employee
+            data_for_create_employee = {
+                'user_id': new_user.id,
+                'base_id': 1
+            }
+            serializer_employee = EmployeeSerializer(data=data_for_create_employee)
+            if serializer_employee.is_valid(raise_exception=True):
+                new_employee = serializer.save()
+                return Response({"serializer": serializer_employee.data,
+                                "message": "Colaborador adicionado com sucesso"}, status=status.HTTP_201_CREATED)
+            return Response({"serializer": serializer_employee.errors,
+                            "message": "Erro ao criar colaborador"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class StatusScooterViewSet(viewsets.ViewSet):

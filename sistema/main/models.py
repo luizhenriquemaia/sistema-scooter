@@ -24,6 +24,15 @@ class Employee(models.Model):
     base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
+    def create(self, **validated_data):
+        print(validated_data)
+        new_employee = Employee(
+            user=User.objects.get(id=validated_data['user_id']),
+            base=BaseOfWork.objects.get(id=validated_data['base_id'])
+        )
+        new_employee.save()
+        return new_employee
+
 
 class StatusScooter(models.Model):
     description = models.CharField(max_length=200)

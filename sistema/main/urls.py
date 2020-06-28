@@ -2,7 +2,7 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
 
-from .api import (BaseOfWorkViewSet, EmployeeSerializer,
+from .api import (BaseOfWorkViewSet, EmployeeViewSet,
                   LogisticOperatorViewSet, MovementViewSet,
                   PeopleRegistrationViewSet, ScooterViewSet,
                   StatusScooterViewSet, TypeMovementViewSet)
@@ -11,7 +11,7 @@ router = routers.DefaultRouter()
 router.register('api/base-of-work',
                 BaseOfWorkViewSet, 'base-of-work')
 router.register('api/employee',
-                EmployeeSerializer, 'employee')
+                EmployeeViewSet, 'employee')
 router.register('api/status-scooter', 
                 StatusScooterViewSet, 'status-scooter')
 router.register('api/type-movement',

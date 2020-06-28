@@ -6,6 +6,12 @@ from .models import (BaseOfWork, Employee, LogisticOperator, Movement,
                      PeopleRegistration, Scooter, StatusScooter, TypeMovement)
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+
 class BaseOfWorkSerializer(serializers.ModelSerializer):
     class Meta:
         model = BaseOfWork
@@ -16,11 +22,16 @@ class BaseOfWorkSerializer(serializers.ModelSerializer):
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    user_id = serializers.IntegerField()
     base = BaseOfWorkSerializer(read_only=True)
     base_id = serializers.IntegerField()
     class Meta:
         model = Employee
-        fields = ['user', 'base', 'base_id']
+        fields = ['user', 'user_id', 'base', 'base_id']
+
+    def create(self, validated_data):
+        return Employee.create(Employee, **validated_data)
         
 
 class StatusScooterSerializer(serializers.ModelSerializer):
