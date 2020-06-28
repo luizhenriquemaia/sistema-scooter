@@ -3,6 +3,18 @@ from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, date
 
 
+class BaseOfWork(models.Model):
+    description = models.CharField(max_length=500)
+    address = models.CharField(max_length=500)
+    objects = models.Manager()
+
+
+class Employee(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE)
+    objects = models.Manager()
+
+
 class StatusScooter(models.Model):
     description = models.CharField(max_length=200)
     objects = models.Manager()
@@ -29,6 +41,7 @@ class TypeMovement(models.Model):
 
 class LogisticOperator(models.Model):
     description = models.CharField(max_length=200)
+    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE)
     objects = models.Manager()
 
     def create(self, **validated_data):
@@ -44,7 +57,9 @@ class LogisticOperator(models.Model):
 
 class Scooter(models.Model):
     chassisNumber = models.CharField(max_length=200)
-    status = models.ForeignKey(StatusScooter, on_delete=models.CASCADE, default=0)
+    status = models.ForeignKey(
+        StatusScooter, on_delete=models.CASCADE, null=True)
+    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE)
     objects = models.Manager()
 
     def create(self, **validated_data):
@@ -64,6 +79,7 @@ class PeopleRegistration(models.Model):
     cpf = models.CharField(max_length=11, default=0)
     logisticOperator = models.ForeignKey(
         LogisticOperator, on_delete=models.CASCADE, null=True)
+    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE)
     objects = models.Manager()
 
     def create(self, **validated_data):
@@ -79,6 +95,7 @@ class PeopleRegistration(models.Model):
 
 
 class Movement(models.Model):
+    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE)
     scooter = models.ForeignKey(Scooter, on_delete=models.CASCADE, null=True)
     peopleRegistration = models.ForeignKey(PeopleRegistration, on_delete=models.CASCADE, null=True, blank=True)
     logisticOperator = models.ForeignKey(
