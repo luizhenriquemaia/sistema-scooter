@@ -245,6 +245,8 @@ class PeopleRegistrationViewSet(viewsets.ViewSet):
                              "message": ""}, status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request):
+        base_employee = Employee.objects.get(
+            user_id=request.user.id).base_id
         try:
             PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistrationToAPI'])
             return Response({"serializer": "",
@@ -252,6 +254,7 @@ class PeopleRegistrationViewSet(viewsets.ViewSet):
         except ObjectDoesNotExist:
             request.data['name'] = request.data['peopleRegistrationName']
             request.data['cpf'] = request.data['cpfPeopleRegistrationToAPI']
+            request.data['base_id'] = base_employee
             try:
                 LogisticOperator.objects.get(
                     id=request.data['logisticOperatorPeopleRegistration'])

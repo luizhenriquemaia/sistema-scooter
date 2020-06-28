@@ -108,7 +108,8 @@ class PeopleRegistration(models.Model):
                 name=validated_data['name'],
                 cpf=validated_data['cpf'],
                 logisticOperator=LogisticOperator.objects.get(
-                    id=validated_data['logisticOperator_id'])
+                    id=validated_data['logisticOperator_id']),
+                base=BaseOfWork.objects.get(id=validated_data['base_id'])
             )
             new_peopleRegistration.save()
             return new_peopleRegistration
