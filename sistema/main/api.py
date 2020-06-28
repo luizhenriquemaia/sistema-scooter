@@ -172,9 +172,9 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
 
 
     def create(self, request):
-        print(f"\n\n\n{Employee.objects.get(user=request.user.username)}\n\n\n")
+        print(f"\n\n\n{Employee.objects.get(user_id=request.user.id)}\n\n\n")
         base_employee = Employee.objects.get(
-            user_id=request.user.username).base_id
+            user_id=request.user.id).base_id
         try:
             LogisticOperator.objects.get(description=request.data['logisticOperatorDescription'], base_id=base_employee)
             return Response({"serializer": "",
