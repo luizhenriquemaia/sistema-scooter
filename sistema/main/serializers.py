@@ -138,7 +138,7 @@ class MovementRetrieveSerializer(serializers.ModelSerializer):
     peopleRegistration = PeopleRegistrationSerializer(read_only=False, required=False)
     peopleRegistration_id = serializers.IntegerField(required=False, allow_null=True)
     logisticOperator = LogisticOperatorSerializer(read_only=False)
-    logisticOperator_id = serializers.IntegerField()
+    logisticOperator_id = serializers.IntegerField()    
     typeMovement = TypeMovementSerializer(read_only=False)
     typeMovement_id = serializers.IntegerField()
     typeRelease = serializers.CharField(required=False) 
@@ -147,8 +147,9 @@ class MovementRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movement
-        fields = ['id', 'scooter', 'scooter_id', 'peopleRegistration',  'peopleRegistration_id', 
-                  'logisticOperator', 'logisticOperator_id', 'typeMovement', 'typeMovement_id', 
-                  'typeRelease', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime',
-                  'base', 'base_id']
+        fields  = ['id', 'scooter', 'scooter_id', 'peopleRegistration',  'peopleRegistration_id',
+                    'logisticOperator', 'logisticOperator_id', 'typeMovement', 'typeMovement_id',
+                    'typeRelease', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime',
+                    'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 'accessoriesCharger', 'observation',
+                    'destinyScooter', 'base', 'base_id', 'owner']
 

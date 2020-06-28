@@ -142,6 +142,8 @@ class Movement(models.Model):
             PeopleRegistration.objects.get(id=movement.peopleRegistration_id)
             movement_dict = {
                 "id": id,
+                "base": BaseOfWork.objects.get(id=movement.base_id).__dict__,
+                "base_id": BaseOfWork.objects.get(id=movement.base_id).id,
                 "scooter": Scooter.objects.get(id=movement.scooter_id).__dict__,
                 "scooter_id": Scooter.objects.get(id=movement.scooter_id).id,
                 "peopleRegistration": PeopleRegistration.objects.get(id=movement.peopleRegistration_id).__dict__,
@@ -164,6 +166,8 @@ class Movement(models.Model):
         except ObjectDoesNotExist:
             movement_dict = {
                 "id": id,
+                "base": BaseOfWork.objects.get(id=movement.base_id).__dict__,
+                "base_id": BaseOfWork.objects.get(id=movement.base_id).id,
                 "scooter": Scooter.objects.get(id=movement.scooter_id).__dict__,
                 "scooter_id": Scooter.objects.get(id=movement.scooter_id).id,
                 "logisticOperator": LogisticOperator.objects.get(id=movement.logisticOperator_id).__dict__,

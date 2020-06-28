@@ -342,10 +342,19 @@ class MovementViewSet(viewsets.ViewSet):
                 return Response({"serializer": serializer.data,
                                 "message": ""}, status=status.HTTP_204_NO_CONTENT)
 
-    def retrieve(self, request, pk): 
+    def retrieve(self, request, pk):
+        base_employee = Employee.objects.get(
+            user_id=request.user.id).base_id
         if not request.user.is_staff or not request.user.is_superuser:
             try:
-                Movement.objects.get(id=pk, owner=request.user)
+                Movement.objects.get(id=pk, owner=request.user, base_id=base_employee)
+            except ObjectDoesNotExist:
+                return Response({"serializer": "",
+                                 "message": "Você não é autorizado a realizar esta ação"}, status=status.HTTP_403_FORBIDDEN)
+        if request.user.is_staff:
+            try:
+                Movement.objects.get(
+                    id=pk, base_id=base_employee)
             except ObjectDoesNotExist:
                 return Response({"serializer": "",
                                  "message": "Você não é autorizado a realizar esta ação"}, status=status.HTTP_403_FORBIDDEN)
@@ -411,8 +420,6 @@ class MovementViewSet(viewsets.ViewSet):
             else:
                 return Response({"serializer": serializer.errors,
                                  "message": "Erro ao criar movimentação"}, status=status.HTTP_400_BAD_REQUEST)
-                    
-
     
     def update(self, request, pk):
         #print(f"\n\n\n{request.data}\n\n\n")
