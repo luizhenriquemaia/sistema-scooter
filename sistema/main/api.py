@@ -19,37 +19,41 @@ class BaseOfWorkViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
     
     def list(self, request):
-        queryset = BaseOfWork.objects.all()
-        serializer = BaseOfWorkSerializer(queryset, many=True)
-        if len(serializer.data) > 0:
-            return Response({"serializer": serializer.data,
-                            "message": ""}, status=status.HTTP_200_OK)
-        else:
-            return Response({"serializer": serializer.data,
-                            "message": ""}, status=status.HTTP_204_NO_CONTENT)
+        if request.user.is_superuser:
+            queryset = BaseOfWork.objects.all()
+            serializer = BaseOfWorkSerializer(queryset, many=True)
+            if len(serializer.data) > 0:
+                return Response({"serializer": serializer.data,
+                                "message": ""}, status=status.HTTP_200_OK)
+            else:
+                return Response({"serializer": serializer.data,
+                                "message": ""}, status=status.HTTP_204_NO_CONTENT)
     
     def create(self, request):
-        serializer = BaseOfWorkSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            new_base_of_work = serializer.save()
-            return Response({"serializer": serializer.data,
-                             "message": "Base adicionada com sucesso"}, status=status.HTTP_201_CREATED)
-        return Response({"serializer": serializer.errors,
-                         "message": "Erro ao criar a base"}, status=status.HTTP_400_BAD_REQUEST)
+        if request.user.is_superuser:
+            serializer = BaseOfWorkSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                new_base_of_work = serializer.save()
+                return Response({"serializer": serializer.data,
+                                "message": "Base adicionada com sucesso"}, status=status.HTTP_201_CREATED)
+            return Response({"serializer": serializer.errors,
+                            "message": "Erro ao criar a base"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class EmployeeViewSet(viewsets.ViewSet):
     permissions_classes = [permissions.IsAdminUser]
-
     def list(self, request):
-        queryset = Employee.objects.all()
-        serializer = EmployeeSerializer(queryset, many=True)
-        if len(serializer.data) > 0:
-            return Response({"serializer": serializer.data,
-                             "message": ""}, status=status.HTTP_200_OK)
-        else:
-            return Response({"serializer": serializer.data,
-                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
+        base_employee = Employee.objects.get(
+            user_id=request.user.id).base_id
+        if request.user.is_staff:
+            queryset = Employee.objects.filter(base_id=base_employee)
+            serializer = EmployeeSerializer(queryset, many=True)
+            if len(serializer.data) > 0:
+                return Response({"serializer": serializer.data,
+                                "message": ""}, status=status.HTTP_200_OK)
+            else:
+                return Response({"serializer": serializer.data,
+                                "message": ""}, status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request):
         if request.user.is_staff:
@@ -66,7 +70,7 @@ class EmployeeViewSet(viewsets.ViewSet):
                 except ObjectDoesNotExist:
                     data_for_create_employee = {
                         'user_id': id_user_in_db,
-                        'base_id': 1
+                        'base_id': 2
                     }
                     serializer_employee = EmployeeSerializer(data=data_for_create_employee)
                     if serializer_employee.is_valid(raise_exception=True):
@@ -97,7 +101,7 @@ class EmployeeViewSet(viewsets.ViewSet):
                 # create a employee
                 data_for_create_employee = {
                     'user_id': new_user.id,
-                    'base_id': 1
+                    'base_id': 2
                 }
                 serializer_employee = EmployeeSerializer(data=data_for_create_employee)
                 if serializer_employee.is_valid(raise_exception=True):
@@ -161,7 +165,9 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        queryset = LogisticOperator.objects.all()
+        base_employee = Employee.objects.get(
+            user_id=request.user.id).base_id
+        queryset = LogisticOperator.objects.filter(base_id=base_employee)
         serializer = LogisticOperatorSerializer(queryset, many=True)
         if len(serializer.data) > 0:
             return Response({"serializer": serializer.data,
@@ -197,7 +203,9 @@ class ScooterViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        queryset = Scooter.objects.all()
+        base_employee = Employee.objects.get(
+            user_id=request.user.id).base_id
+        queryset = Scooter.objects.filter(base_id=base_employee)
         serializer = ScooterSerializer(queryset, many=True)
         if len(serializer.data) > 0:
             return Response({"serializer": serializer.data,
@@ -210,7 +218,8 @@ class ScooterViewSet(viewsets.ViewSet):
         base_employee = Employee.objects.get(
             user_id=request.user.id).base_id
         try: 
-            Scooter.objects.get(chassisNumber=request.data['chassisScooter'])
+            Scooter.objects.get(
+                chassisNumber=request.data['chassisScooter'], base_id=base_employee)
             return Response({"serializer": "",
                              "message": "patinete já cadastrado"}, status=status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist:
@@ -235,7 +244,9 @@ class PeopleRegistrationViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        queryset = PeopleRegistration.objects.all()
+        base_employee = Employee.objects.get(
+            user_id=request.user.id).base_id
+        queryset = PeopleRegistration.objects.filter(base_id=base_employee)
         serializer = PeopleRegistrationSerializer(queryset, many=True)
         if len(serializer.data) > 0:
             return Response({"serializer": serializer.data,
@@ -248,7 +259,8 @@ class PeopleRegistrationViewSet(viewsets.ViewSet):
         base_employee = Employee.objects.get(
             user_id=request.user.id).base_id
         try:
-            PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistrationToAPI'])
+            PeopleRegistration.objects.get(
+                cpf=request.data['cpfPeopleRegistrationToAPI'], base_id=base_employee)
             return Response({"serializer": "",
                              "message": "CPF já cadastrado"}, status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist:
@@ -280,10 +292,13 @@ class MovementViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
+        base_employee = Employee.objects.get(
+            user_id=request.user.id).base_id
         if request.GET.get("chassis"):
             query_from_url_chassis = request.GET.get("chassis")
             try:
-                id_scooter_from_db = Scooter.objects.get(chassisNumber=query_from_url_chassis).id
+                id_scooter_from_db = Scooter.objects.get(
+                    chassisNumber=query_from_url_chassis, base_id=base_employee).id
             except ObjectDoesNotExist:
                 return Response({"serializer": "",
                              "message": ""}, status=status.HTTP_204_NO_CONTENT)
@@ -308,9 +323,10 @@ class MovementViewSet(viewsets.ViewSet):
             if request.user.is_staff or request.user.is_superuser:
                 if query_from_url_initial_date and query_from_url_final_date:
                     queryset_list = Movement.objects.filter(intialDateMovement__range=(
-                        query_from_url_initial_date, query_from_url_final_date))
+                        query_from_url_initial_date, query_from_url_final_date), base_id=base_employee)
                 else:
-                    queryset_list = Movement.objects.filter(intialDateMovement=datetime.today())
+                    queryset_list = Movement.objects.filter(
+                        intialDateMovement=datetime.today(), base_id=base_employee)
             else:
                 if query_from_url_initial_date and query_from_url_final_date:
                     queryset_list = Movement.objects.filter(intialDateMovement__range=(
