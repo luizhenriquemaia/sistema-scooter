@@ -136,7 +136,7 @@ export default function Register() {
         <main className="content">
             <section className="section-main-box register-section">
                 <div className="title-box">
-                    <h1 className="title-page">Cadastros</h1>
+                    <h1 className="title-page">Cadastrar</h1>
                 </div>
                 <section className="content-box">
                     <div className="register-type">

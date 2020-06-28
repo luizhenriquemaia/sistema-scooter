@@ -419,7 +419,7 @@ export default function Movements() {
                             </div>
                             <div className="filters">
                                 <div className="field-box">
-                                    <label>Filtrar por Status Scooter</label>
+                                    <label>Filtrar por Status</label>
                                         <Select options={optionsStatusScooter} name="filterStatusScooter" onChange={hadleFilterSelectChange} styles={styleOfSelectFilter} isSearchable isClearable />
                                 </div>
                                 <div className="field-box">

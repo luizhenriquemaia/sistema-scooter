@@ -38,13 +38,13 @@ export default function Menu() {
                         <Link to="/add-movement">
                             <div className="navBox">
                                 <img src="../../../static/imgs/adicionar_1.png" />
-                                <p>nova movimentação</p>
+                                <p>Nova Movimentação</p>
                             </div>
                         </Link>
                         <Link to="/">
                             <div className="navBox">
                                 <img src="../../../static/imgs/lista-de-controle_1.png" />
-                                <p>Registros</p>
+                                <p>Movimentações</p>
                             </div>
                         </Link>
                     </div>

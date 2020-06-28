@@ -202,7 +202,7 @@ export default function addMovementComponent() {
         <main className="content">
             <section className={newMovementState.idMovement !== "" ? "section-main-box add-movement-section return" : "section-main-box add-movement-section"}>
                 <div className="title-box">
-                    <h1 className="title-page">Adicionar Movimentação</h1>
+                    <h1 className="title-page">Nova Movimentação</h1>
                 </div>
                 <section className="content-box">
                     <div className="register-type">
