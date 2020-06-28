@@ -1,8 +1,24 @@
 from django.contrib.auth.models import User
-from rest_framework.validators import UniqueValidator
 from rest_framework import serializers
-from .models import StatusScooter, TypeMovement, LogisticOperator, Scooter, PeopleRegistration, Movement
+from rest_framework.validators import UniqueValidator
 
+from .models import (BaseOfWork, Employee, LogisticOperator, Movement,
+                     PeopleRegistration, Scooter, StatusScooter, TypeMovement)
+
+
+class BaseOfWorkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BaseOfWork
+        fields = ['id', 'description', 'adress']
+
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    base = BaseOfWorkSerializer(read_only=True)
+    base_id = serializers.IntegerField()
+    class Meta:
+        model = Employee
+        fields = ['user', 'base', 'base_id']
+        
 
 class StatusScooterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,32 +39,39 @@ class TypeMovementSerializer(serializers.ModelSerializer):
 
 
 class LogisticOperatorSerializer(serializers.ModelSerializer):
+    base = BaseOfWorkSerializer(read_only=True)
+    base_id = serializers.IntegerField()
     class Meta:
         model = LogisticOperator
-        fields = ['id', 'description']
+        fields = ['id', 'description', 'base', 'base_id']
 
     def create(self, validated_data):
         return LogisticOperator.create(LogisticOperator, **validated_data)
 
 class ScooterSerializer(serializers.ModelSerializer):
+    base = BaseOfWorkSerializer(read_only=True)
+    base_id = serializers.IntegerField()
     status = StatusScooterSerializer(read_only=True)
     status_id = serializers.IntegerField()
     class Meta:
         model = Scooter
-        fields = ['id', 'chassisNumber', 'status', 'status_id']
+        fields = ['id', 'chassisNumber', 'status',
+                  'status_id', 'base', 'base_id']
     
     def create(self, validated_data):
         return Scooter.create(Scooter, **validated_data)
 
 
 class PeopleRegistrationSerializer(serializers.ModelSerializer):
+    base = BaseOfWorkSerializer(read_only=True)
+    base_id = serializers.IntegerField()
     logisticOperator = LogisticOperatorSerializer(read_only=True)
     logisticOperator_id = serializers.IntegerField()
 
     class Meta:
         model = PeopleRegistration
         fields = ['id', 'name', 'cpf', 'logisticOperator',
-                  'logisticOperator_id']
+                  'logisticOperator_id', 'base', 'base_id']
     
     def create(self, validated_data):
         return PeopleRegistration.create(PeopleRegistration, **validated_data)
@@ -56,6 +79,8 @@ class PeopleRegistrationSerializer(serializers.ModelSerializer):
 
 
 class MovementSerializer(serializers.ModelSerializer):
+    base = BaseOfWorkSerializer(read_only=True)
+    base_id = serializers.IntegerField()
     scooter = ScooterSerializer(read_only=True)
     scooter_id = serializers.IntegerField()
     peopleRegistration = PeopleRegistrationSerializer(read_only=True)
@@ -71,7 +96,8 @@ class MovementSerializer(serializers.ModelSerializer):
         model = Movement
         fields = ['id', 'scooter', 'scooter_id', 'peopleRegistration',  'peopleRegistration_id', 'logisticOperator', 'logisticOperator_id',
                   'typeMovement', 'typeMovement_id','typeRelease', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime', 
-                  'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 'accessoriesCharger', 'observation', 'destinyScooter']
+                  'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 'accessoriesCharger', 'observation', 'destinyScooter',
+                  'base', 'base_id']
     
     def create(self, validated_data):
         return Movement.create(Movement, **validated_data)
@@ -81,6 +107,8 @@ class MovementSerializer(serializers.ModelSerializer):
 
 
 class MovementRetrieveSerializer(serializers.ModelSerializer):
+    base = BaseOfWorkSerializer(read_only=False)
+    base_id = serializers.IntegerField()
     scooter = ScooterSerializer(read_only=False)
     scooter_id = serializers.IntegerField()
     peopleRegistration = PeopleRegistrationSerializer(read_only=False, required=False)
@@ -98,7 +126,5 @@ class MovementRetrieveSerializer(serializers.ModelSerializer):
         fields = ['id', 'scooter', 'scooter_id', 'peopleRegistration',  'peopleRegistration_id', 
                   'logisticOperator', 'logisticOperator_id', 'typeMovement', 'typeMovement_id', 
                   'typeRelease', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime',
-                  'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 'accessoriesCharger', 'observation', 
-                  'destinyScooter', 'owner']
-    
+                  'base', 'base_id']
 
