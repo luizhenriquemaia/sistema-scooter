@@ -67,7 +67,8 @@ class LogisticOperator(models.Model):
             return "this logistic operator already exists"
         else:
             new_logistic_operator = LogisticOperator(
-                description=validated_data['description']
+                description=validated_data['description'],
+                base=BaseOfWork.objects.get(id=validated_data['base_id'])
             )
             new_logistic_operator.save()
             return new_logistic_operator

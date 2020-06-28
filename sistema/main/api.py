@@ -172,12 +172,16 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
 
 
     def create(self, request):
+        print(f"\n\n\n{Employee.objects.get(user=request.user.username)}\n\n\n")
+        base_employee = Employee.objects.get(
+            user_id=request.user.username).base_id
         try:
-            LogisticOperator.objects.get(description=request.data['logisticOperatorDescription'])
+            LogisticOperator.objects.get(description=request.data['logisticOperatorDescription'], base_id=base_employee)
             return Response({"serializer": "",
                              "message": "OL já cadastrada"}, status=status.HTTP_400_BAD_REQUEST) 
         except ObjectDoesNotExist:
             request.data['description'] = request.data['logisticOperatorDescription']
+            request.data['base_id'] = base_employee
             serializer = LogisticOperatorSerializer(data=request.data)
             try:
                 if serializer.is_valid(raise_exception=True):

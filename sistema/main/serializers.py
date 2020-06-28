@@ -9,7 +9,17 @@ from .models import (BaseOfWork, Employee, LogisticOperator, Movement,
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'is_staff']
+        fields = ['username', 'is_staff', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+    
+    def create(self, validated_data):
+        user = User(
+            username=validated_data['username'],
+            is_staff=validated_data['is_staff']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
 
 
 class BaseOfWorkSerializer(serializers.ModelSerializer):
