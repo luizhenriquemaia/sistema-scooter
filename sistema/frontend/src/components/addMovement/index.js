@@ -28,7 +28,7 @@ export default function addMovementComponent() {
     }])
     const [destinyScooterInternalMovement, setDestinyScooterInternalMovement] = useState("Manutenção")
     const [destinyScooterExternalMovement, setDestinyScooterExternalMovement] = useState("Base")
-    const [confimReturnedAccessories, setConfimReturnedAccessories] = useState(false)
+    const [confimReturnedAccessories, setConfimReturnedAccessories] = useState(true);
 
     useEffect(() => {
         dispatch(getLogisticOperator())
@@ -253,11 +253,6 @@ export default function addMovementComponent() {
                                     <textarea name="observation" value={newMovementState.observation} onChange={handleChange}></textarea>
                                 </label>
                             </div>
-                            <div className="confirmation">
-                                <label>Confirmo que todos os acessórios foram devolvidos
-                                <input type="checkbox" name="" onChange={() => setConfimReturnedAccessories(true)} checked={confimReturnedAccessories} />
-                                </label>
-                            </div>
                         </div>
                         <div className="field-box internal">
                             <div className="field-box scooter">
@@ -282,7 +277,7 @@ export default function addMovementComponent() {
                                         <option value="Backup">Backup</option>
                                     </select>
                                 </label>
-                            </div>
+                            </div>const [confimReturnedAccessories, setConfimReturnedAccessories] = useState(false)
                             <div className="scooter-destination">
                                 <label>Destino
                                     <select name="destinyScooterInternalMovement" onChange={handleChange} value={destinyScooterInternalMovement}>
@@ -304,6 +299,17 @@ export default function addMovementComponent() {
                     <button className="submit-button confirm" onClick={handleSubmit}>Registrar</button>
                 </div>
             </section>
+            <div className={userWantsToDeleteMovement === true ? "content dialog-section show-up" : "content dialog-section"}>
+                <section className="section-main-box dialog-box">
+                    <div className="message">
+                        <h3>Caso um acessório não tenha sido retornado, você pode voltar a página de cadastro e fazer uma observação.</h3>
+                    </div>
+                    <div className="buttonBox">
+                        <button className="submit-button clean" onClick={handleConfirmRegister}>Registrar</button>
+                        <button className="submit-button confirm" onClick={handleCancelRegister}>Voltar</button>  
+                    </div>
+                </section>
+            </div>
         </main>
     )
 }

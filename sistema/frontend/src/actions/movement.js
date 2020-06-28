@@ -109,3 +109,15 @@ export const deleteMovement = (id) => (dispatch, getState) => {
         })
         .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status))) 
 }
+
+// export const confirmAddMovement = (id) => (dispatch, getState) => {
+//     axios.delete(`/api/movement/${id}/`, tokenConfig(getState))
+//         .then(res => {
+//             dispatch({
+//                 type: DELETE_MOVEMENT,
+//                 payload: id
+//             })
+//             dispatch(returnSuccess(res.data.message, res.status))
+//         })
+//         .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status))) 
+// }
