@@ -447,6 +447,14 @@ section.section-main-box {
     max-height: 250px;
 }
 
+.add-movement-section .data-box.external .confirmation { 
+    display: none;
+}
+
+.add-movement-section.return .data-box.external .confirmation {
+    display: flex;
+}
+
 .add-movement-section .data-box.external .scooter-destination,
 .add-movement-section .data-box.internal .scooter-destination,
 .add-movement-section .data-box.external .confirmation {
@@ -460,7 +468,7 @@ section.section-main-box {
     max-height: 400px;
     padding: 20px;
     border-bottom: 1px solid #505050;
-    transition: all ease-out 0.3s;
+    transition: all ease-out 0.2s;
 }
 
 .add-movement-section.return .data-box.internal .field-box.internal .field-box.scooter-destination {
