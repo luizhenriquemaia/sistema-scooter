@@ -173,12 +173,14 @@ export default function detailsMovement() {
                         </div>
                         <div className="field-box movement">
                             <div className="field-box">
-                                <label>Retirada</label>
-                                <input type="radio" name="typeRelease" value="Retirada" checked={movementState.typeRelease == "Retirada"} onChange={handleChange} />
+                                <label>Retirada
+                                    <input type="radio" name="typeRelease" value="Retirada" checked={movementState.typeRelease == "Retirada"} onChange={handleChange} />
+                                </label>
                             </div>
                             <div className="field-box">
-                                <label>Devolução</label>
-                                <input type="radio" name="typeRelease" value="Devolução" checked={movementState.typeRelease == "Devolução"} onChange={handleChange} />
+                                <label>Devolução
+                                    <input type="radio" name="typeRelease" value="Devolução" checked={movementState.typeRelease == "Devolução"} onChange={handleChange} />
+                                </label>
                             </div>
                         </div>
                         <div className={movementState.typeRelease == "Devolução" ? "field-box destination-box destination-up" :"field-box destination-box"}>                        
@@ -187,12 +189,14 @@ export default function detailsMovement() {
                             </span>
                             <div className="destination-choice">
                                 <div className="field-box">
-                                    <label>Base</label>
-                                    <input type="radio" name="destinyScooter" value="Base" checked={movementState.destinyScooter == "Base"} onChange={handleChange} />
+                                    <label>Base
+                                        <input type="radio" name="destinyScooter" value="Base" checked={movementState.destinyScooter == "Base"} onChange={handleChange} />
+                                    </label>
                                 </div>
                                 <div className="field-box">
-                                    <label>Manutenção</label>
-                                    <input type="radio" name="destinyScooter" value="Manutenção" checked={movementState.destinyScooter == "Manutenção"} onChange={handleChange} />
+                                    <label>Manutenção
+                                        <input type="radio" name="destinyScooter" value="Manutenção" checked={movementState.destinyScooter == "Manutenção"} onChange={handleChange} />
+                                    </label>
                                 </div>
                             </div>
                         </div>
