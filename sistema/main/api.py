@@ -170,9 +170,7 @@ class LogisticOperatorViewSet(viewsets.ViewSet):
             return Response({"serializer": serializer.data,
                              "message": ""}, status=status.HTTP_204_NO_CONTENT)
 
-
     def create(self, request):
-        print(f"\n\n\n{Employee.objects.get(user_id=request.user.id)}\n\n\n")
         base_employee = Employee.objects.get(
             user_id=request.user.id).base_id
         try:
@@ -209,6 +207,8 @@ class ScooterViewSet(viewsets.ViewSet):
                              "message": ""}, status=status.HTTP_204_NO_CONTENT)
         
     def create(self, request):
+        base_employee = Employee.objects.get(
+            user_id=request.user.id).base_id
         try: 
             Scooter.objects.get(chassisNumber=request.data['chassisScooter'])
             return Response({"serializer": "",
@@ -216,6 +216,7 @@ class ScooterViewSet(viewsets.ViewSet):
         except ObjectDoesNotExist:
             request.data['status_id'] = request.data['statusScooter']
             request.data['chassisNumber'] = request.data['chassisScooter']
+            request.data['base_id'] = base_employee
             serializer = ScooterSerializer(data=request.data)
             try:
                 if serializer.is_valid(raise_exception=True):

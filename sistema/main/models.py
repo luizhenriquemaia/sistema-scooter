@@ -87,7 +87,8 @@ class Scooter(models.Model):
         else:
             new_scooter = Scooter(
                 chassisNumber=validated_data['chassisNumber'],
-                status=StatusScooter.objects.get(id=validated_data['status_id'])
+                status=StatusScooter.objects.get(id=validated_data['status_id']),
+                base=BaseOfWork.objects.get(id=validated_data['base_id'])
             )
             new_scooter.save()
             return new_scooter
