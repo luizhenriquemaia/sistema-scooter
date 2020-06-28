@@ -16,7 +16,7 @@ export default function (state = initialState, action) {
         case ADD_LOGISTIC_OPERATOR:
             return {
                 ...state,
-                logisticOperator: [...state.logisticOperator, action.payload]
+                logisticOperator: action.payload
             }
         default:
             return state

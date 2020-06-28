@@ -11,7 +11,7 @@ export default function (state = initialState, action) {
         case ADD_PEOPLE_REGISTRATION:
             return {
                 ...state,
-                register: [...state.register, action.payload]
+                register: action.payload
             }
         default:
             return state

@@ -26,7 +26,7 @@ export default function (state = initialState, action) {
         case ADD_SCOOTER:
             return {
                 ...state,
-                scooter: [...state.scooter, action.payload]
+                scooter: action.payload
             }
         default:
             return state
