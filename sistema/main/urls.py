@@ -8,7 +8,7 @@ from .api import (BaseOfWorkViewSet, EmployeeSerializer,
                   StatusScooterViewSet, TypeMovementViewSet)
 
 router = routers.DefaultRouter()
-router.register('api/base-of-work', 
+router.register('api/base-of-work',
                 BaseOfWorkViewSet, 'base-of-work')
 router.register('api/employee',
                 EmployeeSerializer, 'employee')
@@ -23,4 +23,4 @@ router.register('api/scooter',
 router.register('api/people-registration', PeopleRegistrationViewSet, 'peopleRegistration')
 router.register('api/movement', MovementViewSet, 'movement')
 
-urlpatterns += router.urls
+urlpatterns = router.urls

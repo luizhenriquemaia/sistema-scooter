@@ -1,6 +1,8 @@
-from django.db import models
+from datetime import date, datetime
+
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from datetime import datetime, date
+from django.db import models
 
 
 class BaseOfWork(models.Model):
@@ -8,10 +10,18 @@ class BaseOfWork(models.Model):
     address = models.CharField(max_length=500)
     objects = models.Manager()
 
+    def create(self, **validated_data):
+        new_base = BaseOfWork(
+            description=validated_data['description'],
+            address=validated_data['address']
+        )
+        new_base.save()
+        return new_base
+
 
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE)
+    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
 
@@ -41,7 +51,7 @@ class TypeMovement(models.Model):
 
 class LogisticOperator(models.Model):
     description = models.CharField(max_length=200)
-    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE)
+    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def create(self, **validated_data):
@@ -59,7 +69,7 @@ class Scooter(models.Model):
     chassisNumber = models.CharField(max_length=200)
     status = models.ForeignKey(
         StatusScooter, on_delete=models.CASCADE, null=True)
-    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE)
+    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def create(self, **validated_data):
@@ -79,7 +89,7 @@ class PeopleRegistration(models.Model):
     cpf = models.CharField(max_length=11, default=0)
     logisticOperator = models.ForeignKey(
         LogisticOperator, on_delete=models.CASCADE, null=True)
-    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE)
+    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
     def create(self, **validated_data):
@@ -95,7 +105,7 @@ class PeopleRegistration(models.Model):
 
 
 class Movement(models.Model):
-    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE)
+    base = models.ForeignKey(BaseOfWork, on_delete=models.CASCADE, null=True)
     scooter = models.ForeignKey(Scooter, on_delete=models.CASCADE, null=True)
     peopleRegistration = models.ForeignKey(PeopleRegistration, on_delete=models.CASCADE, null=True, blank=True)
     logisticOperator = models.ForeignKey(
@@ -114,7 +124,7 @@ class Movement(models.Model):
     owner = models.ForeignKey('auth.User', related_name='movement', on_delete=models.CASCADE, null=True)
     objects = models.Manager()
 
-    def retrieve(self, id):
+    def retrieve(self, id): 
         movement = Movement.objects.get(id=id)
         # internal movements don't have peopleRegistration
         try: 
@@ -288,6 +298,3 @@ class Movement(models.Model):
                 description="Disponível")[0]
             scooter_db.save()
         movement_to_destroy.delete()
-
-
-

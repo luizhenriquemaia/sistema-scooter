@@ -9,7 +9,10 @@ from .models import (BaseOfWork, Employee, LogisticOperator, Movement,
 class BaseOfWorkSerializer(serializers.ModelSerializer):
     class Meta:
         model = BaseOfWork
-        fields = ['id', 'description', 'adress']
+        fields = ['id', 'description', 'address']
+    
+    def create(self, validated_data):
+        return BaseOfWork.create(BaseOfWork, **validated_data)
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
