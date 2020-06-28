@@ -16,7 +16,7 @@ const styleOfSelectFilter = {
 
 const optionsStatusScooter = [
     { value: "Em uso", label: "Em uso" },
-    { value: "Disponível e Backup", label: "Disponível e Backup" },
+    { value: "Disponível", label: "Disponível" },
     { value: "Manutenção", label: "Manutenção" }
 ]
 
