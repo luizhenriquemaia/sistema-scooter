@@ -1002,6 +1002,10 @@ div.dialog-section {
 }
 
 .details-section .movement .field-box input{
+    margin: 10px auto;
+}
+
+.details-section .field-box input{
     margin: 10px auto 0;
 }
 
