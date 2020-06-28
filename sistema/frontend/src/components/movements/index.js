@@ -260,8 +260,9 @@ export default function Movements() {
                 if (filterObj.value === "Em uso") {
                     filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.returnTime === null))
                     filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.typeMovement.description === "Externa"))
-                } if (filterObj.value === "Disponível e Backup") {
-                    filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.returnTime !== null))                    
+                } if (filterObj.value === "Disponível") {
+                    filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.returnTime !== null))
+
                 } if (filterObj.value === "Manutenção") {
                     filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.returnTime === null))
                     filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.typeMovement.description === "Interna"))
