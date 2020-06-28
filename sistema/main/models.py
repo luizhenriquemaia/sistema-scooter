@@ -63,7 +63,7 @@ class LogisticOperator(models.Model):
     objects = models.Manager()
 
     def create(self, **validated_data):
-        if LogisticOperator.objects.filter(description=validated_data['description']):
+        if LogisticOperator.objects.filter(description=validated_data['description'], base=validated_data['base_id']):
             return "this logistic operator already exists"
         else:
             new_logistic_operator = LogisticOperator(
@@ -82,7 +82,7 @@ class Scooter(models.Model):
     objects = models.Manager()
 
     def create(self, **validated_data):
-        if Scooter.objects.filter(chassisNumber=validated_data['chassisNumber']):
+        if Scooter.objects.filter(chassisNumber=validated_data['chassisNumber'], base=validated_data['base_id']):
             return "this scooter already exists"
         else:
             new_scooter = Scooter(
@@ -103,7 +103,7 @@ class PeopleRegistration(models.Model):
     objects = models.Manager()
 
     def create(self, **validated_data):
-        if not PeopleRegistration.objects.filter(cpf=validated_data['cpf']):
+        if not PeopleRegistration.objects.filter(cpf=validated_data['cpf'], base=validated_data['base_id']):
             new_peopleRegistration = PeopleRegistration(
                 name=validated_data['name'],
                 cpf=validated_data['cpf'],
@@ -190,6 +190,7 @@ class Movement(models.Model):
             people_registration_of_movement = PeopleRegistration.objects.get(
                 id=validated_data['peopleRegistration_id'])
             new_movement = Movement(
+                base=BaseOfWork.objects.get(id=validated_data['base_id']),
                 scooter=scooter_db,
                 peopleRegistration=people_registration_of_movement,
                 logisticOperator=LogisticOperator.objects.get(
@@ -207,6 +208,7 @@ class Movement(models.Model):
             )
         except KeyError:
             new_movement = Movement(
+                base=BaseOfWork.objects.get(id=validated_data['base_id']),
                 scooter=scooter_db,
                 logisticOperator=LogisticOperator.objects.get(id=validated_data['logisticOperator_id']),
                 typeMovement=TypeMovement.objects.get(id=validated_data['typeMovement_id']),

@@ -343,21 +343,27 @@ class MovementViewSet(viewsets.ViewSet):
             
 
     def create(self, request):
+        base_employee = Employee.objects.get(
+            user_id=request.user.id).base_id
+        request.data['base_id'] = base_employee
         if request.data['typeMovement'] != 'Externa' and request.data['typeMovement'] != 'Interna':
             return Response({"serializer": "",
                              "message": "Tipo de movimentação incorreta"}, status=status.HTTP_400_BAD_REQUEST)
         try: 
-            Scooter.objects.get(chassisNumber=request.data['scooter'])
+            Scooter.objects.get(
+                chassisNumber=request.data['scooter'], base_id=base_employee)
         except ObjectDoesNotExist:
             return Response({"serializer": "",
                             "message": "Patinete não existente"}, status=status.HTTP_400_BAD_REQUEST)
         if request.data['typeMovement'] == "Externa":
             try:
-                PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration'])
+                PeopleRegistration.objects.get(
+                    cpf=request.data['cpfPeopleRegistration'], base_id=base_employee)
             except ObjectDoesNotExist:
                 return Response({"serializer": "",
                                  "message": "Entregador não cadastrado"}, status=status.HTTP_400_BAD_REQUEST)
-        request.data['scooter_id'] = Scooter.objects.get(chassisNumber=request.data['scooter']).id
+        request.data['scooter_id'] = Scooter.objects.get(
+            chassisNumber=request.data['scooter'], base_id=base_employee).id
         scooter_db = Scooter.objects.get(id=request.data['scooter_id'])
         if scooter_db.status.description != "Disponível" and scooter_db.status.description != "Backup":
             return Response({"serializer": "",
@@ -366,14 +372,15 @@ class MovementViewSet(viewsets.ViewSet):
             request.data['typeMovement_id'] = TypeMovement.objects.get_or_create(
                 description=request.data['typeMovement'])[0].id
             if request.data['typeMovement'] == "Externa":
-                people_registration_movement = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration'])
+                people_registration_movement = PeopleRegistration.objects.get(
+                    cpf=request.data['cpfPeopleRegistration'], base_id=base_employee)
                 request.data['logisticOperator_id'] = people_registration_movement.logisticOperator_id
                 request.data['peopleRegistration_id'] = people_registration_movement.id
             # internal movements does not need accessories
             elif request.data['typeMovement'] == "Interna":
-                if request.data['destinyScooterToAPI'] == "maintenance":
+                if request.data['destinyScooterToAPI'] == "maintenance" or request.data['destinyScooterToAPI'] == "Manutenção":
                     request.data['destinyScooter']  = "Manutenção"
-                elif request.data['destinyScooterToAPI'] == "backup":
+                elif request.data['destinyScooterToAPI'] == "backup" or request.data['destinyScooterToAPI'] == "Backup":
                     request.data['destinyScooter']  = "Backup"
                 request.data['logisticOperator_id'] = request.data['logisticOperatorMovement']
                 request.data['accessoriesHelmet'] = False
