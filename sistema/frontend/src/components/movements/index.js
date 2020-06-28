@@ -451,7 +451,6 @@ export default function Movements() {
                                             <th>Bag</th>
                                             <th>Case</th>
                                             <th>Carregador</th>
-                                            <th>Status do Patinete</th>
                                             <th></th>
                                         </tr>
                                     </thead>
