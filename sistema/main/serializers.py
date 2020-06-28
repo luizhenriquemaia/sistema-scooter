@@ -9,7 +9,7 @@ from .models import (BaseOfWork, Employee, LogisticOperator, Movement,
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password', 'is_staff']
 
 
 class BaseOfWorkSerializer(serializers.ModelSerializer):

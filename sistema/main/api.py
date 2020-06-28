@@ -81,10 +81,12 @@ class EmployeeViewSet(viewsets.ViewSet):
                     request.data['email']
                 except:
                     request.data['email'] = ""
+                ## When users frontend gets created, change is_staff for request.data['isAdmin']
                 data_for_create_user = {
                     'username': request.data['name'],
                     'email': request.data['email'],
-                    'password': request.data['password']
+                    'password': request.data['password'],
+                    'is_staff': True
                 }
                 serializer_user = UserSerializer(data=data_for_create_user)
                 if serializer_user.is_valid(raise_exception=True):
@@ -99,7 +101,7 @@ class EmployeeViewSet(viewsets.ViewSet):
                 }
                 serializer_employee = EmployeeSerializer(data=data_for_create_employee)
                 if serializer_employee.is_valid(raise_exception=True):
-                    new_employee = serializer.save()
+                    new_employee = serializer_employee.save()
                     return Response({"serializer": serializer_employee.data,
                                     "message": "Colaborador adicionado com sucesso"}, status=status.HTTP_201_CREATED)
                 return Response({"serializer": serializer_employee.errors,
