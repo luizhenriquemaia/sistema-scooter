@@ -47,7 +47,7 @@ export default function (state = initialState, action) {
         case ADD_MOVEMENT:
             return {
                 ...state,
-                movement: [...state.movement, action.payload],
+                movement: action.payload,
                 isAdd: true
             }
         case UPDATE_MOVEMENT:
