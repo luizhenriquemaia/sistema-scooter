@@ -138,7 +138,7 @@ export default function addMovementComponent() {
                     alert.error("o chassi deve ter pelo menos 4 números")
                 } else {
                     var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, cpfPeopleRegistration, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
-                    var newMovementToAPI = { ...newMovementToAPI, destinyScooter: destinyScooterExternalMovement, typeRelease: "Devolução"}
+                    var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterExternalMovement, typeRelease: "Devolução"}
                     if (newMovementToAPI.idMovement !== "") {
                         if (confimReturnedAccessories === true) {
                             dispatch(updateMovement(idMovement, newMovementToAPI))
@@ -170,7 +170,7 @@ export default function addMovementComponent() {
                     alert.error("o chassi deve ter pelo menos 4 números")
                 } else {
                     var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, observation  }
-                    var newMovementToAPI = { ...newMovementToAPI, destinyScooter: destinyScooterInternalMovement }
+                    var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterInternalMovement }
                     // is a return of scooter
                     if (newMovementToAPI.idMovement !== "") {
                         var newMovementToAPI = { ...newMovementToAPI, 

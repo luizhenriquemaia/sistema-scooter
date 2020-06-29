@@ -437,12 +437,12 @@ class MovementViewSet(viewsets.ViewSet):
         if request.user.is_staff:
             try:
                 request.data['scooter_id'] = Scooter.objects.get(
-                    chassisNumber=request.data['scooter']).id
+                    chassisNumber=request.data['scooter'], base_id=base_employee).id
                 request.data['logisticOperator_id'] = LogisticOperator.objects.get(
-                    id=request.data['logisticOperatorMovement']).id
+                    id=request.data['logisticOperatorMovement'], base_id=base_employee).id
                 # if this data was not passed don't need to update them
                 try:
-                    request.data['peopleRegistration_id'] = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration']).id
+                    request.data['peopleRegistration_id'] = PeopleRegistration.objects.get(cpf=request.data['cpfPeopleRegistration'], base_id=base_employee).id
                 except: pass
                 try:
                     if request.data['initialTimeFormatted'] != "":
@@ -454,7 +454,7 @@ class MovementViewSet(viewsets.ViewSet):
                         request.data['returnTime'] = request.data['finalTimeFormatted']
                 except:
                     request.data['returnTime'] = movement.returnTime
-                try: 
+                try:
                     request.data['intialDateMovement']
                 except: 
                     request.data['intialDateMovement'] = movement.intialDateMovement
@@ -479,11 +479,13 @@ class MovementViewSet(viewsets.ViewSet):
             request.data['pickUpTime'] = movement.pickUpTime
             request.data['returnTime'] = movement.returnTime
         request.data['typeMovement_id'] = movement.typeMovement_id
+        request.data['base_id'] = movement.base_id
         serializer = MovementSerializer(movement, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response({"serializer": serializer.data,
                              "message": "movimentação atualizada com sucesso"}, status=status.HTTP_200_OK)
+        print(f"\n\n\nErrors {serializer.errors}")
         return Response({"serializer": serializer.errors,
                          "message": "Erro ao atualizar dados"}, status=status.HTTP_400_BAD_REQUEST)
     
