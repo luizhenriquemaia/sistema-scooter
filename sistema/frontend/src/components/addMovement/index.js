@@ -26,7 +26,8 @@ export default function addMovementComponent() {
         id: "",
         description: ""
     }])
-    const [destinyScooterInternalMovement, setDestinyScooterInternalMovement] = useState("Manutenção")
+    const [destinyScooterInternalMovementPickUp, setDestinyScooterInternalMovementPickUp] = useState("Manutenção")
+    const [destinyScooterInternalMovementReturn, setDestinyScooterInternalMovementReturn] = useState("Base")
     const [destinyScooterExternalMovement, setDestinyScooterExternalMovement] = useState("Base")
     const [confimReturnedAccessories, setConfimReturnedAccessories] = useState(false)
 
@@ -62,6 +63,7 @@ export default function addMovementComponent() {
                         accessoriesCharger: movementsFromAPI.accessoriesCharger,
                         observation: movementsFromAPI.observation
                     })
+
                 }
             }
         } else {
@@ -82,10 +84,12 @@ export default function addMovementComponent() {
 
     const handleChange = e => {
         const { name, value } = e.target
-        if (name === "destinyScooterInternalMovement") {
-            setDestinyScooterInternalMovement(value)
+        if (name === "destinyScooterInternalMovementPickUp") {
+            setDestinyScooterInternalMovementPickUp(value)
         } else if (name === "destinyScooterExternalMovement") {
             setDestinyScooterExternalMovement(value)
+        } else if (name === "destinyScooterInternalMovementReturn") {
+            setDestinyScooterInternalMovementReturn(value)
         } else if (name === "scooter") {
             setNewMovementState({
                 ...newMovementState,
@@ -148,6 +152,7 @@ export default function addMovementComponent() {
                         }
                     }
                     else dispatch(postMovement(newMovementToAPI))
+                    setDestinyScooterExternalMovement("Base")
                     setNewMovementState({
                         ...newMovementState,
                         idMovement: "",
@@ -170,7 +175,7 @@ export default function addMovementComponent() {
                     alert.error("o chassi deve ter pelo menos 4 números")
                 } else {
                     var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, observation  }
-                    var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterInternalMovement }
+                    var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterInternalMovementReturn }
                     // is a return of scooter
                     if (newMovementToAPI.idMovement !== "") {
                         var newMovementToAPI = { ...newMovementToAPI, 
@@ -181,7 +186,12 @@ export default function addMovementComponent() {
                             typeRelease: "Devolução"
                         }
                         dispatch(updateMovement(idMovement, newMovementToAPI))
-                    } else dispatch(postMovement(newMovementToAPI))
+                    } else {
+                        var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterInternalMovementPickUp }
+                        dispatch(postMovement(newMovementToAPI))
+                    }
+                    setDestinyScooterInternalMovementPickUp("Manutenção")
+                    setDestinyScooterInternalMovementReturn("Base")
                     setNewMovementState({
                         ...newMovementState,
                         idMovement: "",
@@ -277,7 +287,7 @@ export default function addMovementComponent() {
                             </div>
                             <div className="field-box scooter-destination">
                                 <label>Destino
-                                    <select name="destinyScooterInternalMovement" onChange={handleChange} value={destinyScooterInternalMovement}>
+                                    <select name="destinyScooterInternalMovementPickUp" onChange={handleChange} value={destinyScooterInternalMovementPickUp}>
                                         <option value="Manutenção">Manutenção</option>
                                         <option value="Backup">Backup</option>
                                     </select>
@@ -285,7 +295,7 @@ export default function addMovementComponent() {
                             </div>
                             <div className="scooter-destination">
                                 <label>Destino
-                                    <select name="destinyScooterInternalMovement" onChange={handleChange} value={destinyScooterInternalMovement}>
+                                    <select name="destinyScooterInternalMovementReturn" onChange={handleChange} value={destinyScooterInternalMovementReturn}>
                                         <option value="Base">Base</option>
                                         <option value="Backup">Backup</option>
                                     </select>

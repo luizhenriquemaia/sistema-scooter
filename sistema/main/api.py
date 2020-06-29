@@ -307,14 +307,13 @@ class MovementViewSet(viewsets.ViewSet):
             except ObjectDoesNotExist:
                 return Response({"serializer": "",
                              "message": ""}, status=status.HTTP_204_NO_CONTENT)
-            queryset_list = Movement.objects.filter(scooter_id=id_scooter_from_db).order_by('id').last()
+            queryset_list = Movement.objects.filter(scooter_id=id_scooter_from_db, base_id=base_employee).order_by('id').last()
             # if there is not a movement in scooter yet
             try:
                if queryset_list.returnTime:
-                    return Response({"serializer": "", "message": ""}, status=status.HTTP_204_NO_CONTENT)
+                   return Response({"serializer": "", "message": ""}, status=status.HTTP_204_NO_CONTENT)
             except:
-                return Response({"serializer": "",
-                            "message": ""}, status=status.HTTP_204_NO_CONTENT)
+                return Response({"serializer": "", "message": ""}, status=status.HTTP_204_NO_CONTENT)
             serializer = MovementSerializer(queryset_list, many=False)
             if serializer.data:
                 return Response({"serializer": serializer.data,
@@ -494,7 +493,6 @@ class MovementViewSet(viewsets.ViewSet):
             serializer.save()
             return Response({"serializer": serializer.data,
                              "message": "movimentação atualizada com sucesso"}, status=status.HTTP_200_OK)
-        print(f"\n\n\nErrors {serializer.errors}")
         return Response({"serializer": serializer.errors,
                          "message": "Erro ao atualizar dados"}, status=status.HTTP_400_BAD_REQUEST)
     
