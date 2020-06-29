@@ -422,8 +422,13 @@ class MovementViewSet(viewsets.ViewSet):
                                  "message": "Erro ao criar movimentação"}, status=status.HTTP_400_BAD_REQUEST)
     
     def update(self, request, pk):
-        #print(f"\n\n\n{request.data}\n\n\n")
-        movement = Movement.objects.get(id=pk)
+        base_employee = Employee.objects.get(
+            user_id=request.user.id).base_id
+        try:
+            movement = Movement.objects.get(id=pk, base_id=base_employee)
+        except ObjectDoesNotExist:
+            return Response({"serializer": "",
+                             "message": "Não autorizado"}, status=status.HTTP_401_UNAUTHORIZED)
         if request.user.is_staff:
             try:
                 request.data['scooter_id'] = Scooter.objects.get(
@@ -478,12 +483,18 @@ class MovementViewSet(viewsets.ViewSet):
                          "message": "Erro ao atualizar dados"}, status=status.HTTP_400_BAD_REQUEST)
     
     def destroy(self, request, pk):
-        permission_classes = [permissions.IsAuthenticated]
-        if request.user.is_staff or request.user.is_superuser:
-            serializer = MovementSerializer
-            Movement.destroy(Movement, id=pk)
-            return Response({"serializer": "",
-                             "message": "movimentação excluída com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+        base_employee = Employee.objects.get(
+            user_id=request.user.id).base_id
+        if Movement.objects.get(id=pk).base_id == base_employee:
+            permission_classes = [permissions.IsAuthenticated]
+            if request.user.is_staff or request.user.is_superuser:
+                serializer = MovementSerializer
+                Movement.destroy(Movement, id=pk)
+                return Response({"serializer": "",
+                                "message": "movimentação excluída com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response({"serializer": serializer.errors,
+                                "message": "é necessário ser administrador para excluir um registro"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response({"serializer": serializer.errors,
-                             "message": "é necessário ser administrador para excluir um registro"}, status=status.HTTP_401_UNAUTHORIZED)
+                             "message": "Não autorizado"}, status=status.HTTP_401_UNAUTHORIZED)
