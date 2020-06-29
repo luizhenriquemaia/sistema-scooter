@@ -199,7 +199,8 @@ export default function addMovementComponent() {
     }
 
     return (
-        <main className="content">
+        <div>
+        <main className="content">        
             <section className={newMovementState.idMovement !== "" ? "section-main-box add-movement-section return" : "section-main-box add-movement-section"}>
                 <div className="title-box">
                     <h1 className="title-page">Nova Movimentação</h1>
@@ -215,16 +216,12 @@ export default function addMovementComponent() {
                     <fieldset className={newMovementState.typeMovement === "Externa" ? `data-box external` : "data-box internal"} >
                         <div className="field-box external">
                             <div className="field-box two-boxes">
-                            <div className="field-box delivery-man">
                                 <label>CPF Entregador
                                     <input type="text" name="cpfPeopleRegistration" value={newMovementState.cpfPeopleRegistration} onChange={handleChange} />
                                 </label>
-                            </div>
-                                <div className="field-box scooter">
-                                    <label>Chassi
-                                        <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
-                                    </label>
-                                </div>
+                                <label>Chassi
+                                    <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
+                                </label>
                             </div>
                             <div className="scooter-destination">
                                 <label>Destino
@@ -255,12 +252,10 @@ export default function addMovementComponent() {
                             </div>
                         </div>
                         <div className="field-box internal">
-                            <div className="field-box scooter">
+                            <div className="field-box two-boxes">
                                 <label>Chassi
                                     <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
                                 </label>
-                            </div>
-                            <div className="field-box logistic-operator">
                                 <label>Operador Logístico
                                     <select name="logisticOperatorMovement" onChange={handleChange} value={newMovementState.logisticOperatorMovement}>
                                         <option value="">-----</option>
@@ -277,7 +272,7 @@ export default function addMovementComponent() {
                                         <option value="Backup">Backup</option>
                                     </select>
                                 </label>
-                            </div>const [confimReturnedAccessories, setConfimReturnedAccessories] = useState(false)
+                            </div>
                             <div className="scooter-destination">
                                 <label>Destino
                                     <select name="destinyScooterInternalMovement" onChange={handleChange} value={destinyScooterInternalMovement}>
@@ -299,17 +294,18 @@ export default function addMovementComponent() {
                     <button className="submit-button confirm" onClick={handleSubmit}>Registrar</button>
                 </div>
             </section>
-            <div className={userWantsToDeleteMovement === true ? "content dialog-section show-up" : "content dialog-section"}>
-                <section className="section-main-box dialog-box">
-                    <div className="message">
-                        <h3>Caso um acessório não tenha sido retornado, você pode voltar a página de cadastro e fazer uma observação.</h3>
-                    </div>
-                    <div className="buttonBox">
-                        <button className="submit-button clean" onClick={handleConfirmRegister}>Registrar</button>
-                        <button className="submit-button confirm" onClick={handleCancelRegister}>Voltar</button>  
-                    </div>
-                </section>
-            </div>
         </main>
+        <div className="content dialog-section show-up">
+            <section className="section-main-box dialog-box">
+                <div className="message">
+                    <h3>Caso um acessório não tenha sido retornado, você pode voltar a página de cadastro e fazer uma observação.</h3>
+                </div>
+                <div className="buttonBox">
+                    <button className="submit-button clean">Voltar</button>
+                    <button className="submit-button confirm">Registrar</button>  
+                </div>
+            </section>
+        </div>
+        </div>
     )
 }
