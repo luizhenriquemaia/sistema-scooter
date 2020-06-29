@@ -70,7 +70,7 @@ class EmployeeViewSet(viewsets.ViewSet):
                 except ObjectDoesNotExist:
                     data_for_create_employee = {
                         'user_id': id_user_in_db,
-                        'base_id': 2
+                        'base_id': 1
                     }
                     serializer_employee = EmployeeSerializer(data=data_for_create_employee)
                     if serializer_employee.is_valid(raise_exception=True):
@@ -101,7 +101,7 @@ class EmployeeViewSet(viewsets.ViewSet):
                 # create a employee
                 data_for_create_employee = {
                     'user_id': new_user.id,
-                    'base_id': 2
+                    'base_id': 1
                 }
                 serializer_employee = EmployeeSerializer(data=data_for_create_employee)
                 if serializer_employee.is_valid(raise_exception=True):
@@ -123,19 +123,24 @@ class StatusScooterViewSet(viewsets.ViewSet):
         serializer = StatusScooterSerializer(queryset, many=True)
         if len(serializer.data) > 0:
             return Response({"serializer": serializer.data,
-                             "message": ""}, status=status.HTTP_200_OK)
+                            "message": ""}, status=status.HTTP_200_OK)
         else:
             return Response({"serializer": serializer.data,
-                             "message": ""}, status=status.HTTP_204_NO_CONTENT)
+                            "message": ""}, status=status.HTTP_204_NO_CONTENT)
+
     
     def create(self, request):
-        serializer = StatusScooterSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            new_status_scooter = serializer.save()
-            return Response({"serializer": serializer.data,
-                             "message": "Status do patinete adicionado com sucesso"}, status=status.HTTP_201_CREATED)
-        return Response({"serializer": serializer.errors,
-                         "message": "Erro ao adicionar status do patinete"}, status=status.HTTP_400_BAD_REQUEST)
+        if request.user.is_staff:
+            serializer = StatusScooterSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                new_status_scooter = serializer.save()
+                return Response({"serializer": serializer.data,
+                                "message": "Status do patinete adicionado com sucesso"}, status=status.HTTP_201_CREATED)
+            return Response({"serializer": serializer.errors,
+                            "message": "Erro ao adicionar status do patinete"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"serializer": "",
+                             "message": "Não autorizado"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class TypeMovementViewSet(viewsets.ViewSet):
@@ -493,8 +498,8 @@ class MovementViewSet(viewsets.ViewSet):
                 return Response({"serializer": "",
                                 "message": "movimentação excluída com sucesso"}, status=status.HTTP_204_NO_CONTENT)
             else:
-                return Response({"serializer": serializer.errors,
+                return Response({"serializer": "",
                                 "message": "é necessário ser administrador para excluir um registro"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
-            return Response({"serializer": serializer.errors,
+            return Response({"serializer": "",
                              "message": "Não autorizado"}, status=status.HTTP_401_UNAUTHORIZED)
