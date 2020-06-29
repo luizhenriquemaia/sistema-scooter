@@ -19,7 +19,7 @@ export default function detailsMovement() {
         logisticOperatorMovement: "",
         typeRelease: "Retirada",
         typeMovement: "",
-        destinyScooter: "",
+        destinyScooterToAPI: "",
         accessoriesHelmet: false,
         accessoriesBag: false,
         accessoriesCase: false,
@@ -59,7 +59,7 @@ export default function detailsMovement() {
                         accessoriesCase: movement.accessoriesCase,
                         accessoriesCharger: movement.accessoriesCharger,
                         observation: movement.observation,
-                        destinyScooter: movement.destinyScooter,
+                        destinyScooterToAPI: movement.destinyScooter,
                         initialTimeFormatted: movement.intialDateMovement != null ? formattingTime(movement.intialDateMovement, movement.pickUpTime) : "",
                         finalTimeFormatted: movement.finalDateMovement != null ? formattingTime(movement.finalDateMovement, movement.returnTime) : "",
                     })
@@ -124,8 +124,8 @@ export default function detailsMovement() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        const { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfPeopleRegistration, logisticOperatorMovement, typeRelease, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
-        const updateMovementData = { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfPeopleRegistration, logisticOperatorMovement, typeRelease, destinyScooter, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+        const { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfPeopleRegistration, logisticOperatorMovement, typeRelease, destinyScooterToAPI, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = movementState
+        const updateMovementData = { intialDateMovement, finalDateMovement, initialTimeFormatted, finalTimeFormatted, scooter, cpfPeopleRegistration, logisticOperatorMovement, typeRelease, destinyScooterToAPI, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
         dispatch(updateMovement(idMovement, updateMovementData))
         history.push("/")
     }
@@ -190,12 +190,12 @@ export default function detailsMovement() {
                             <div className="destination-choice">
                                 <div className="field-box">
                                     <label>Base
-                                        <input type="radio" name="destinyScooter" value="Base" checked={movementState.destinyScooter == "Base"} onChange={handleChange} />
+                                        <input type="radio" name="destinyScooterToAPI" value="Base" checked={movementState.destinyScooterToAPI == "Base"} onChange={handleChange} />
                                     </label>
                                 </div>
                                 <div className="field-box">
                                     <label>Manutenção
-                                        <input type="radio" name="destinyScooter" value="Manutenção" checked={movementState.destinyScooter == "Manutenção"} onChange={handleChange} />
+                                        <input type="radio" name="destinyScooterToAPI" value="Manutenção" checked={movementState.destinyScooterToAPI == "Manutenção"} onChange={handleChange} />
                                     </label>
                                 </div>
                             </div>

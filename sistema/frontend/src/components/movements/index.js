@@ -192,29 +192,30 @@ export default function Movements() {
                 let numberOfScootersUnderMaintenance = 0
                 let numberOfScootersOperants = 0
                 let numberOfScootersInBackup = 0
-
-                scooters.map(scooter => {
-                    if (scooter.status.description === "Em uso") {
-                        numberOfScootersInUse += 1
-                        numberOfScootersOperants += 1
-                    } 
-                    if (scooter.status.description === "Disponível") {
-                        numberOfScootersAvailable += 1
-                        numberOfScootersOperants += 1
-                    }
-                    if (scooter.status.description === "Manutenção") numberOfScootersUnderMaintenance += 1
-                    if (scooter.status.description === "Backup") numberOfScootersInBackup += 1
-                    numberOfScooters += 1
-                })
-                setNumbersOfScootersState({
-                    numberOfScooters,
-                    numberOfScootersInUse,
-                    numberOfScootersAvailable,
-                    numberOfScootersUnderMaintenance,
-                    numberOfScootersOperants,
-                    numberOfScootersInBackup
-                })
-                setScootersState(scooters)
+                if (scooters.map) {
+                    scooters.map(scooter => {
+                        if (scooter.status.description === "Em uso") {
+                            numberOfScootersInUse += 1
+                            numberOfScootersOperants += 1
+                        } 
+                        if (scooter.status.description === "Disponível") {
+                            numberOfScootersAvailable += 1
+                            numberOfScootersOperants += 1
+                        }
+                        if (scooter.status.description === "Manutenção") numberOfScootersUnderMaintenance += 1
+                        if (scooter.status.description === "Backup") numberOfScootersInBackup += 1
+                        numberOfScooters += 1
+                    })
+                    setNumbersOfScootersState({
+                        numberOfScooters,
+                        numberOfScootersInUse,
+                        numberOfScootersAvailable,
+                        numberOfScootersUnderMaintenance,
+                        numberOfScootersOperants,
+                        numberOfScootersInBackup
+                    })
+                    setScootersState(scooters)
+                }
             }
         }
     }, [scooters, MovementState, movements])

@@ -1,10 +1,17 @@
-from django.urls import path
 from django.conf.urls import include
+from django.urls import path
 from rest_framework import routers
-from .api import StatusScooterViewSet, TypeMovementViewSet, LogisticOperatorViewSet, ScooterViewSet, PeopleRegistrationViewSet, MovementViewSet
 
+from .api import (BaseOfWorkViewSet, EmployeeViewSet,
+                  LogisticOperatorViewSet, MovementViewSet,
+                  PeopleRegistrationViewSet, ScooterViewSet,
+                  StatusScooterViewSet, TypeMovementViewSet)
 
 router = routers.DefaultRouter()
+router.register('api/base-of-work',
+                BaseOfWorkViewSet, 'base-of-work')
+router.register('api/employee',
+                EmployeeViewSet, 'employee')
 router.register('api/status-scooter', 
                 StatusScooterViewSet, 'status-scooter')
 router.register('api/type-movement',
@@ -16,10 +23,4 @@ router.register('api/scooter',
 router.register('api/people-registration', PeopleRegistrationViewSet, 'peopleRegistration')
 router.register('api/movement', MovementViewSet, 'movement')
 
-
-
-urlpatterns = [
-    #path('api/auth', include('rest_framework.urls')),
-]
-
-urlpatterns += router.urls
+urlpatterns = router.urls
