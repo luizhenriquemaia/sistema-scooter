@@ -478,6 +478,15 @@ class MovementViewSet(viewsets.ViewSet):
             request.data['finalDateMovement'] = movement.finalDateMovement
             request.data['pickUpTime'] = movement.pickUpTime
             request.data['returnTime'] = movement.returnTime
+        # for updates in movements without a return
+        try:
+            if request.data['destinyScooterToAPI'] == "maintenance" or request.data['destinyScooterToAPI'] == "Manutenção":
+                request.data['destinyScooter']  = "Manutenção"
+            elif request.data['destinyScooterToAPI'] == "backup" or request.data['destinyScooterToAPI'] == "Backup":
+                request.data['destinyScooter']  = "Backup"
+            elif request.data['destinyScooterToAPI'] == "base" or request.data['destinyScooterToAPI'] == "Base":
+                request.data['destinyScooter'] = "Base"
+        except: pass
         request.data['typeMovement_id'] = movement.typeMovement_id
         request.data['base_id'] = movement.base_id
         serializer = MovementSerializer(movement, data=request.data)
