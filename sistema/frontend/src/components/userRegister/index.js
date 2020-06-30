@@ -1,4 +1,60 @@
-export default function Register() {
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useAlert } from 'react-alert'
+
+    
+
+export default function userRegisterComponent() {
+    const dispatch = useDispatch()
+    const alert = useAlert()
+    const [newUserState, setNewUserState] = useState({
+        firstName: "",
+        lastName: "",
+        base: "",
+        username: "",
+        password: "",
+        password2: ""
+    })
+    const [basesFromAPI, setBasesFromAPI] = useState([{
+        id: "",
+        description: ""
+    }])
+
+    // useEffect(() => {
+    //     //dispatch get basesOfWork
+    // }, [])
+
+    // const basesOfWork = useSelector(state => state.basesOfWork.base)
+
+    // useEffect(() => {
+    //     if (basesOfWork !== undefined && basesOfWork !== "") {
+    //         setBasesFromAPI(basesOfWork)
+    //     }
+    // }, [basesOfWork])
+
+
+    const handleChange = e => {
+        setNewUserState({
+            ...newUserState,
+            [name]: value
+        })
+    }
+
+    const handleClean = e => {
+        setNewUserState({
+            ...newUserState,
+            firstName: "",
+            lastName: "",
+            username: "",
+            password: "",
+            password2: ""
+        })
+    }
+
+    const handleClickAdd = e => {
+
+    }
+
     return (
         <main className="content">
             <section className="section-main-box register-section">
@@ -17,11 +73,11 @@ export default function Register() {
                     <fieldset className="data-box" >
                         <div className="field-box user">
                             <label>Nome</label>
-                            <input type="text" name="" onChange={handleChange} />
+                            <input type="text" name="firstName" onChange={handleChange} />
                             <label>Sobrenome</label>
-                            <input type="text" name="" onChange={handleChange} />
+                            <input type="text" name="lastName" onChange={handleChange} />
                             <label>Base</label>
-                            <select onChange={handleChange}>
+                            <select name= "base" onChange={handleChange}>
                                 <option value="">-----</option>
                                 {/* {logisticOperatorFromAPI.map(logisitcOperator => (
                                     <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
@@ -30,11 +86,11 @@ export default function Register() {
                         </div>
                         <div className="field-box">
                             <label>User name</label>
-                            <input type="text" onChange={handleChange} />
+                            <input type="text" name="username" onChange={handleChange} />
                             <label>Senha</label>
-                            <input type="text" onChange={handleChange} />
+                            <input type="text" name="password" onChange={handleChange} />
                             <label>Confirmação de senha</label>
-                            <input type="text" onChange={handleChange} />
+                            <input type="text" name="password2" onChange={handleChange} />
                         </div>
                     </fieldset>
                 </section>
@@ -44,4 +100,5 @@ export default function Register() {
                 </div>
             </section>
         </main>
-    )};
+    )
+}
