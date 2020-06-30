@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { returnErrors } from './messages'
-import { USER_LOADING, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS } from './types'
+import { returnErrors, returnSuccess } from './messages'
+import { USER_LOADING, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, ADD_EMPLOYEE } from './types'
 
 
 export const loadUser = () => (dispatch, getState) => {
@@ -52,6 +52,20 @@ export const logoutUser = () => (dispatch, getState) => {
             dispatch(returnErrors(err.response.data, err.response.status))
         })
 }
+
+
+export const addEmployee = (employee) => (dispatch, getState) => {
+    axios.post("api/auth/employee/", employee, tokenConfig(getState))
+        .then(res => {
+            dispatch({
+                type: ADD_EMPLOYEE,
+                payload: res.data.serializer
+            })
+            dispatch(returnSuccess(res.data.message, res.status))
+        })
+        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
+}
+
 
 export const tokenConfig = getState => {
     const token = getState().auth.token

@@ -1,4 +1,4 @@
-import { USER_LOADING, USER_LOADED, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS } from '../actions/types'
+import { USER_LOADING, USER_LOADED, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS, ADD_EMPLOYEE } from '../actions/types'
 
 
 const initialState = {
@@ -6,7 +6,7 @@ const initialState = {
     isAuthenticated: null,
     isLoading: false,
     user: null,
-    bases: []
+    employee: null
 }
 
 
@@ -31,6 +31,11 @@ export default function(state = initialState, action) {
                 ...action.payload,
                 isAuthenticated: true,
                 isLoading: false
+            }
+        case ADD_EMPLOYEE:
+            return {
+                ...state,
+                employee: action.payload
             }
         case LOGOUT_SUCCESS:
         case AUTH_ERROR:

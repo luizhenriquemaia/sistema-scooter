@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from knox.models import AuthToken
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
@@ -56,7 +57,7 @@ class EmployeeViewSet(viewsets.ViewSet):
             try:
                 # if user already exists
                 id_user_in_db = User.objects.get(
-                    username=request.data['name']).id
+                    username=request.data['username']).id
                 # if employee already exists
                 try:
                     employee_in_db = Employee.objects.get(
@@ -67,7 +68,7 @@ class EmployeeViewSet(viewsets.ViewSet):
                 except ObjectDoesNotExist:
                     data_for_create_employee = {
                         'user_id': id_user_in_db,
-                        'base_id': 1
+                        'base_id': request.data['base']
                     }
                     serializer_employee = EmployeeSerializer(
                         data=data_for_create_employee)
@@ -85,9 +86,11 @@ class EmployeeViewSet(viewsets.ViewSet):
                     request.data['email'] = ""
                 ## When users frontend gets created, change is_staff for request.data['isAdmin']
                 data_for_create_user = {
-                    'username': request.data['name'],
+                    'username': request.data['username'],
                     'email': request.data['email'],
                     'password': request.data['password'],
+                    'first_name': request.data['firstName'],
+                    'last_name': request.data['lastName'],
                     'is_staff': True
                 }
                 serializer_user = UserSerializer(data=data_for_create_user)
@@ -99,7 +102,7 @@ class EmployeeViewSet(viewsets.ViewSet):
                 # create a employee
                 data_for_create_employee = {
                     'user_id': new_user.id,
-                    'base_id': 1
+                    'base_id': request.data['base']
                 }
                 serializer_employee = EmployeeSerializer(
                     data=data_for_create_employee)
