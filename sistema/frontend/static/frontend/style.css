@@ -546,7 +546,7 @@ section.section-main-box {
         padding: 0 0 25px;
     }
 }
-/* Movement (hoot link) --------------------------------- */
+/* Movement Section (hoot link) --------------------------------- */
 .movement-section .content-box {
     padding: 0 2% 2%;
 }
@@ -770,14 +770,14 @@ section.section-main-box.movement-section {
     background-color: #fafafa;
 }
 
-    /* searching selection feature */
+    /* searching select */
     .css-2b097c-container {
         position: absolute !important;
         box-sizing: border-box;
         padding-top: 58px;
     }
 
-/* Movement (hoot link) - Mobile ------------------------------ */
+/* Movement Section (hoot link) - Mobile ------------------------------ */
 @media(max-width:600px) {
     .movement-section .date-filter .date-box {
         height: auto;
