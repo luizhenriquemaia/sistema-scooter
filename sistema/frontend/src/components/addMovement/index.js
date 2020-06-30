@@ -5,7 +5,6 @@ import { postMovement, getLastMovementsOfScooter, updateMovement } from '../../a
 import { getLogisticOperator } from '../../actions/logisticOperator'
 
 
-//// SE A MOVIMENTAÇÃO TIVER ID DISPATCH PARA O UPDATE
 export default function addMovementComponent() {
     const dispatch = useDispatch()
     const alert = useAlert()
