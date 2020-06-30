@@ -37,7 +37,7 @@ export default function Routes() {
             <PrivateRoute exact path="/add-movement" component={addMovement} />
             <PrivateRoute exact path="/details-movement/:idMovement" component={detailsMovement} />
             <PrivateRoute exact path="/register" component={Register} />
-            <PrivateRoute exact path="/add-user" component={userRegister} />
+            <PrivateRoute exact path="/user-register" component={userRegister} />
         </Switch>
     )
 }
