@@ -1,7 +1,10 @@
-from rest_framework import generics, permissions
-from rest_framework.response import Response
 from knox.models import AuthToken
-from .serializers import UserSerializer, LoginSerializer
+from rest_framework import generics, permissions, status, viewsets
+from rest_framework.response import Response
+
+from main.models import BaseOfWork
+
+from .serializers import BaseOfWorkSerializer, LoginSerializer, UserSerializer
 
 
 class LoginAPI(generics.GenericAPIView):
@@ -28,3 +31,28 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class BaseOfWorkViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request):
+        if request.user.is_staff:
+            queryset = BaseOfWork.objects.all()
+            serializer = BaseOfWorkSerializer(queryset, many=True)
+            if len(serializer.data) > 0:
+                return Response({"serializer": serializer.data,
+                                 "message": ""}, status=status.HTTP_200_OK)
+            else:
+                return Response({"serializer": serializer.data,
+                                 "message": ""}, status=status.HTTP_204_NO_CONTENT)
+
+    def create(self, request):
+        if request.user.is_staff:
+            serializer = BaseOfWorkSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                new_base_of_work = serializer.save()
+                return Response({"serializer": serializer.data,
+                                 "message": "Base adicionada com sucesso"}, status=status.HTTP_201_CREATED)
+            return Response({"serializer": serializer.errors,
+                             "message": "Erro ao criar a base"}, status=status.HTTP_400_BAD_REQUEST)

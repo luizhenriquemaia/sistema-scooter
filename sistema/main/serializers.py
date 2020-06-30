@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import (BaseOfWork, Employee, LogisticOperator, Movement,
-                     PeopleRegistration, Scooter, StatusScooter, TypeMovement)
+from .models import (Employee, LogisticOperator, Movement, PeopleRegistration,
+                     Scooter, StatusScooter, TypeMovement)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,15 +20,6 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
-
-
-class BaseOfWorkSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BaseOfWork
-        fields = ['id', 'description', 'address']
-    
-    def create(self, validated_data):
-        return BaseOfWork.create(BaseOfWork, **validated_data)
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -152,4 +143,3 @@ class MovementRetrieveSerializer(serializers.ModelSerializer):
                     'typeRelease', 'intialDateMovement', 'finalDateMovement', 'pickUpTime', 'returnTime',
                     'accessoriesHelmet', 'accessoriesBag', 'accessoriesCase', 'accessoriesCharger', 'observation',
                     'destinyScooter', 'base', 'base_id', 'owner']
-

@@ -5,39 +5,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
 
-from .models import (BaseOfWork, Employee, LogisticOperator, Movement,
-                     PeopleRegistration, Scooter, StatusScooter, TypeMovement)
-from .serializers import (BaseOfWorkSerializer, EmployeeSerializer,
-                          LogisticOperatorSerializer,
+from .models import (Employee, LogisticOperator, Movement, PeopleRegistration,
+                     Scooter, StatusScooter, TypeMovement)
+from .serializers import (EmployeeSerializer, LogisticOperatorSerializer,
                           MovementRetrieveSerializer, MovementSerializer,
                           PeopleRegistrationSerializer, ScooterSerializer,
                           StatusScooterSerializer, TypeMovementSerializer,
                           UserSerializer)
-
-
-class BaseOfWorkViewSet(viewsets.ViewSet):
-    permission_classes = [permissions.IsAuthenticated]
-    
-    def list(self, request):
-        if request.user.is_superuser:
-            queryset = BaseOfWork.objects.all()
-            serializer = BaseOfWorkSerializer(queryset, many=True)
-            if len(serializer.data) > 0:
-                return Response({"serializer": serializer.data,
-                                "message": ""}, status=status.HTTP_200_OK)
-            else:
-                return Response({"serializer": serializer.data,
-                                "message": ""}, status=status.HTTP_204_NO_CONTENT)
-    
-    def create(self, request):
-        if request.user.is_superuser:
-            serializer = BaseOfWorkSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                new_base_of_work = serializer.save()
-                return Response({"serializer": serializer.data,
-                                "message": "Base adicionada com sucesso"}, status=status.HTTP_201_CREATED)
-            return Response({"serializer": serializer.errors,
-                            "message": "Erro ao criar a base"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class EmployeeViewSet(viewsets.ViewSet):
