@@ -29,10 +29,16 @@ export default function Menu() {
                             <img className="exit-img" onClick={handleLogoutClick} src='../../../static/imgs/sair.png' />
                         </div>
                         <hr />
+                        <Link to="/user-register">
+                            <div className="navBox">
+                                <img src='../../../static/imgs/add.png' />
+                                <p>cadastrar usuários</p>
+                            </div>
+                        </Link>
                         <Link to="/register">
                             <div className="navBox">
                                 <img src='../../../static/imgs/cadastrar_1.png' />
-                                <p>cadastrar</p>
+                                <p>cadastrar patinetes</p>
                             </div>
                         </Link>
                         <Link to="/add-movement">
