@@ -6,6 +6,7 @@ import addMovement from './addMovement'
 import detailsMovement from './detailsMovement'
 import Login from './login'
 import Register from './register'
+import userRegister from './userRegister'
 
 
 const PrivateRoute = ({ component, ...options }) => {
@@ -31,11 +32,12 @@ const PrivateRoute = ({ component, ...options }) => {
 export default function Routes() {
     return (    
         <Switch>
-            <PrivateRoute exact path="/" component={movements} />
             <Route exact path="/login" component={Login} />
+            <PrivateRoute exact path="/" component={movements} />
             <PrivateRoute exact path="/add-movement" component={addMovement} />
             <PrivateRoute exact path="/details-movement/:idMovement" component={detailsMovement} />
             <PrivateRoute exact path="/register" component={Register} />
+            <PrivateRoute exact path="/add-user" component={userRegister} />
         </Switch>
     )
 }
