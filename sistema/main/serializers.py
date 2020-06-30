@@ -2,38 +2,12 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import (Employee, LogisticOperator, Movement, PeopleRegistration,
+from .models import (LogisticOperator, Movement, PeopleRegistration,
                      Scooter, StatusScooter, TypeMovement)
 
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'is_staff', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
-    
-    def create(self, validated_data):
-        user = User(
-            username=validated_data['username'],
-            is_staff=validated_data['is_staff']
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+from accounts.serializers import BaseOfWorkSerializer
 
 
-class EmployeeSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    user_id = serializers.IntegerField()
-    base = BaseOfWorkSerializer(read_only=True)
-    base_id = serializers.IntegerField()
-    class Meta:
-        model = Employee
-        fields = ['user', 'user_id', 'base', 'base_id']
-
-    def create(self, validated_data):
-        return Employee.create(Employee, **validated_data)
-        
 
 class StatusScooterSerializer(serializers.ModelSerializer):
     class Meta:
