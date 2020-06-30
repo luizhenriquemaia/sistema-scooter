@@ -1,11 +1,12 @@
-import { USER_LOADING, USER_LOADED, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS } from '../actions/types'
+import { USER_LOADING, USER_LOADED, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS, GET_BASES_OF_WORK } from '../actions/types'
 
 
 const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
     isLoading: false,
-    user: null
+    user: null,
+    bases: []
 }
 
 
@@ -30,6 +31,11 @@ export default function(state = initialState, action) {
                 ...action.payload,
                 isAuthenticated: true,
                 isLoading: false
+            }
+        case GET_BASES_OF_WORK:
+            return {
+                ...state, 
+                bases: action.payload
             }
         case LOGOUT_SUCCESS:
         case AUTH_ERROR:

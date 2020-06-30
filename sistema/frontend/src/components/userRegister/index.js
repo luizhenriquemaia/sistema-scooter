@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
+import { getBases } from '../../actions/auth'
 
     
 
@@ -20,17 +21,17 @@ export default function userRegisterComponent() {
         description: ""
     }])
 
-    // useEffect(() => {
-    //     //dispatch get basesOfWork
-    // }, [])
+    useEffect(() => {
+       dispatch(getBases())
+    }, [])
 
-    // const basesOfWork = useSelector(state => state.basesOfWork.base)
+     const basesOfWork = useSelector(state => state.auth.bases)
 
-    // useEffect(() => {
-    //     if (basesOfWork !== undefined && basesOfWork !== "") {
-    //         setBasesFromAPI(basesOfWork)
-    //     }
-    // }, [basesOfWork])
+    useEffect(() => {
+        if (basesOfWork !== undefined && basesOfWork !== "" && basesOfWork !== null) {
+            setBasesFromAPI(basesOfWork)
+        }
+    }, [basesOfWork])
 
 
     const handleChange = e => {
@@ -79,9 +80,9 @@ export default function userRegisterComponent() {
                             <label>Base</label>
                             <select name= "base" onChange={handleChange}>
                                 <option value="">-----</option>
-                                {/* {logisticOperatorFromAPI.map(logisitcOperator => (
-                                    <option value={logisitcOperator.id} key={logisitcOperator.id}>{logisitcOperator.description}</option>
-                                ))} */}
+                                {basesFromAPI.map(base => (
+                                    <option value={base.id} key={base.id}>{base.description}</option>
+                                ))}
                             </select>
                         </div>
                         <div className="field-box">

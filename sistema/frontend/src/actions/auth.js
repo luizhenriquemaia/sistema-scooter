@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { returnErrors } from './messages'
-import { USER_LOADING, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS } from './types'
+import { returnErrors, returnSuccess } from './messages'
+import { USER_LOADING, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, GET_BASES_OF_WORK } from './types'
 
 
 export const loadUser = () => (dispatch, getState) => {
@@ -64,4 +64,16 @@ export const tokenConfig = getState => {
         config.headers['Authorization'] = `Token ${token}`
     }
     return config
+}
+
+
+export const getBases = () => (dispatch, getState) => {
+    axios.get('/api/auth/bases-of-work', tokenConfig(getState))
+        .then(res => {
+            dispatch({
+                type: GET_BASES_OF_WORK,
+                payload: res.data.serializer
+            })
+            dispatch(returnSuccess("", res.status))
+        }).catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
 }
