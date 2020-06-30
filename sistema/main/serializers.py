@@ -2,11 +2,19 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import (LogisticOperator, Movement, PeopleRegistration,
+from .models import (BaseOfWork, LogisticOperator, Movement, PeopleRegistration,
                      Scooter, StatusScooter, TypeMovement)
 
-from accounts.serializers import BaseOfWorkSerializer
 
+
+
+class BaseOfWorkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BaseOfWork
+        fields = ['id', 'description', 'address']
+
+    def create(self, validated_data):
+        return BaseOfWork.create(BaseOfWork, **validated_data)
 
 
 class StatusScooterSerializer(serializers.ModelSerializer):

@@ -2,7 +2,7 @@ from django.urls import include, path
 from knox import views as knox_views
 from rest_framework import routers
 
-from .api import BaseOfWorkViewSet, EmployeeViewSet, LoginAPI, UserAPI
+from .api import EmployeeViewSet, LoginAPI, UserAPI
 
 urlpatterns = [
     path('api/auth', include('knox.urls')),
@@ -12,7 +12,6 @@ urlpatterns = [
 ]
 
 router = routers.DefaultRouter()
-router.register('api/auth/bases-of-work', BaseOfWorkViewSet, 'baseOfWork')
 router.register('api/auth/employee', EmployeeViewSet, 'employee')
 
 urlpatterns += router.urls
