@@ -5,7 +5,6 @@ import { postMovement, getLastMovementsOfScooter, updateMovement } from '../../a
 import { getLogisticOperator } from '../../actions/logisticOperator'
 
 
-//// SE A MOVIMENTAÇÃO TIVER ID DISPATCH PARA O UPDATE
 export default function addMovementComponent() {
     const dispatch = useDispatch()
     const alert = useAlert()
@@ -29,7 +28,7 @@ export default function addMovementComponent() {
     const [destinyScooterInternalMovementPickUp, setDestinyScooterInternalMovementPickUp] = useState("Manutenção")
     const [destinyScooterInternalMovementReturn, setDestinyScooterInternalMovementReturn] = useState("Base")
     const [destinyScooterExternalMovement, setDestinyScooterExternalMovement] = useState("Base")
-    const [confimReturnedAccessories, setConfimReturnedAccessories] = useState(true);
+    const [userWantsToUpdateExternalMovement, setUserWantsToUpdateExternalMovement] = useState(false)
 
     useEffect(() => {
         dispatch(getLogisticOperator())
@@ -125,6 +124,29 @@ export default function addMovementComponent() {
         })
     }
 
+    const handleConfirmAccessoriesAndSubmitExternalMovement = e => {
+        const { idMovement, typeMovement, scooter, logisticOperatorMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
+        let cpfPeopleRegistration = newMovementState.cpfPeopleRegistration.replace(/\D/g, '')
+        var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, cpfPeopleRegistration, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+        var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterExternalMovement, typeRelease: "Devolução" }
+        if (newMovementToAPI.idMovement !== "") {
+            dispatch(updateMovement(idMovement, newMovementToAPI))
+            setDestinyScooterExternalMovement("Base")
+            setNewMovementState({
+                ...newMovementState,
+                idMovement: "",
+                scooter: "",
+                cpfPeopleRegistration: "",
+                accessoriesHelmet: false,
+                accessoriesBag: false,
+                accessoriesCase: false,
+                accessoriesCharger: false,
+                observation: ""
+            })
+        }
+        setUserWantsToUpdateExternalMovement(false)
+    }
+
     
 
     const handleSubmit = e => {
@@ -142,28 +164,25 @@ export default function addMovementComponent() {
                     alert.error("o chassi deve ter pelo menos 4 números")
                 } else {
                     var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, cpfPeopleRegistration, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
-                    var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterExternalMovement, typeRelease: "Devolução"}
+                    var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterExternalMovement, typeRelease: "Devolução" }
                     if (newMovementToAPI.idMovement !== "") {
-                        if (confimReturnedAccessories === true) {
-                            dispatch(updateMovement(idMovement, newMovementToAPI))
-                        } else {
-                            alert.error("você precisa confirmar que foram devolvidos os acessórios")
-                            return
-                        }
+                        setUserWantsToUpdateExternalMovement(true)
                     }
-                    else dispatch(postMovement(newMovementToAPI))
-                    setDestinyScooterExternalMovement("Base")
-                    setNewMovementState({
-                        ...newMovementState,
-                        idMovement: "",
-                        scooter: "",
-                        cpfPeopleRegistration: "",
-                        accessoriesHelmet: false,
-                        accessoriesBag: false,
-                        accessoriesCase: false,
-                        accessoriesCharger: false,
-                        observation: ""
-                    })
+                    else {
+                        dispatch(postMovement(newMovementToAPI))
+                        setDestinyScooterExternalMovement("Base")
+                        setNewMovementState({
+                            ...newMovementState,
+                            idMovement: "",
+                            scooter: "",
+                            cpfPeopleRegistration: "",
+                            accessoriesHelmet: false,
+                            accessoriesBag: false,
+                            accessoriesCase: false,
+                            accessoriesCharger: false,
+                            observation: ""
+                        })
+                    }
                 }
             }
         }
@@ -305,14 +324,14 @@ export default function addMovementComponent() {
                 </div>
             </section>
         </main>
-        <div className="content dialog-section show-up">
+            <div className={userWantsToUpdateExternalMovement ? "content dialog-section show-up" : "content dialog-section"}>
             <section className="section-main-box dialog-box">
                 <div className="message">
                     <h3>Caso um acessório não tenha sido retornado, você pode voltar a página de cadastro e fazer uma observação.</h3>
                 </div>
                 <div className="buttonBox">
-                    <button className="submit-button clean">Voltar</button>
-                    <button className="submit-button confirm">Registrar</button>  
+                        <button className="submit-button clean" onClick={() => setUserWantsToUpdateExternalMovement(false)}>Voltar</button>
+                        <button className="submit-button confirm" onClick={handleConfirmAccessoriesAndSubmitExternalMovement}>Registrar</button>
                 </div>
             </section>
         </div>
