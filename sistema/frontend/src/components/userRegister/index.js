@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
-import { getBases } from '../../actions/auth'
+import { getBases } from '../../actions/bases'
 
     
 
@@ -25,7 +25,7 @@ export default function userRegisterComponent() {
        dispatch(getBases())
     }, [])
 
-     const basesOfWork = useSelector(state => state.auth.bases)
+     const basesOfWork = useSelector(state => state.bases.base)
 
     useEffect(() => {
         if (basesOfWork !== undefined && basesOfWork !== "" && basesOfWork !== null) {

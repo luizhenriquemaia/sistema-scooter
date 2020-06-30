@@ -6,6 +6,7 @@ import peopleRegistration from './peopleRegistration'
 import info from './info'
 import messages from './messages'
 import auth from './auth'
+import bases from './bases'
 
 
 export default combineReducers({
@@ -13,6 +14,7 @@ export default combineReducers({
     logisticOperator,
     movements,
     peopleRegistration,
+    bases,
     info,
     messages,
     auth,
