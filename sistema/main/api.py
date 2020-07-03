@@ -145,7 +145,7 @@ class ScooterViewSet(viewsets.ViewSet):
     def create(self, request):
         base_employee = Employee.objects.get(
             user_id=request.user.id).base_id
-        if request.data['chassisScooter'] < 4:
+        if len(request.data['chassisScooter']) < 4:
             return Response({"serializer": "",
                              "message": "o chassi deve ter pelo menos 4 dígitos"}, status=status.HTTP_400_BAD_REQUEST)
         try: 
@@ -312,8 +312,13 @@ class MovementViewSet(viewsets.ViewSet):
                             "message": "Patinete não existente"}, status=status.HTTP_400_BAD_REQUEST)
         if request.data['typeMovement'] == "Externa":
             try:
-                PeopleRegistration.objects.get(
-                    cpf=request.data['cpfPeopleRegistration'], base_id=base_employee)
+                id_deliveryman_db = PeopleRegistration.objects.get(
+                    cpf=request.data['cpfPeopleRegistration'], base_id=base_employee).id
+                last_movement_deliveryman_db = Movement.objects.filter(
+                    peopleRegistration_id=id_deliveryman_db, base_id=base_employee).order_by('id').last()
+                if last_movement_deliveryman_db.returnTime == None:
+                    return Response({"serializer": "",
+                                    "message": "Entregador com movimentação em aberto"}, status=status.HTTP_400_BAD_REQUEST)
             except ObjectDoesNotExist:
                 return Response({"serializer": "",
                                  "message": "Entregador não cadastrado"}, status=status.HTTP_400_BAD_REQUEST)
