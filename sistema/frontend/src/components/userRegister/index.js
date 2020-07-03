@@ -74,12 +74,11 @@ export default function userRegisterComponent() {
 
     return (
         <main className="content">
-            <section className="section-main-box register-section">
+            <section className="section-main-box user-section">
                 <div className="title-box">
                     <h1 className="title-page">Cadastro de Usuários</h1>
                 </div>
-                {/* <section className="content-box"> */}
-                <section>
+                <section className="content-box">
                     {/* <div className="register-type">
                         <label>Tipo de Cadastro</label>
                         <select name="register-type" onChange={handleChange}>
@@ -88,10 +87,8 @@ export default function userRegisterComponent() {
                             <option value="scooter">Patinete</option>
                         </select>
                     </div> */}
-                    <fieldset>
-                    {/* <fieldset className="data-box" > */}
-                        {/* <div className="field-box user"> */}
-                        <div>
+                    <fieldset className="data-box" >
+                        <div className="field-box user personal-data">
                             <label>Nome</label>
                             <input type="text" name="firstName" onChange={handleChange} value={newUserState.firstName} />
                             <label>Sobrenome</label>
@@ -104,8 +101,7 @@ export default function userRegisterComponent() {
                                 ))}
                             </select>
                         </div>
-                        {/* <div className="field-box"> */}
-                        <div>
+                        <div className="field-box user register-data">
                             <label>User name</label>
                             <input type="text" name="username" onChange={handleChange} value={newUserState.username} />
                             <label>Senha</label>
