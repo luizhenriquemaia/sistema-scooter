@@ -245,11 +245,11 @@ export default function addMovementComponent() {
                     <fieldset className={newMovementState.typeMovement === "Externa" ? `data-box external` : "data-box internal"} >
                         <div className="field-box external">
                             <div className="field-box two-boxes">
-                                <label>CPF Entregador
-                                    <input type="text" name="cpfPeopleRegistration" value={newMovementState.cpfPeopleRegistration} onChange={handleChange} />
-                                </label>
                                 <label>Chassi
                                     <input type="text" name="scooter" value={newMovementState.scooter} onChange={handleChange} />
+                                </label>
+                                <label>CPF Entregador
+                                    <input type="text" name="cpfPeopleRegistration" value={newMovementState.cpfPeopleRegistration} onChange={handleChange} />
                                 </label>
                             </div>
                             <div className="scooter-destination">
