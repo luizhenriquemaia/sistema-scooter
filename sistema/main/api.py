@@ -145,6 +145,9 @@ class ScooterViewSet(viewsets.ViewSet):
     def create(self, request):
         base_employee = Employee.objects.get(
             user_id=request.user.id).base_id
+        if request.data['chassisScooter'] < 4:
+            return Response({"serializer": "",
+                             "message": "o chassi deve ter pelo menos 4 dígitos"}, status=status.HTTP_400_BAD_REQUEST)
         try: 
             Scooter.objects.get(
                 chassisNumber=request.data['chassisScooter'], base_id=base_employee)

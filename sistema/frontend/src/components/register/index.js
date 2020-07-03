@@ -110,9 +110,12 @@ export default function Register() {
         else if (stateValueSelect === "scooter") {
                     const { chassisScooter, statusScooter } = RegisterState
                     if (chassisScooter === "") {
-                        alert.error("preencha todos os campos")
+                        return alert.error("preencha todos os campos")
                     }
                     else {
+                        if (chassisScooter.toString().length < 4) {
+                            return alert.error("o chassi deve ter pelo menos 4 dígitos")
+                        }
                         if (statusScooter !== "0" && statusScooter !== "") {
                             var newRegisterToAPI = { chassisScooter, statusScooter }
                             dispatch(addScooter(newRegisterToAPI))
@@ -122,12 +125,12 @@ export default function Register() {
                             })
                         }
                         else {
-                            alert.error("Status Inválido")
+                            return alert.error("Status Inválido")
                         }
                     }
                 }
         else {
-            alert.error("Tipo de Registro Inválido")
+            return alert.error("Tipo de Registro Inválido")
         }
     }
 
