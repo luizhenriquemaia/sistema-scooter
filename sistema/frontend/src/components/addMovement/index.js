@@ -29,12 +29,14 @@ export default function addMovementComponent() {
     const [destinyScooterInternalMovementReturn, setDestinyScooterInternalMovementReturn] = useState("Base")
     const [destinyScooterExternalMovement, setDestinyScooterExternalMovement] = useState("Base")
     const [userWantsToUpdateExternalMovement, setUserWantsToUpdateExternalMovement] = useState(false)
+    const [wasMovementAdded, setWasMovementAdded] = useState(false)
+    const logisticOperator = useSelector(state => state.logisticOperator.logisticOperator)
+    const movementsFromAPI = useSelector(state => state.movements.movement)
+    const movementForAddComponent = useSelector(state => state.movements.isAdd)
 
     useEffect(() => {
         dispatch(getLogisticOperator())
     }, [])
-
-    const logisticOperator = useSelector(state => state.logisticOperator.logisticOperator)
 
     useEffect(() => {
         if (logisticOperator !== undefined && logisticOperator !== "") {
@@ -42,71 +44,40 @@ export default function addMovementComponent() {
         }
     }, [logisticOperator])
 
-
-    const movementsFromAPI = useSelector(state => state.movements.movement)
-    const movementForAddComponent = useSelector(state => state.movements.isAdd)
-
     useEffect(() => {
-        if (movementsFromAPI !== undefined && movementsFromAPI !== "") {
-            if (movementForAddComponent === true) {
-                if (!movementsFromAPI.map) {
-                    setNewMovementState({
-                        idMovement: movementsFromAPI.id,
-                        typeMovement: movementsFromAPI.typeMovement !== undefined && movementsFromAPI.typeMovement !== null ? movementsFromAPI.typeMovement.description : "Externa",
-                        scooter: movementsFromAPI.scooter !== undefined && movementsFromAPI.scooter !== null ? movementsFromAPI.scooter.chassisNumber : "",
-                        logisticOperatorMovement: movementsFromAPI.logisticOperator !== undefined && movementsFromAPI.logisticOperator !== null ? movementsFromAPI.logisticOperator.id : "",
-                        cpfPeopleRegistration: movementsFromAPI.peopleRegistration !== undefined && movementsFromAPI.peopleRegistration !== null ? movementsFromAPI.peopleRegistration.cpf : "",
-                        accessoriesHelmet: movementsFromAPI.accessoriesHelmet,
-                        accessoriesBag: movementsFromAPI.accessoriesBag,
-                        accessoriesCase: movementsFromAPI.accessoriesCase,
-                        accessoriesCharger: movementsFromAPI.accessoriesCharger,
-                        observation: movementsFromAPI.observation
-                    })
+        if (!wasMovementAdded) {
+            if (movementsFromAPI !== undefined && movementsFromAPI !== "") {
+                if (movementForAddComponent === true) {
+                    if (!movementsFromAPI.map) {
+                        setNewMovementState({
+                            idMovement: movementsFromAPI.id,
+                            typeMovement: movementsFromAPI.typeMovement !== undefined && movementsFromAPI.typeMovement !== null ? movementsFromAPI.typeMovement.description : "Externa",
+                            scooter: movementsFromAPI.scooter !== undefined && movementsFromAPI.scooter !== null ? movementsFromAPI.scooter.chassisNumber : "",
+                            logisticOperatorMovement: movementsFromAPI.logisticOperator !== undefined && movementsFromAPI.logisticOperator !== null ? movementsFromAPI.logisticOperator.id : "",
+                            cpfPeopleRegistration: movementsFromAPI.peopleRegistration !== undefined && movementsFromAPI.peopleRegistration !== null ? movementsFromAPI.peopleRegistration.cpf : "",
+                            accessoriesHelmet: movementsFromAPI.accessoriesHelmet,
+                            accessoriesBag: movementsFromAPI.accessoriesBag,
+                            accessoriesCase: movementsFromAPI.accessoriesCase,
+                            accessoriesCharger: movementsFromAPI.accessoriesCharger,
+                            observation: movementsFromAPI.observation
+                        })
 
+                    }
                 }
             }
-        } else {
-            setNewMovementState({
-                ...newMovementState,
-                idMovement: "",
-                logisticOperatorMovement: "",
-                cpfPeopleRegistration: "",
-                accessoriesHelmet: false,
-                accessoriesBag: false,
-                accessoriesCase: false,
-                accessoriesCharger: false,
-                observation: ""
-            })
         }
+        // else {
+        //     setNewMovementStateToInitial()
+        // }
     }, [movementsFromAPI])
 
 
-    const handleChange = e => {
-        const { name, value } = e.target
-        if (name === "destinyScooterInternalMovementPickUp") {
-            setDestinyScooterInternalMovementPickUp(value)
-        } else if (name === "destinyScooterExternalMovement") {
-            setDestinyScooterExternalMovement(value)
-        } else if (name === "destinyScooterInternalMovementReturn") {
-            setDestinyScooterInternalMovementReturn(value)
-        } else if (name === "scooter") {
-            setNewMovementState({
-                ...newMovementState,
-                [name]: value
-            })
-            if (value.toString().length >= 4) dispatch(getLastMovementsOfScooter(value))
-        } else {
-            setNewMovementState({
-                ...newMovementState,
-                [name]: value
-            })
-        }
-    }
-
-    const handleClean = e => {
+    const setNewMovementStateToInitial = () => {
         setNewMovementState({
             ...newMovementState,
+            idMovement: "",
             scooter: "",
+            logisticOperatorMovement: "",
             cpfPeopleRegistration: "",
             accessoriesHelmet: false,
             accessoriesBag: false,
@@ -114,6 +85,32 @@ export default function addMovementComponent() {
             accessoriesCharger: false,
             observation: ""
         })
+    }
+
+
+    const handleChange = e => {
+        const { name, value } = e.target
+        switch (name) {
+            case "destinyScooterInternalMovementPickUp":
+                setDestinyScooterInternalMovementPickUp(value)
+                break
+            case "destinyScooterExternalMovement":
+                setDestinyScooterExternalMovement(value)
+                break
+            case "destinyScooterInternalMovementReturn":
+                setDestinyScooterInternalMovementReturn(value)
+                break
+            case "scooter":
+                if (value.toString().length >= 4) {
+                    dispatch(getLastMovementsOfScooter(value))
+                    setWasMovementAdded(false)
+                }
+            default:
+                setNewMovementState({
+                    ...newMovementState,
+                    [name]: value
+                })
+        }
     }
 
     const handleCheck = e => {
@@ -132,100 +129,70 @@ export default function addMovementComponent() {
         if (newMovementToAPI.idMovement !== "") {
             dispatch(updateMovement(idMovement, newMovementToAPI))
             setDestinyScooterExternalMovement("Base")
-            setNewMovementState({
-                ...newMovementState,
-                idMovement: "",
-                scooter: "",
-                cpfPeopleRegistration: "",
-                accessoriesHelmet: false,
-                accessoriesBag: false,
-                accessoriesCase: false,
-                accessoriesCharger: false,
-                observation: ""
-            })
+            setNewMovementStateToInitial()
+            setWasMovementAdded(true)
         }
         setUserWantsToUpdateExternalMovement(false)
     }
 
-    
 
     const handleSubmit = e => {
         const { idMovement, typeMovement, scooter, logisticOperatorMovement, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation } = newMovementState
         let cpfPeopleRegistration = newMovementState.cpfPeopleRegistration.replace(/\D/g, '')
         if (typeMovement === "Externa") {
             if (scooter === "" || cpfPeopleRegistration === "") {
-                alert.error("preencha todos os campos obrigatórios")
+                return alert.error("preencha todos os campos obrigatórios")
             }
-            else if (cpfPeopleRegistration !== "" && cpfPeopleRegistration.length !== 11) {
-                alert.error("cpf inválido")
+            if (cpfPeopleRegistration !== "" && cpfPeopleRegistration.length !== 11) {
+                return alert.error("cpf inválido")
+            }
+            if (scooter.toString().length < 4) {
+                return alert.error("o chassi deve ter pelo menos 4 números")
+            }
+            var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, cpfPeopleRegistration, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
+            var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterExternalMovement, typeRelease: "Devolução" }
+            if (newMovementToAPI.idMovement !== "") {
+                setUserWantsToUpdateExternalMovement(true)
             }
             else {
-                if (scooter.toString().length < 4) {
-                    alert.error("o chassi deve ter pelo menos 4 números")
-                } else {
-                    var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, cpfPeopleRegistration, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
-                    var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterExternalMovement, typeRelease: "Devolução" }
-                    if (newMovementToAPI.idMovement !== "") {
-                        setUserWantsToUpdateExternalMovement(true)
-                    }
-                    else {
-                        dispatch(postMovement(newMovementToAPI))
-                        setDestinyScooterExternalMovement("Base")
-                        setNewMovementState({
-                            ...newMovementState,
-                            idMovement: "",
-                            scooter: "",
-                            cpfPeopleRegistration: "",
-                            accessoriesHelmet: false,
-                            accessoriesBag: false,
-                            accessoriesCase: false,
-                            accessoriesCharger: false,
-                            observation: ""
-                        })
-                    }
-                }
+                dispatch(postMovement(newMovementToAPI))
+                setDestinyScooterExternalMovement("Base")
+                setWasMovementAdded(true)
+                setNewMovementStateToInitial()
             }
         }
         else if (typeMovement === "Interna") {
             if (scooter === "" || logisticOperatorMovement === "") {
-                alert.error("preencha todos os campos obrigatórios")
-            } else {
-                if (scooter.toString().length < 4) {
-                    alert.error("o chassi deve ter pelo menos 4 números")
-                } else {
-                    var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, observation  }
-                    var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterInternalMovementReturn }
-                    // is a return of scooter
-                    if (newMovementToAPI.idMovement !== "") {
-                        var newMovementToAPI = { ...newMovementToAPI, 
-                            accessoriesHelmet: false, 
-                            accessoriesBag: false, 
-                            accessoriesCase: false, 
-                            accessoriesCharger: false,
-                            typeRelease: "Devolução"
-                        }
-                        dispatch(updateMovement(idMovement, newMovementToAPI))
-                    } else {
-                        var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterInternalMovementPickUp }
-                        dispatch(postMovement(newMovementToAPI))
-                    }
-                    setDestinyScooterInternalMovementPickUp("Manutenção")
-                    setDestinyScooterInternalMovementReturn("Base")
-                    setNewMovementState({
-                        ...newMovementState,
-                        idMovement: "",
-                        scooter: "",
-                        cpfPeopleRegistration: "",
-                        accessoriesHelmet: false,
-                        accessoriesBag: false,
-                        accessoriesCase: false,
-                        accessoriesCharger: false,
-                        observation: ""
-                    })
-                }
+                return alert.error("preencha todos os campos obrigatórios")
+            } 
+            if (scooter.toString().length < 4) {
+                return alert.error("o chassi deve ter pelo menos 4 números")
             }
+            var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, observation  }
+            var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterInternalMovementReturn }
+            // is a return of scooter
+            if (newMovementToAPI.idMovement !== "") {
+                var newMovementToAPI = { 
+                    ...newMovementToAPI, 
+                    accessoriesHelmet: false, 
+                    accessoriesBag: false, 
+                    accessoriesCase: false, 
+                    accessoriesCharger: false,
+                    typeRelease: "Devolução"
+                }
+                dispatch(updateMovement(idMovement, newMovementToAPI))
+                setWasMovementAdded(true)
+            } else {
+                var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterInternalMovementPickUp }
+                dispatch(postMovement(newMovementToAPI))
+                setWasMovementAdded(true)
+            }
+            setDestinyScooterInternalMovementPickUp("Manutenção")
+            setDestinyScooterInternalMovementReturn("Base")
+            setNewMovementStateToInitial()
         }
     }
+
 
     return (
         <div>
@@ -319,7 +286,7 @@ export default function addMovementComponent() {
                     </fieldset>
                 </section>
                 <div className="buttonBox">
-                    <button className="submit-button clean" onClick={handleClean}>Limpar</button>
+                        <button className="submit-button clean" onClick={() => setNewMovementStateToInitial()}>Limpar</button>
                     <button className="submit-button confirm" onClick={handleSubmit}>Registrar</button>
                 </div>
             </section>
