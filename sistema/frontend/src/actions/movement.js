@@ -52,7 +52,7 @@ export const getLastMovementsOfScooter = (chassis) => (dispatch, getState) => {
                 type: GET_MOVEMENT_BY_SCOOTER,
                 payload: res.data.serializer
             })
-            dispatch(returnSuccess("", res.status))
+            dispatch(returnSuccess("generic get message", res.status))
         })
         .catch(err => (
             err.response !== undefined ? dispatch(returnErrors(err.response.data.message, err.response.status)) : dispatch(returnErrors(err.response, err.response))

@@ -33,6 +33,7 @@ export default function addMovementComponent() {
     const logisticOperator = useSelector(state => state.logisticOperator.logisticOperator)
     const movementsFromAPI = useSelector(state => state.movements.movement)
     const movementForAddComponent = useSelector(state => state.movements.isAdd)
+    const statusInfo = useSelector(state => state.info.status)
 
     useEffect(() => {
         dispatch(getLogisticOperator())
@@ -66,10 +67,27 @@ export default function addMovementComponent() {
                 }
             }
         }
-        // else {
-        //     setNewMovementStateToInitial()
-        // }
     }, [movementsFromAPI])
+
+    useEffect(() => {
+        if (statusInfo === 200 || statusInfo === 201) {
+            if (wasMovementAdded) setNewMovementStateToInitial()
+        } else if (statusInfo === 204) {
+            if (!wasMovementAdded) {
+                setNewMovementState({
+                    ...newMovementState,
+                    idMovement: "",
+                    logisticOperatorMovement: "",
+                    cpfPeopleRegistration: "",
+                    accessoriesHelmet: false,
+                    accessoriesBag: false,
+                    accessoriesCase: false,
+                    accessoriesCharger: false,
+                    observation: ""
+                })
+            }
+        }
+    }, [statusInfo])
 
 
     const setNewMovementStateToInitial = () => {
@@ -126,10 +144,9 @@ export default function addMovementComponent() {
         let cpfPeopleRegistration = newMovementState.cpfPeopleRegistration.replace(/\D/g, '')
         var newMovementToAPI = { idMovement, typeMovement, scooter, logisticOperatorMovement, cpfPeopleRegistration, accessoriesHelmet, accessoriesBag, accessoriesCase, accessoriesCharger, observation }
         var newMovementToAPI = { ...newMovementToAPI, destinyScooterToAPI: destinyScooterExternalMovement, typeRelease: "Devolução" }
-        if (newMovementToAPI.idMovement !== "") {
+        if (newMovementToAPI.idMovement !== "") {   
             dispatch(updateMovement(idMovement, newMovementToAPI))
             setDestinyScooterExternalMovement("Base")
-            setNewMovementStateToInitial()
             setWasMovementAdded(true)
         }
         setUserWantsToUpdateExternalMovement(false)
@@ -158,7 +175,6 @@ export default function addMovementComponent() {
                 dispatch(postMovement(newMovementToAPI))
                 setDestinyScooterExternalMovement("Base")
                 setWasMovementAdded(true)
-                setNewMovementStateToInitial()
             }
         }
         else if (typeMovement === "Interna") {
@@ -189,10 +205,8 @@ export default function addMovementComponent() {
             }
             setDestinyScooterInternalMovementPickUp("Manutenção")
             setDestinyScooterInternalMovementReturn("Base")
-            setNewMovementStateToInitial()
         }
     }
-
 
     return (
         <div>
