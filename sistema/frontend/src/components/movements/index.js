@@ -185,37 +185,39 @@ export default function Movements() {
     }, [movements])
 
     useEffect(() => {
-        if (scooters !== undefined) {
-            if (scooters.length !== 0) {
-                let numberOfScooters = 0
-                let numberOfScootersInUse = 0
-                let numberOfScootersAvailable = 0
-                let numberOfScootersUnderMaintenance = 0
-                let numberOfScootersOperants = 0
-                let numberOfScootersInBackup = 0
-                if (scooters.map) {
-                    scooters.map(scooter => {
-                        if (scooter.status.description === "Em uso") {
-                            numberOfScootersInUse += 1
-                            numberOfScootersOperants += 1
-                        } 
-                        if (scooter.status.description === "Disponível") {
-                            numberOfScootersAvailable += 1
-                            numberOfScootersOperants += 1
-                        }
-                        if (scooter.status.description === "Manutenção") numberOfScootersUnderMaintenance += 1
-                        if (scooter.status.description === "Backup") numberOfScootersInBackup += 1
-                        numberOfScooters += 1
-                    })
-                    setNumbersOfScootersState({
-                        numberOfScooters,
-                        numberOfScootersInUse,
-                        numberOfScootersAvailable,
-                        numberOfScootersUnderMaintenance,
-                        numberOfScootersOperants,
-                        numberOfScootersInBackup
-                    })
-                    setScootersState(scooters)
+        if (!wasScooterAdded) {
+            if (scooters !== undefined) {
+                if (scooters.length !== 0) {
+                    let numberOfScooters = 0
+                    let numberOfScootersInUse = 0
+                    let numberOfScootersAvailable = 0
+                    let numberOfScootersUnderMaintenance = 0
+                    let numberOfScootersOperants = 0
+                    let numberOfScootersInBackup = 0
+                    if (scooters.length > 0) {
+                        scooters.map(scooter => {
+                            if (scooter.status.description === "Em uso") {
+                                numberOfScootersInUse += 1
+                                numberOfScootersOperants += 1
+                            } 
+                            if (scooter.status.description === "Disponível") {
+                                numberOfScootersAvailable += 1
+                                numberOfScootersOperants += 1
+                            }
+                            if (scooter.status.description === "Manutenção") numberOfScootersUnderMaintenance += 1
+                            if (scooter.status.description === "Backup") numberOfScootersInBackup += 1
+                            numberOfScooters += 1
+                        })
+                        setNumbersOfScootersState({
+                            numberOfScooters,
+                            numberOfScootersInUse,
+                            numberOfScootersAvailable,
+                            numberOfScootersUnderMaintenance,
+                            numberOfScootersOperants,
+                            numberOfScootersInBackup
+                        })
+                        setScootersState(scooters)
+                    }
                 }
             }
         }
@@ -274,9 +276,9 @@ export default function Movements() {
                     filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.typeMovement.description === "Interna"))
                 }
             } if (filterObj.propertie === "logisticOperator.description") {
-               filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.logisticOperator.description === filterObj.value))
+                filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.logisticOperator.description === filterObj.value))
             } if (filterObj.propertie === "scooter.chassisNumber") {
-               filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.scooter.chassisNumber === filterObj.value))
+                filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.scooter.chassisNumber === filterObj.value))
             } if (filterObj.propertie === "peopleRegistration.name") {
                 filteredMovementsToState = filteredMovementsToState.filter(movementToFilter => (movementToFilter.peopleRegistration ? movementToFilter.peopleRegistration.name === filterObj.value : movementToFilter.peopleRegistration === filterObj.value))
             }
