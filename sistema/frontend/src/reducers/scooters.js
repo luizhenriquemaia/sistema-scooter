@@ -3,7 +3,8 @@ import { GET_SCOOTERS, GET_STATUS_SCOOTERS, DELETE_SCOOTER, ADD_SCOOTER } from '
 
 
 const initialState = {
-    scooter: []
+    scooter: [],
+    wasAdded: false
 }
 
 export default function (state = initialState, action) {
@@ -12,21 +13,25 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 scooter: action.payload,
+                wasAdded: false
             }
         case GET_STATUS_SCOOTERS:
             return {
                 ...state,
                 statusScooter: action.payload,
+                wasAdded: false
             }
         case DELETE_SCOOTER:
             return {
                 ...state,
-                scooter: state.scooter.filter(scooter => scooter.id !== action.payload)
+                scooter: state.scooter.filter(scooter => scooter.id !== action.payload),
+                wasAdded: false
             }
         case ADD_SCOOTER:
             return {
                 ...state,
-                scooter: action.payload
+                scooter: action.payload,
+                wasAdded: true
             }
         default:
             return state

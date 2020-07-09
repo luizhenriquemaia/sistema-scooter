@@ -101,6 +101,7 @@ export default function Movements() {
     const scooters = useSelector(state => state.scooters.scooter)
     const isDetails = useSelector(state => state.movements.isDetails)
     const isAdd = useSelector(state => state.movements.isAdd)
+    const wasScooterAdded = useSelector(state => state.scooters.wasAdded)
     const [shouldFilter, setShouldFilter] = useState({
         shouldFilterStatusScooter: false,
         shouldFilterTypesMovement: false,
@@ -228,6 +229,10 @@ export default function Movements() {
         }
     }, [shouldGetMovements])
     
+
+    useEffect(() => {
+        if (wasScooterAdded) dispatch(getScooters())
+    }, [wasScooterAdded])
 
     const handleGoToDetails = (idMovement) => history.push(`details-movement/${idMovement}`)
 
