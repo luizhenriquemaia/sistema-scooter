@@ -23,7 +23,9 @@ export const addLogisticOperator = (LO) => (dispatch, getState) => {
                 type: ADD_LOGISTIC_OPERATOR,
                 payload: res.data.serializer
             })
-            dispatch(returnSuccess(res.data.message, res.status))
+            dispatch(returnSuccess(res !== undefined ? res.data.message : "", res.status))
         })
-        .catch(err => dispatch(returnErrors(err.response.data.message, err.response.status)))
+        .catch(err => {
+            dispatch(returnErrors(err.response !== undefined ? err.response.data.message : "", err.response !== undefined ? err.response.status : null))
+        })
 }
