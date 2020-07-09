@@ -316,9 +316,12 @@ class MovementViewSet(viewsets.ViewSet):
                     cpf=request.data['cpfPeopleRegistration'], base_id=base_employee).id
                 last_movement_deliveryman_db = Movement.objects.filter(
                     peopleRegistration_id=id_deliveryman_db, base_id=base_employee).order_by('id').last()
-                if last_movement_deliveryman_db.returnTime == None:
-                    return Response({"serializer": "",
-                                    "message": "Entregador com movimentação em aberto"}, status=status.HTTP_400_BAD_REQUEST)
+                try: 
+                    if last_movement_deliveryman_db.returnTime == None:
+                        return Response({"serializer": "",
+                                        "message": "Entregador com movimentação em aberto"}, status=status.HTTP_400_BAD_REQUEST)
+                except:
+                    pass
             except ObjectDoesNotExist:
                 return Response({"serializer": "",
                                  "message": "Entregador não cadastrado"}, status=status.HTTP_400_BAD_REQUEST)
