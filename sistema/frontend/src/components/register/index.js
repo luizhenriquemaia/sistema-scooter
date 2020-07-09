@@ -26,14 +26,19 @@ export default function Register() {
         description: ""
     }])
     const [stateValueSelect, setStateValueSelect] = useState("logistic-operator")
+    
+    const logisticOperator = useSelector(state => state.logisticOperator ? state.logisticOperator.logisticOperator : state.logisticOperator)
+    const statusScooter = useSelector(state => state.scooters ? state.scooters.statusScooter : state.scooters)
+    const wasLOAdded = useSelector(state => state.logisticOperator.wasAdded)
 
     useEffect(() => {
         dispatch(getStatusScooters())
         dispatch(getLogisticOperator())
     }, [])
 
-    const logisticOperator = useSelector(state => state.logisticOperator ? state.logisticOperator.logisticOperator : state.logisticOperator)
-    const statusScooter = useSelector(state => state.scooters ? state.scooters.statusScooter : state.scooters)
+    useEffect(() => {
+        if (wasLOAdded) dispatch(getLogisticOperator())
+    }, [wasLOAdded])
 
     useEffect(() => {
         if (statusScooter !== undefined && statusScooter !== "") {
@@ -45,7 +50,9 @@ export default function Register() {
 
     useEffect(() => {
         if (logisticOperator !== undefined && logisticOperator !== "") {
-            setLogisticOperatorFromAPI(logisticOperator)
+            if (!wasLOAdded) {
+                setLogisticOperatorFromAPI(logisticOperator)
+            }
         }
     }, [logisticOperator])
 
